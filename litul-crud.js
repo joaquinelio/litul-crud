@@ -6,9 +6,7 @@
   learning vanilla js, first project
 
   by
-  joaquin elio
-  o
-  Lito
+  Joaquin Elio 'Lito'
   
 */
 
