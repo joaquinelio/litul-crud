@@ -3,7 +3,7 @@
 CRUD PANEL  htmlElement, 
 
 My very first js project  html-css-js vanilla, doing-learning js same time 
-Thanks javascript.info and freecodecamp.org  they are great.
+Thanks javascript.info it's great.
 
 Warning
 ---There should be better a tool, better yet, far more complete and integrated frameworks over there---
@@ -36,7 +36,7 @@ These buttons have behaviour althougth.  They show up, hidd, enable/disable them
 ***The story***
 ===
 
-First, abstractions.  I dont see good ones, flexible and useful.  This will be. Talking Crud.
+First, abstractions.  I dont see good ones, this will be. Talking Crud.
 
 Second, I still see too many unresponsive buttons over there, 
 when dev forgets the user while doing fancy server ops.
@@ -47,11 +47,11 @@ Clean, simple, reusable, leaving dev to just write cleaner:
   Form (form show, form edit ) 
 operations, passed as function parameters
 
-I use to talk about SQL but it may use any kind of data op (mongo, json). I just refer it as DB
+I use to talk about SQL but it can use any kind of data op (mongo, json). I just refer it as DB
 
 *** How  ***
 
-Each CRUD and the NAV opertions has to be implemented by its method (i.e. .implementCreate())
+Each CRUD and the NAV operations has to be implemented by its method (i.e. .implementCreate())
 
 Dev has to code the functions to perform the very specific task and pass them as a function parameter
 example for CREATE: passing two functions: prety pure: 
@@ -164,10 +164,25 @@ Azure devops, github... How do they keep version history? To check.
 
 
 
-
 *** --- ***
 *** Log ***    -----A sacar de acá  ==>> log.txt 
 *** --- ***
+
+19-04-17
+
+Break is over.  My sinusitis isn't.  Wanna drill a hole in my head to release... something, anything. Ibuprofeno wont be any help, unless stomach ache become more painful than eyes pain.
+
+Cant help with callback... What if I do a "litul-Form element"?  It should understand "edit mode", "idle mode",
+and an special "disabled mode" that wont enable until it receives the msg "paint this THEN enable yourself"
+Should I study frameworks with "html templates"?
+
+WTF class get, set...  let  x.status = x.list.nnn ????
+to study... again.
+
+
+
+
+
 
 
 19-04-13

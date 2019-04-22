@@ -67,6 +67,20 @@ class CrudPanel extends HTMLElement  {
 
 
 
+  get STATUS_LIST() {   // bits
+    return {"ST_IDLE":1,"ST_SHOW":2,"ST_CREATE":4,"ST_MODIFY":8,}  // "ST_WAITINGSERVER":16 ?
+  }
+  get CB_RESULT_MSG_LIST(){ 
+    return {"DB_CREATE_OK":1,                }
+  }
 
+  set _status(newStatus){
+
+  }
+  get _status(){
+    return  // !!!!!!!!!!!!!!! WTF how do I do  let this.status ?
+  }
   
+
+
 }
