@@ -6,8 +6,8 @@ My very first js project  html-css-js vanilla, doing-learning js same time
 Thanks javascript.info it's great.
 
 Warning
----There should be better a tool, better yet, far more complete and integrated frameworks over there---
-It's just a practice field.
+---There should be better a tool... better yet far more complete and integrated frameworks over there---
+This is just a practice field.
 For now.
 
 Dedicated to DEV, my imaginary friend the developer (mostly myself).
@@ -32,6 +32,8 @@ These buttons have behaviour althougth.  They show up, hidd, enable/disable them
   panel status (idle, showing, editing) and
   the functions actually implemented by dev (search, create, update, remove, nav)
 
+Pretty rigid. Not a tool for create new stuff, although the l&s and some behaviour can be changed drastically with css.
+
 
 ***The story***
 ===
@@ -47,6 +49,7 @@ Clean, simple, reusable, leaving dev to just write cleaner:
   Form (form show, form edit ) 
 operations, passed as function parameters
 
+
 I use to talk about SQL but it can use any kind of data op (mongo, json). I just refer it as DB
 
 *** How  ***
@@ -54,12 +57,12 @@ I use to talk about SQL but it can use any kind of data op (mongo, json). I just
 Each CRUD and the NAV operations has to be implemented by its method (i.e. .implementCreate())
 
 Dev has to code the functions to perform the very specific task and pass them as a function parameter
-example for CREATE: passing two functions: prety pure: 
-  One for drawing a form with input controls,  
+example for CREATE: passing two functions: pretty pure: 
+  One for drawing a form with the input controls,  
   the other one for checking data and doing the Sql insert.
 NO onclick listening, no taking care of buttons status.
 But dev has to manage the cb and inform the panel its result.
-  .response(msg)    // msg  true false for now...  my intuition tells me it is not enough
+  .result(msg)    // msg  true false for now...  my intuition tells me it is not enough
 
 
 
@@ -105,6 +108,8 @@ Azure devops, github... How do they keep version history? To check.
 
 ***What dev should see and fill***
 ===
+
+// RAW.  Not even alpha.  It's still a thinking thing, hi-hi.   
 
 // It'll need a way to do an EMPY view: when first shows, when the user cancels edition, when a painting fails. 
 // so this method is mandatory:
@@ -162,11 +167,29 @@ Azure devops, github... How do they keep version history? To check.
     // so dev can put icon and SVGs in one place.  Do I need to be careful InnerHTML dsnt overwrite too much? 
 
 
+.
+
 
 
 *** --- ***
-*** Log ***    -----A sacar de acá  ==>> log.txt 
+*** Log ***    -----A sacar de acá  ==>> log.txt  cuando empiece el real código... uf que se me demora 
 *** --- ***
+
+19-04-20
+
+Needing more background here... Still fighting async.
+To do, rewrite fake crud app, localStorage with fake async response is crazy, indexedDB 
+is a real async app and test... 
+Should I test real latency problems? Looking for free cloud DB storages now.
+
+Panel thinking:   
+add custom confirm and custom msg inside panel, no popups. 
+Status via backgound colors would be nice.
+Dev op callback 
+  .result( ok_true, "msg tudu bem") 
+  .result( kaput_false, "kaput your db just crashed" ) 
+
+
 
 19-04-17
 
@@ -179,9 +202,7 @@ Should I study frameworks with "html templates"?
 WTF class get, set...  let  x.status = x.list.nnn ????
 to study... again.
 
-
-
-
+Custom buttons will be there. Useful for to localstarage, to pdf, to Xls, etc  
 
 
 

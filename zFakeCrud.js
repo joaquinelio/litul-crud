@@ -9,8 +9,9 @@ document.addEventListener('DOMContentLoaded', main);
 function main(){
 
   // here init crud menu  
-  
-  let fakeDB = window.localStorage
+
+
+  //  let fakeDB = window.localStorage
 
 
 
@@ -33,7 +34,7 @@ function main(){
 
 /*
 ************************************
-** z Dev functions for CRUD & NAV **  
+** z Dev functions for CRUD & NAV **  crud panel parameters 
 ************************************
 */
 
@@ -59,15 +60,17 @@ function zFrmCreate(){
 function zDbCreate(database, adata){
   //fakeDB.push(  myFrmRead() )
   //fakeCB(fakeSQLInsertOK)
-  database.setItem(adata[0], adata[1]+','+adata[2])  // truchíssimo sorry... sync!
+  //database.setItem(adata[0], adata[1]+','+adata[2])  // truchíssimo sorry... sync!
   //fake async callback:
-  kk.result()
+  //kk.result()
+
 }
 
 // ---------------------------------------
 // implement UPDATE
 // Form - edit modify
 function zFrmUpdate(){
+
   myFrmBlock([true,false,false])  // enable all inputs but code 
 }
 // DB - update
@@ -126,11 +129,11 @@ function myFrmBlock(arrayDisabled){
   document.getElementById("i3").disabled = arrayDisabled[2]
 }
 
-// ---------------------------------------
-// fake Callback
-function fakeCbSqlOk(){
-  setInterval(( ) => {
+// // ---------------------------------------
+// // fake Callback
+// function fakeCbSqlOk(){
+//   setInterval(( ) => {
     
-  }, interval);
-  return true
-}
+//   }, interval);
+//   return true
+// }
