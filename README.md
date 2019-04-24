@@ -66,8 +66,9 @@ But dev has to manage the cb and inform the panel its result.
 
 
 
+ -----A sacar de acá  ==>> log.txt  cuando empiece el real código... uf que se me demora 
 ***let's do***        ---a limpiar de acá  ==> log.txt
-===
+=== 
 
 Still thinking process. CB makes me nervous.
 
@@ -103,7 +104,7 @@ What about button names, should I put inside implementXxx() too?
   or just leave them as properties  .msgConfirmExit, .txtButtonOk, ...
 
 
-Azure devops, github... How do they keep version history? To check.  
+Azure devops, github... How do they keep version history? To check. Forks only? Too crazy.
 
 
 ***What dev should see and fill***
@@ -166,122 +167,3 @@ Azure devops, github... How do they keep version history? To check.
 .setAllButtonsInnerHTML (txtButtonOk, txtButtonCancel, ... )  // I think it's clean to have the option .
     // so dev can put icon and SVGs in one place.  Do I need to be careful InnerHTML dsnt overwrite too much? 
 
-
-.
-
-
-
-*** --- ***
-*** Log ***    -----A sacar de acá  ==>> log.txt  cuando empiece el real código... uf que se me demora 
-*** --- ***
-
-19-04-20
-
-Needing more background here... Still fighting async.
-To do, rewrite fake crud app, localStorage with fake async response is crazy, indexedDB 
-is a real async app and test... 
-Should I test real latency problems? Looking for free cloud DB storages now.
-
-Panel thinking:   
-add custom confirm and custom msg inside panel, no popups. 
-Status via backgound colors would be nice.
-Dev op callback 
-  .result( ok_true, "msg tudu bem") 
-  .result( kaput_false, "kaput your db just crashed" ) 
-
-
-
-19-04-17
-
-Break is over.  My sinusitis isn't.  Wanna drill a hole in my head to release... something, anything. Ibuprofeno wont be any help, unless stomach ache become more painful than eyes pain.
-
-Cant help with callback... What if I do a "litul-Form element"?  It should understand "edit mode", "idle mode",
-and an special "disabled mode" that wont enable until it receives the msg "paint this THEN enable yourself"
-Should I study frameworks with "html templates"?
-
-WTF class get, set...  let  x.status = x.list.nnn ????
-to study... again.
-
-Custom buttons will be there. Useful for to localstarage, to pdf, to Xls, etc  
-
-
-
-19-04-13
-
-html and js app for the crud panel test. 
-Harder than I thought, how to test one each other wo finishing them first  
-
-humpf.  Timeout call!!!  
-Need to get cb & dom events better.  freecodecamp sucks here. 
-You dont want the user clicking "modify" before the input elements are filled!
-javascript.info , I'm going.  
-
-
-
-19-04-12
-
-Still thinking phase.
-Methods:
-1 method to add custom buttons. (without it the panel would be too restrictive )
-  onclick is all yours, dev.
-  One extra property:  The status (IDLE, SHOWING, EDITING) on wich these buttons would be enabled   
-
-6 methods to define the panel:  paint empty, create, update, remove, search&show, nav.
-
-1 method to tell the panel the result of any op so it can change its status.  
-  The result follows the CB that dev should put in its funtions.  
-    Still raw.
-     To define: 
-     Is it ok to receive just true/false for operation sucessful? 
-     OR  
-     Do I need to check an unexpected result?
-          RESULT_MSG = { CREATE_OK, CREATE_FAIL, UPDATE_OK, ...  DRAW_OK, ... etc... }
-
-1 method, optional, to overwrite all buttons names at once (or icons, or svg) 'ok' 'cancel' 'yes' 'no' 'new'...
-  Other L&F should be via css I suppose.
-
-more:
-
-set properties for buttons? Maybe not, three options is too much. 
-Better Use the method, These four at the beggining.  
-  .txtButtonOKname = 'Ok'             // ok / cancel, 
-  .txtButtonCancelName = 'Cancel'
-  .txtButtonConfirmYesName = 'Yes'   // I hate browser confirm()
-  .txtButtonConfirmNoName = 'No'
-
--When the user is modifying and cancels , status go IDLE and form emptied.  
-    Maybe I should give dev option to redraw showing record... not posible if I only have .opResult(false)   
-
-Still Dont like names.        Edit: I DONT CARE! They are just parameter names.
-  funXXX_DbXXX()  funcXXX_FormXXX()
-  funcXXX_ related to the corresp implementXXX(), 
-  then _Dbxxx or FormXXX, form or sql specific op.  Mmm...
-
-Close to the REAL start
-
-
-
-19-04-10
-to define:
-
--via events to listen, like an oop interface? (My original VB6 menuABM interface) -I Still dont know how to-  
--via functions as properties?  sounds dirty but js devs are very familiar with them
-  like this     crudPanel.funcFormEditNew =  ()->{//displays html for edition }
-                crudPanel.funcSqlInsert   =  ()->{//sql insert code}
--via functions as parameters? cleaner
-  like this    crudPanel.implementCreate(funcFormEditNew, funcSQLinsert)
--error and feedback management HOW TO!!!!????
-  Still thinking how to feedback. How to manage callbacks...  yet KISS. WHERE TF put them?
-
-Maybe:
-create custom buttons (onclick will be all yours) able to respond to the panel status  
-(i.e.  "Export to xx", only enabled when "showing" status; "Paste from" only in "editing" status )  
-
-
-
-19-04-09
-linea hecha en casa con  VS CoDE 
-  a ver como joraca se manda
-  que corno significa stage 
-  
-  
