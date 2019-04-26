@@ -15,8 +15,9 @@ function main(){
 
 
 
+  let x = new CrudPanel()
+  let xx = x.status   
   
-
 
 
 

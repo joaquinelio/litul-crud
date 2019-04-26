@@ -4,6 +4,27 @@
 *** --- ***
 
 
+
+19-04-26
+
+F kidding me.  No local var inside classes???  this._MADNESS.
+DOM goes crazy.  With no f way for js to check integrity, 
+It would be better if I text instead of doing fancy objects
+    like this: innerHTML = "<div id='divcrud' ><button id 'btnew' class 'dadada'  etc
+Hate js.
+Anyway, more code: 
+DOM, set methods for dev, modes, enabling div & buttons.  Next: hidden handlers  then test app
+
+
+
+19-04-25
+
+readonly and private properties   _    # ll be standard when I start the real code... 
+"pad" instead of menu, buttonpanel or whatever 
+"setCreate()" instead of implementCreate() 
+
+
+
 19-04-24
 
 some backbone code wo testing. 

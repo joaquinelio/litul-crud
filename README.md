@@ -66,6 +66,10 @@ But dev has to manage the cb and inform the panel its result.
 
 
 
+
+
+
+
  -----A sacar de acá  ==>> log.txt  cuando empiece el real código... uf que se me demora 
 ***let's do***        ---a limpiar de acá  ==> log.txt
 === 
