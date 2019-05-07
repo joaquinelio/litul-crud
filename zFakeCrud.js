@@ -11,7 +11,7 @@ function main(){
   // here init crud menu  
 
 
-  //  let fakeDB = window.localStorage
+  //  let fakeDB = window.localStorage     
 
 
 
@@ -64,6 +64,7 @@ function zDbCreate(database, adata){
   //database.setItem(adata[0], adata[1]+','+adata[2])  // truchíssimo sorry... sync!
   //fake async callback:
   //kk.result()
+
 
 }
 

@@ -5,13 +5,71 @@
 
 
 
+
+19-05-06
+
+Keeping playground local.
+But still the code here is completely untested. (Cool! or Doomed!)
+Longer than expected.  But it WILL be a bust. I ll finish this soon. 
+...
+Hate JS, hate W10.  May the next update be from Mint part, 
+test for github When I have wifi back.
+...
+JS naming nightmare.  No way to ensure integrity, 
+intelisense is pretty dumb,  It CAN'T BE GOOD with this language!!! 
+I cant do arrays of objects, anonymous or fancy abstractions, not here,
+the pad is pretty complex and distictive elements, I need NAMES.  Lots of.  
+No integrity check, and they became properties?  FY!!!
+But I can do better.  No exposed names for button properties, 
+just expose the buttons themselves to Dev and let him change everything from text to tips, icons and animations;
+but Do I need the expose? or just naming it right is then well showed? Maybe. Maybe crudpad.buttons is clearer,
+just like crudpad.customButtons.   
+...
+Still hate js, but the async thing is the coolest. You are the boss, 
+you dont wait until your minions finish their job.  You just tell them what to do 
+and do something else.  Its REAL multitask, cause you are not doing it.
+The first word in every js tutorial should be: ASYNC
+
+
+
+19-05-03
+
+Callbacks here?  YES! ...maybe. If I understand, 
+needed on element onload to ensure I enable controls when they are ready,
+where should I put them? Can I put only one for the entire div?  DOM!!!!
+Library, here I go again.
+
+
+
+19-05-02
+
+Im back.  No dispatch. No callbacks either.  No place to practice them here, if there is a SIMPLEr way. Ha!! KISS.
+Should do practice II: litul-form to bind litul-crud.  No way, Im not going to make a framework for myself.  
+Just schooling myself.   I NEED to practice server related code!!!
+Internal names madness...
+Doing everything with absolutely no test.  I am crazy?  Too confident? What a debug awaits.
+The log is longer than my code!  Log is dreams and hopes.  And encouraging too.  Dear diary...
+
+
+
+19-04-27
+
+onclick events from crud buttons.  They all async.  But the callback has to be managed by dev. So:
+- addEventListener and a series of event types for dev to dispatch?  is worth the effort ?
+or 
+- crudPad.result(true/false) function as I origininally tought dev has to call after he receives the callback
+Looks the same job for dev.  dispatch(somethingok)  or result(ok), he controls the timing anyway.
+
+
+
+
 19-04-26
 
 F kidding me.  No local var inside classes???  this._MADNESS.
 DOM goes crazy.  With no f way for js to check integrity, 
 It would be better if I text instead of doing fancy objects
     like this: innerHTML = "<div id='divcrud' ><button id 'btnew' class 'dadada'  etc
-Hate js.
+Hate js. Again.
 Anyway, more code: 
 DOM, set methods for dev, modes, enabling div & buttons.  Next: hidden handlers  then test app
 

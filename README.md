@@ -6,7 +6,7 @@ My very first js project  html-css-js vanilla, doing-learning js same time
 Thanks javascript.info it's great.
 
 Warning
----There should be better a tool... better yet far more complete and integrated frameworks over there---
+---There should be a better tool...  and far more complete and integrated frameworks over there---
 This is just a practice field.
 For now.
 
@@ -82,7 +82,7 @@ Status WAITINGSERVER, a 5ft status or a special status? To define.
 
 What about ERRORS. Mmm....
 
-So far, only 5 optional methods to implement by the developer.  Looks good.
+So far, only 5 optional methods to be implemented by dev.  Looks good.
 Up to 11 optional functions to implement, CLEAN nearly pure functions.  
 
 

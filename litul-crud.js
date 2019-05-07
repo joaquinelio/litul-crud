@@ -3,7 +3,7 @@
   Lituls
   litul-crud  HTMLelement  (expected to be...)
 
-  learning vanilla js, my first project
+  learning vanilla js, my very first project
 
   by
   Joaquin Elio 'Lito' Fernandez
@@ -11,34 +11,39 @@
 */
 
 /*
-  whats the story?
+  what?
 
-  Clean keypad with optional buttons for 
-    Search&show, Create, Update, Remove, db mov << < > >> , 
-    OK, Cancel  
+  Clean keypad with optional buttons for:
+    Search&show, 
+    Create, Update, Remove, 
+    db nav << < > >> , 
+    OK, Cancel
+    Custom buttons  (can be enabled on specific status of choice)
+    msg         unintrusive //check meaning/spelling find better word// 
+                custom text 
   
-  It will show and enable-disable buttons depending on
+  It will show and enable-disable buttons depending on:
     functions implemented:  db create, db update, ...  
-    internal status, 1 of 4:  Idle, showing record, creating new record,  modifing existing record.  
+    internal status: 1 of 4  Idle, showing record, creating new record,  modifing existing record.  
 
-
-  View behaviour is client js controlled,  critical ops stays on server
-    so it should be fast and responsive, reducing delay problems to the actual server db operations 
-
-  The dev user implements simple operations only (forget the onclick !)
+  dev implements simple operations only (forget the onclick !)
     form operations:  clean the form, show a record, create a form for editing
-    db operations:    select, insert, update, delete...     
+    db operations:    select, insert, update, delete...
+    result:           true/false  to let keypad know those op where succesful        
     just that.  
- 
-  html, css, js, 
-  class, events,  
+  
 
+*/
+/*
+     whats the story?
+
+     forget onclick and buttons enabling, just code the f operations 
 */
 
 /*
 
 
-  status, 1 of 4   
+  mode: 1 of 4   
     panel mode:   idle, showing, adding, modifying 
     special status: waiting server response
 
@@ -47,7 +52,7 @@
 
   Mandatory methods?
 
-  Optional methods
+  Optional methods.
   
 
 
@@ -57,6 +62,9 @@
   
 
  check IDLE spelling
+
+  Note: I quit being an all semicolon paranoic to be an only-to-force-starting-commands advocant (like for( ;i++), like ;[] ) 
+  No debate intended, I just guess fewer errors with this aproach.  And a cleaner screen.
 
 */
 
@@ -72,11 +80,18 @@ class CrudPad extends HTMLElement  {
   constructor(){
     super()  
 
+     
+
 
   } 
 
-  // *** mode, readonly for dev  ***    
-  _mode = 0  //  type as ST_LIST // dont  =this.ST_LIST.IDLE, to force change to idle first run   
+
+  // ** shared objects 
+  buttons        // internal, unified here for easy apeareance tuning. DONT change behaviour (onclick, enable)
+  customButtons  // custom, created by .createCustomButton.  Everything else is on you, Dev.   
+
+
+
 
   get mode(){
     return this._mode
@@ -84,7 +99,11 @@ class CrudPad extends HTMLElement  {
 
   get MODE_LIST() {return {
     "IDLE":1, "SHOW":2, "CREATE":4, "MODIFY":8,   // "ST_WAITINGSERVER":16 ?}
-  }}                                              
+  }}
+
+  // *** mode, readonly for dev  ***    
+  _mode = 0  //  type as ST_LIST // dont =this.MODE_LIST.IDLE here so it sets things to idle on first run   
+  
 
   // *** internal var ***     // USELESS ??? no declaration needed, no way to prevent typos?? this.ANYTHING?
   // *** internal var 1of2: From dev ***
@@ -97,36 +116,43 @@ class CrudPad extends HTMLElement  {
 
   _funcEraseForm 
   _funcDisableForm
-  _textButtonOk
-  _txtButtonCancel
+  //_textButtonOk
+  //_txtButtonCancel
 
   _funcCreate_FormEditNew
   _funcCreate_DbInsert
-  _txtButtonCreate
+  //  _txtButtonCreate
 
   _funcUpdate_FormEditModify
   _funcUpdate_DbUpdate
-  _txtButtonModify
+  //  _txtButtonModify
 
   _funcRemove_DbDelete
-  _txtButtonDelete
-  _txtConfirmDelete
+  //  _txtButtonDelete
+  //  _txtConfirmDelete
 
   _funcSearchAndShow
-  _txtButtonSearch
+  //  _txtButtonSearch
   _boolWithSearchInputBox
 
   _funcNavMoveFrst
   _funcNavMovePrev
   _funcNavMoveNext
   _funcNavMoveLast
-  _arrayButtonNavTxt
+  //  _arrayButtonNavTxt
 
   // *** internal var 2of2: predefined (hidden pad work) ***
   
 
   // *** onclick *** hidden for Mr Dev
-  _btSearch(){}
+  // fire finction implemented, wait for result..  
+          // Should I put a "cancelable" ? waiting a search result is cancelable, result from update isnt. 
+          // timeout and otrhe stuff in waitingserver function
+  _btSearch(){
+    this._funcSearchAndShow(this.inpSearch.value)  // input if any
+    // now set cb 
+
+  }
   _btNew(){}
   _btModi(){}
   _btDel(){}
@@ -139,15 +165,93 @@ class CrudPad extends HTMLElement  {
   _btExit(){}
 
 
+  _btConfirmYes(){
+    this._funcConfirmYes()
+    this._confirmHide()
+  }
+  _btConfirmNo(){
+    this._funcConfirmNo()
+    this._confirmHide()
+  }
+  _confirmHide(){     // hide with style? 
+    this.divYesNo.style.display = "none"
+    this._enableMenu(true)
+    this._funcConfirmYes = undefined
+    this._funcConfirmNo = undefined
+  }
+
+
+  // get RESULT_LIST(){ return {
+  //   "reset":1, "search_ok":2, 
+  // }}
+
+  
+   
+
+  // PROBLEMS to fix:  
+  // Names.  
+  // Dom elements, I need to create them from start (and add to .buttons[])  even if I never use this.
+  // Style..? Im not sure I have to force it here, I dont see another option.
+  confirm(textMsg, funcYes, funcNo){  // just cause I dont like confirm in a box
+      //verify  
+      if (!esFun(funcYes) || !esFun(funcNo) ) {return} 
+
+      if (esFun(this._funcConfirmYes) || esFun(this._funcConfirmNo)) {
+          this.hey('int err - _confirm() already waiting')  // It cannot happen.  Can it?
+          return
+      } 
+
+      // msg = "",  does not requiere confirmation...  Why? To abstract its use.  I'll use it later.
+      if (textMsg == '') { funcYes() ; return }
+
+      //semimodal
+      this._enableMenu(false)
+      this._funcConfirmYes = funcYes
+      this._funcConfirmNo = funcNo
+
+      //let rta =  preguntoSiNo(queQuere )
+
+
+      this.divYesNo = document.createElement("div")
+      this.divYesNo = this.divYesNo      //despues veo...  *************************************
+      //let msg = document.createElement("p")
+      let inputYes = document.createElement("button")
+      let inputNo = document.createElement("button")
+      
+
+      this.divMain.appendChild(this.divYesNo)  //no matter where,  always middle-left
+      //mg.textContent = mensaje
+      inputYes.textContent = "SI"
+      inputNo.textContent = "NO"
+
+     // di.returnValue.
+     this.divYesNo.textContent = textMsg
+//       this.divYesNo.appendChild("form")
+     this.divYesNo.appendChild(inputYes)
+     this.divYesNo.appendChild(inputNo)
+     this.divYesNo.style.position = "fixed"
+     this.divYesNo.style.bottom = 0
+   
+      {let tt = this; inputYes.onclick = function(){ tt._btConfirmYes()} } // me cago en el iavascrít
+      {let tt = this; inputNo.onclick = function(){ tt._btConfirmNo()} } // me cago en el iavascrít
+
+      //ya esta, no puedo hacer mas nada, returno con las manos vacias
+
+  }
+  hey(what){
+      this.pMensaje.textContent = what
+      //this.pMensaje.innerHTML = what
+  }
+  
+
 
   // *** implement behaviour ***
   //set control mandatory.   ---Should  i do it Via constructor????  
-  setFormControl(funcCleanForm, funcDisableForm, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
+  setFormControl(funcCleanForm, funcDisableForm){ //}, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
     this._funcCleanForm = funcCleanForm   
     this._funcDisableForm = funcDisableForm
-    this._textButtonOk = textOkButton
-    this._txtButtonCancel = textCancelButton
-
+    // this._textButtonOk = textOkButton
+    // this._txtButtonCancel = textCancelButton
   }
 
   // These 5 methods implement bahaviour and they all are optional.
@@ -191,21 +295,20 @@ class CrudPad extends HTMLElement  {
   }
 
   // this change the pad status, results from db operations // true/false (ok/err) for now, maybe let complex later  
-  operationResult(op_msg){    // TRUE FALSE for now
+  operationResult(success, msg){    // success TRUE FALSE for now.  Msg optional msg <p>.
 
 
-    
   }
 
   // get CB_RESULT_MSG_LIST(){ // do I really need this?   Nav !!
   //   return {"DB_CREATE_OK":1,  "DB_UPDATE_OK":2,               }
   // }
 
-/*
+  /*
   setAllButtonsInnerHTML ( btOk, btCancel, btSearch, btCreate,  etcetcetcetc, ){   // I dont like it. At all. better expose dom array buttons ?  Or forget and Let dev query buttons? 
       // this is horrible.  Let's dev do it by himself via query or whatever. I could help with a htm class 
   }
-*/ 
+  */ 
   
 
 
@@ -228,7 +331,8 @@ class CrudPad extends HTMLElement  {
 
     /*
 
-    2 groups:  1 search, crud, ok/canc, custom     2 nav, status, exit 
+    3 groups:  1 search, crud, ok/canc, custom     2 nav, status, exit   3 replace 1&2 with YeS/NO confirm
+
     some div replaced by fieldset cause its useful "enabled"
 
       divMain                  div
@@ -255,6 +359,9 @@ class CrudPad extends HTMLElement  {
             pMsg
           divExit
             butExit
+        divYesNo    // 3rd group, "CONFIRM" replace temporarily 1&2
+          butYes
+          butNo
   */
 
     // MAIN- 
@@ -363,19 +470,26 @@ class CrudPad extends HTMLElement  {
     this.div2.appendChild(this.divMsg) 
 
     //divExit
-    if (this._implementedExit)) {
+    if (this._implementedExit) {
       this.divExit = document.createElement("div") 
       this.divExit.className = "div_exit" 
       this.btExit = this._makeButton(this.divExit, "cmdExit", this._txtButtonExit  ) 
       {let tt = this; this.botSalir.onclick = function(){ tt._btExit()} } // me cago en el yavascrít
       this.div2.appendChild(this.divExit) 
     }
+
+    //divYesNo
+
+
+
+
     this.divCrud.appendChild(this.div1) 
-    this.divCrud.appendChild(this.div2) 
+    this.divCrud.appendChild(this.div2)
+     
   }
 
 
-  _makeButton(context, id, text){
+  _makeButton(context, id, name, text){
     let boton = document.createElement("button") 
     
     boton.id = id   
@@ -386,10 +500,12 @@ class CrudPad extends HTMLElement  {
     context.appendChild(boton) 
     boton.textContent = text
 
+    this.buttons[name] = boton   // is it correct?
+
     return boton 
   }
 
-  _changeMode(newMode, focus){
+  _changeMode(newMode, focus){      // focus? is to used to set? Any convention?
     // enable/disable buttons and div
     // Tests are masks of bynary flags. Do NO TEMPT to put || (logical OR) instead of bynary sum, it would fail.
 
@@ -490,7 +606,10 @@ class CrudPad extends HTMLElement  {
         //}
     }
   }
-} //?
 
-function isObj(what){return typeof what == 'object' }
-function isFun(what){return typeof what == 'function'}
+} // class end
+
+// can I do this, here?
+function isObj(what){return typeof what == 'object'   }   // NEVER fucking parameters inside ' ' !!! Hate you js.  
+function isFun(what){return typeof what == 'function' }
+
