@@ -8,27 +8,27 @@
 
 19-05-06
 
-Keeping playground local.
-But still the code here is completely untested. (Cool! or Doomed!)
-Longer than expected.  But it WILL be a bust. I ll finish this soon. 
+Keeping playground local. "confirm" was a good practice. 
+But still the code here is completely untested. (may I say: Cool! or Doomed!)
+Taking longer than I expected.  But it WILL be a bust. I ll finish this soon. 
 ...
-Hate JS, hate W10.  May the next update be from Mint part, 
-test for github When I have wifi back.
+Still Hate JS
 ...
 JS naming nightmare.  No way to ensure integrity, 
-intelisense is pretty dumb,  It CAN'T BE GOOD with this language!!! 
+intellisense is pretty dumb,  It CAN'T BE GOOD with this languaje!!! 
 I cant do arrays of objects, anonymous or fancy abstractions, not here,
 the pad is pretty complex and distictive elements, I need NAMES.  Lots of.  
 No integrity check, and they became properties?  FY!!!
 But I can do better.  No exposed names for button properties, 
 just expose the buttons themselves to Dev and let him change everything from text to tips, icons and animations;
 but Do I need the expose? or just naming it right is then well showed? Maybe. Maybe crudpad.buttons is clearer,
-just like crudpad.customButtons.   
+just like crudpad.customButtons. Ill keep separated cause of different implementations.
 ...
 Still hate js, but the async thing is the coolest. You are the boss, 
 you dont wait until your minions finish their job.  You just tell them what to do 
-and do something else.  Its REAL multitask, cause you are not doing it.
+and go do something else.  Its REAL multitask, cause you are not doing it.
 The first word in every js tutorial should be: ASYNC
+Wow, forgot to stage commit push publish or wathever.
 
 
 
