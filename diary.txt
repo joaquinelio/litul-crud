@@ -1,8 +1,59 @@
 
-*** --- ***
-*** Log ***   
-*** --- ***
+*** ----- ***
+*** Diary ***   
+*** ----- ***
 
+
+19-05-15
+
+REAL DATABASE!
+Finished -without ANY testing- htm playground with test database indexedDb.  So I can test the panel.
+No need to promises. Just events.
+With the crudpad in mind, it was too easy.  I wonder if any of these would work. 
+...
+Didnt implement db NAV yet (cursors). Easy too, with my sql backgound.  I'll  back to it later in the project,
+too much code with no idea of how good I'm going.  
+...
+DB, PAD.  They'll test each other.  Sometime.
+
+
+
+19-05-13
+
+BirthWeek  break.  I just left being a teenager, 3th time.  I'm 3 times 20yo young. 
+The break will continue while studing promises, I understand them but they are not in my blood yet.
+
+
+
+19-05-09
+
+I really was trying to implement firebase, useful knowledge unlike local storage. 
+Then node? now?  Everything new here.  Learning from caos, not my first time, like a baby. 
+but.
+Insane js language, great callbacks, promises, node, firebase, nosql, dom, they all first time.
+and no way to test any until everything is setup and in armony.  
+Stop overwelm.
+Indexeddb is complex, maybe too complex. But it has what I need, solid test for my first app.
+Stll, either way, I have to finish it without even one test...  Until I get some crudpad done.
+but If I do things right design errors in one project wont make the other deprecated.  
+...
+result(true/false)  is ok. but I keep thinking what if.  
+onerror, onsuccess sound more familiar to dev,
+would it put the complexity on the wrong side?  ?
+But the message would target to exactly where it was called, thats the beauty of promises
+If I understand.
+Maybe I can think aubout it later, buy it feels like one of the starting paradigms.
+YES.  Depends on how difficult is for dev to fire them.  result() is easier. 
+F freecodecamp only barely teach async inside frameworks part.  I WON'T DO iT.  Vanilla is my goal, 
+vanilla will be my schooling.  By the time I "finish" learning all frameworks will be deprecated. lol!
+hopefully js deprecated too. It needs to be rebuilt.
+
+
+
+19-05-07
+
+Fatal github empty server response?  Okey.
+Uf. Need to do test db app. Real, no fake.  Promises, promises, promises...
 
 
 
@@ -10,12 +61,12 @@
 
 Keeping playground local. "confirm" was a good practice. 
 But still the code here is completely untested. (may I say: Cool! or Doomed!)
-Taking longer than I expected.  But it WILL be a bust. I ll finish this soon. 
+Taking longer than I expected.  But it WILL be a burst. I ll finish this soon. 
 ...
 Still Hate JS
 ...
 JS naming nightmare.  No way to ensure integrity, 
-intellisense is pretty dumb,  It CAN'T BE GOOD with this languaje!!! 
+intellisense is pretty dumb,  It CAN'T BE GOOD with this language!!! 
 I cant do arrays of objects, anonymous or fancy abstractions, not here,
 the pad is pretty complex and distictive elements, I need NAMES.  Lots of.  
 No integrity check, and they became properties?  FY!!!

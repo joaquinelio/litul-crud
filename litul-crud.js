@@ -19,7 +19,7 @@
     db nav << < > >> , 
     OK, Cancel
     Custom buttons  (can be enabled on specific status of choice)
-    msg         unintrusive //check meaning/spelling find better word// 
+    msg         unintrusive //check meaning/spelling find better word // -*********************
                 custom text 
   
   It will show and enable-disable buttons depending on:
@@ -102,7 +102,7 @@ class CrudPad extends HTMLElement  {
   }}
 
   // *** mode, readonly for dev  ***    
-  _mode = 0  //  type as ST_LIST // dont =this.MODE_LIST.IDLE here so it sets things to idle on first run   
+  _mode = 0 // as ST_LIST he-he // 0=invalid. Dont =IDLE here so it sets things to idle on first run   
   
 
   // *** internal var ***     // USELESS ??? no declaration needed, no way to prevent typos?? this.ANYTHING?
@@ -140,6 +140,11 @@ class CrudPad extends HTMLElement  {
   _funcNavMoveNext
   _funcNavMoveLast
   //  _arrayButtonNavTxt
+
+
+  _funcConfirmYes
+  _funcConfirmNo
+
 
   // *** internal var 2of2: predefined (hidden pad work) ***
   
@@ -209,9 +214,8 @@ class CrudPad extends HTMLElement  {
       this._funcConfirmYes = funcYes
       this._funcConfirmNo = funcNo
 
-      //let rta =  preguntoSiNo(queQuere )
 
-
+      //  PROBLEM:  move it to _letsMakeThePanel(), here only show  
       this.divYesNo = document.createElement("div")
       this.divYesNo = this.divYesNo      //despues veo...  *************************************
       //let msg = document.createElement("p")
@@ -243,7 +247,11 @@ class CrudPad extends HTMLElement  {
       //this.pMensaje.innerHTML = what
   }
   
-
+  // fires pad.  Use it when all settings are done and db ready.  
+  start(){
+    this._letsMakeButtonPanel()
+    this._changeMode(this.MODE_LIST.IDLE)
+  }
 
   // *** implement behaviour ***
   //set control mandatory.   ---Should  i do it Via constructor????  
@@ -362,6 +370,9 @@ class CrudPad extends HTMLElement  {
         divYesNo    // 3rd group, "CONFIRM" replace temporarily 1&2
           butYes
           butNo
+
+        //div Waiting // ?? 4th group could be a pic of a cloud replacing all buttons 
+
   */
 
     // MAIN- 
@@ -485,7 +496,7 @@ class CrudPad extends HTMLElement  {
 
     this.divCrud.appendChild(this.div1) 
     this.divCrud.appendChild(this.div2)
-     
+
   }
 
 
@@ -500,7 +511,7 @@ class CrudPad extends HTMLElement  {
     context.appendChild(boton) 
     boton.textContent = text
 
-    this.buttons[name] = boton   // is it correct?
+    this.buttons[name] = boton   // is it correct?******************
 
     return boton 
   }
@@ -573,11 +584,11 @@ class CrudPad extends HTMLElement  {
 
   
   _enableElement(element, conditionToEnable){  // buttons and fieldsets,  enable or disable
-      if (esObj(element)){
-          element.disabled = !conditionToEnable
-          return conditionToEnable 
-      }
-      return false 
+    if (esObj(element)){
+      element.disabled = !conditionToEnable
+      return conditionToEnable 
+    }
+    return false 
   }
 
   _enableInNav(){
