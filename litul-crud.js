@@ -104,7 +104,7 @@ class CrudPad extends HTMLElement  {
   // *** mode, readonly for dev  ***    
   _mode = 0 // as ST_LIST he-he // 0=invalid. Dont =IDLE here so it sets things to idle on first run   
   
-  get _WAITNG_LIST = 
+ // get _WAITNG_LIST = 
   
   _waitingFor = 0
 
