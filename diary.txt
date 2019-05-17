@@ -1,7 +1,18 @@
-
+-
 *** ----- ***
 *** Diary ***   
 *** ----- ***
+
+
+
+19-05-17
+
+Lunch break.
+Nothing to commit today... but still...
+Just trying to understand git.    
+Stage, commit, push, publish.  I dont get.  I can understand request, never used.
+Project folder in dropbox... just in case
+
 
 
 19-05-16
