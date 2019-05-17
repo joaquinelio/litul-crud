@@ -13,7 +13,7 @@ For now.
 Dedicated to DEV, my imaginary friend the developer (mostly myself).
 
 Started on
-April 9, 1919
+April 9, 1819 
 
 By
 Joaquin Elio 'Lito' Fernandez
@@ -62,8 +62,13 @@ example for CREATE: passing two functions: pretty pure:
   the other one for checking data and doing the Sql insert.
 NO onclick listening, no taking care of buttons status.
 But dev has to manage the cb and inform the panel its result.
-  .result(msg)    // msg  true false for now...  my intuition tells me it is not enough
+  .result(boolSucces, textMsg)    // msg  true false for now...  my intuition tells me it is not enough
 
+About crudpad.result(success)
+You have to inform me if it was a success
+   db.requestsomething()
+   db.onsuccess = (){ crudpad.result(true) }
+   db.onerror =   (){ crudpad.result(false)}
 
 
 
@@ -170,4 +175,5 @@ Azure devops, github... How do they keep version history? To check. Forks only? 
 
 .setAllButtonsInnerHTML (txtButtonOk, txtButtonCancel, ... )  // I think it's clean to have the option .
     // so dev can put icon and SVGs in one place.  Do I need to be careful InnerHTML dsnt overwrite too much? 
+
 

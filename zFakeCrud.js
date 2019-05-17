@@ -5,6 +5,8 @@
 
 
 
+
+
 // mmm...  what is best practice to do this kind of things
 const myDbName  = 'fakedb' 
 const myStoreName = 'fakestore'
@@ -16,7 +18,8 @@ const transreadwrite = 'readwrite'
 const transreadonly = 'readonly'  // crazy but the right thing
 
 // store item {id: , description: , price: }
-//        FK!!! should *type* properties too? Hate js 
+//        FK!!! should *type* properties too? HATE js 
+//        a CLASS wont protect it either.     HATE js
 
 
 let db    //db

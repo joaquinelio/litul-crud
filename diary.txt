@@ -4,6 +4,49 @@
 *** ----- ***
 
 
+19-05-16
+
+Cleaner: 
+-I can put button names in a json file.  Later.  I'll just stop enhancing code related to that
+-The class button_crud lets dev modify that and more, add icons, svg; note: dont overwrite this. 
+...
+to toy with, later
+- If I understand event delegation...
+1) db file:
+May I replace ALL .onsuccess in db section with just ONE line ??  
+the panel lets that, no need to code anything extra
+ onsuccess  (){ crudpad.result(true) }   
+ onerror   (){  crudpad.result (false, msg2user) }   mm... the msg to the user...   
+ careful, can fire when I dont want to. 
+ Just a few db functions, no need. 
+2) crud file
+Replace all insane 'this.' onclick listening  whit one ?  There is an advantage:
+  waitingfor status in only one place.
+...
+What if I put an html file (is this a template?) instead of making it from js? Is it
+cleaner?
+preferred?
+I dunno
+...
+Hate js again
+EnumMODE = { 'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8, }
+this._mode = this.EnumMODE.MODIFY    
+would be useful if js let me 
+  var  mode  as  EnuMODE     ( Even VB6 had it!  Does TS? )
+No way to protect anything. 
+js is wonderful tool to fabric bugs.
+freedom sucks.
+...
+internal status waitingFor,  so dev sees only one method for everything result() 
+each button registers to _buttons, their onclick can be simpler than now,
+plus the unified onclick let me manage waitingFor all in one place, fewer errors.  
+...
+I dont get html element class extend yet, link still broken.  
+Busy tomorrow, hope i ll back with certezas  
+no net? no need to commit now, I just hope notebook dont explode. 
+
+
+
 19-05-15
 
 REAL DATABASE!
