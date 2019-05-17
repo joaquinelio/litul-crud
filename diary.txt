@@ -11,8 +11,10 @@ Lunch break.
 Nothing to commit today... but still...
 Just trying to understand git.    
 Stage, commit, push, publish.  I dont get.  I can understand request, never used.
-Project folder in dropbox... just in case
-
+Project folder in dropbox... in the "editable" folder, autozip cumulative. Just in case
+Fatal: git taskcanceled excepcion
+    I didnt do it
+    
 
 
 19-05-16
