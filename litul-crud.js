@@ -6,7 +6,7 @@
   learning vanilla js, my very first project
 
   by
-  Joaquin Elio 'Lito' Fernandez
+  Joaquin Elio "Lito" Fernandez
   
 */
 
@@ -34,6 +34,7 @@
   
 
 */
+
 /*
      whats the story?
 
@@ -87,16 +88,16 @@ class CrudPad extends HTMLElement  {
 
 
   // ** shared objects 
-  buttons        // internal, unified here for easy apeareance tuning. DONT change behaviour (onclick, enable)
-  customButtons  // custom, created by .createCustomButton.  Everything else is on you, Dev.   
+  padButtons      // internal, exposed for easy apeareance tuning. DONT change behaviour (onclick, enable)
+  customButtons   // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
+  _requestTypes    // pad on hold waiting for one of these.
 
 
 
   get mode(){
     return this._mode
   }
-
   get MODE_LIST() {return {
     'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,   // 'ST_WAITINGSERVER':16 ?}
   }}
@@ -104,9 +105,12 @@ class CrudPad extends HTMLElement  {
   // *** mode, readonly for dev  ***    
   _mode = 0 // as ST_LIST he-he // 0=invalid. Dont =IDLE here so it sets things to idle on first run   
   
- // get _WAITNG_LIST = 
-  
-  _waitingFor = 0
+
+  _promiseResult = null     // sorry I dunno how to do it
+  // get _WAITNG_LIST =   
+  // //  _waitingForRequest = 0
+  // _waitSuccess = null
+  // _waitError = null     // unused until now.
 
 
   // *** internal var ***     // USELESS ??? no declaration needed, no way to prevent typos?? this.ANYTHING?
@@ -122,6 +126,7 @@ class CrudPad extends HTMLElement  {
   _funcDisableForm
   //_textButtonOk
   //_txtButtonCancel
+  _txtConfirmCancel
 
   _funcCreate_FormEditNew
   _funcCreate_DbInsert
@@ -133,7 +138,7 @@ class CrudPad extends HTMLElement  {
 
   _funcRemove_DbDelete
   //  _txtButtonDelete
-  //  _txtConfirmDelete
+  _txtConfirmDelete
 
   _funcSearchAndShow
   //  _txtButtonSearch
@@ -145,6 +150,7 @@ class CrudPad extends HTMLElement  {
   _funcNavMoveLast
   //  _arrayButtonNavTxt
 
+  _txtConfirmExit
 
   _funcConfirmYes
   _funcConfirmNo
@@ -157,29 +163,110 @@ class CrudPad extends HTMLElement  {
   // fire finction implemented, wait for result..  
           // Should I put a 'cancelable' ? waiting a search result is cancelable, result from update isnt. 
           // timeout and otrhe stuff in waitingserver function
-  _btSearch(){
+  async _btSearch(){
     this._funcSearchAndShow(this.inpSearch.value)  // input if any
-    // now set cb 
-
+    _setPromise(MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)  ? 
   }
-  _btNew(){}
-  _btModi(){}
-  _btDel(){}
-  _btOK(){}
-  _btCancel(){}
-  _btMovFirst(){}
-  _btMovPrev(){}
-  _btMovNext(){}
-  _btMovLast(){}
-  _btExit(){}
+  
+  _btNew(){
+    this._funcCreate_FormEditNew()
+    _setPromise(MODE_LIST.CREATE,  )   //  ,MODE_LIST.IDLE)  ? 
+  }
+
+  _btModi(){
+    this._funcUpdate_FormEditModify()
+    _setPromise(MODE_LIST.MODIFY,  ) //  ,MODE_LIST.IDLE)  ? 
+  }
+  
+  _btDel(){
+    this.confirm(
+      this._txtConfirmDelete,
+      ()=>{
+        this._funcRemove_DbDelete()
+        _setPromise(MODE_LIST.IDLE,)   // err, keep showing 
+      },
+      // no, stays the same
+    )
+  }
+  
+  _btOK(){
+    if(this.mode == this.MODE_LIST.CREATE){
+      this._funcCreate_DbInsert()
+      _setPromise(MODE_LIST.SHOW,)  
+    } else if(this.mode == this.MODE_LIST.MODIFY) {
+      this._funcUpdate_DbUpdate()
+      _setPromise(MODE_LIST.SHOW,)  
+    } else {
+      hey ('int err: okbutton no create no modify')
+    }
+  }
+  
+  _btCancel(){
+    this.confirm(
+      this._txtConfirmCancel,
+      ()=>{ 
+        hey(_txtCancelDone)
+        this._funcEraseForm()
+      }
+    )
+  }
+  
+  _btMovFirst(){
+    this._funcNavMoveFrst()
+    _setPromise(MODE_LIST.SHOW)
+  }
+  
+  _btMovPrev(){
+    this._funcNavMovePrev()
+    _setPromise(MODE_LIST.SHOW)
+  }
+  
+  _btMovNext(){
+    this._funcNavMoveNext()
+    _setPromise(MODE_LIST.SHOW)
+  }
+  
+  _btMovLast(){
+    this._funcNavMoveLast()
+    _setPromise(MODE_LIST.SHOW)
+  }
+  
+  _btExit(){
+    this.confirm(
+      this._txtConfirmExit,
+      this._funcExit(),
+    )
+  }
 
 
+  _setPromise(successMode, errorMode=''){
+
+    let tt = this._changeMode   // this way?  If it works sucks either.
+
+    let promise = new Promise(function(resolve, reject)  {
+      // reqUserRespones(promise)
+      _promiseResult = promise 
+      this._crudPadActive(false)
+    })      
+    promise.then(              //  CHECK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ()=> tt( successMode ),  // I'm afraid the fucking THIS will ruin like onclick
+      ()=> {if(errorMode != ''){tt(errorMode)}}  //(error) => this._changeMode( MODE_LIST.IDLE ) do nothing, if fail stay the same.  
+    )
+    promise.finally (()=>{ 
+      _promiseResult = null
+      this._crudPadActive(true) // or maybe disable div1 & div2  // better a nice animation shot to the cloud
+    })   
+ 
+  }
+
+
+  // --- .confirm ---------------
   _btConfirmYes(){
     this._funcConfirmYes()
     this._confirmHide()
   }
   _btConfirmNo(){
-    this._funcConfirmNo()
+    this._funcConfirmNo()  // check if ?
     this._confirmHide()
   }
   _confirmHide(){     // hide with style? 
@@ -268,7 +355,7 @@ class CrudPad extends HTMLElement  {
 
   // These 5 methods implement bahaviour and they all are optional.
   setCreate(funcFormEditNew, funcDbInsert, textButton = 'New', ){
-    // if !func throw err...   
+    // if ! func throw err...   ??
     this._funcCreate_FormEditNew = funcFormEditNew
     this._funcCreate_DbInsert = funcDbInsert
     this._txtButtonCreate = textButton
@@ -306,10 +393,40 @@ class CrudPad extends HTMLElement  {
     this._implementedExit = true
   }
 
+  addCustomButton(name, className, caption, activeModesBinarySum, onclick){
+    let bot = document.createElement("button") 
+
+    bot.name = name 
+    bot.className = className + " boton " 
+    //bot.value = value 
+    bot.innerHTML = caption 
+    bot.id = name 
+    bot.onclick = onclick   
+    bot.type = "button" 
+    bot.dataset.estados = activeModesBinarySum  
+    bot.disabled = true 
+
+    this.customButtons.push(bot) 
+    return bot 
+  }
+
   // this change the pad status, results from db operations // true/false (ok/err) for now, maybe let complex later  
   result(success, msg){    // success TRUE FALSE for now.  Msg optional msg <p>.
+    if ( _promiseResult == null ){
+      hey("Int err:  No promise pending")
+      return
+    }
+
+    ;(success)? _promiseResult.resolve(): _promiseResult.reject()   //can I do that?
 
 
+    // if (success){
+    //   _promiseResult.resolve()
+    // } else {
+    //   _promiseResult.reject()
+    // }
+
+    hey(msg)
   }
 
   // get CB_RESULT_MSG_LIST(){ // do I really need this?   Nav !!
@@ -496,6 +613,9 @@ class CrudPad extends HTMLElement  {
     //divYesNo
 
 
+          //       ***** HEY !!    Where is .confirm  div3 panel???
+
+
 
 
     this.divCrud.appendChild(this.div1) 
@@ -514,16 +634,16 @@ class CrudPad extends HTMLElement  {
     context.appendChild(boton) 
     boton.textContent = text
 
-    this.buttons[name] = boton   // is it correct?******************
+    this.buttons.push(boton)   // is it correct?********** Yes, but this way cant: "buttons.buttonRemove"
 
     return boton 
   }
 
-  _changeMode(newMode, focus){      // focus? is to used to set? Any convention?
+  _changeMode(newMode, focus){      // focus? is it used to set focus? Any convention?
     // enable/disable buttons and div
-    // Tests are masks of bynary flags. Do NO TEMPT to put || (logical OR) instead of bynary sum, it would fail.
+    // Tests are masks of bynary flags. Do NO TEMPT to put "||" (logical OR) instead of bynary sum, it would fail.
 
-    if (this.mode  != newMode  ) {     
+    if (this.mode != newMode  ) {     
 
       this.mode = newMode 
 
@@ -576,7 +696,7 @@ class CrudPad extends HTMLElement  {
       // show con style?
       //this._style_divMsg  this. mode .CLASS
 
-      if (focus){         // should I ? 
+      if (focus){         // should I ?   useless? 
 
         // focus on bt OK  if enabled 
           //    cmdOk.SetFocus
@@ -622,6 +742,7 @@ class CrudPad extends HTMLElement  {
   }
 
 } // class end
+
 
 // can I do this, here?
 function isObj(what){return typeof what == 'object'   }   // NEVER fucking parameters inside ' ' !!! Hate you js.  

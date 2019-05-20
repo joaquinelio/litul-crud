@@ -4,6 +4,58 @@
 *** ----- ***
 
 
+19-05-20
+
+Dear diary. Sad sunday.
+Its monday already.
+20? What did I do the last two days?
+Now: wandering around, looking for something to complete... modify... or even spell check.
+...
+Need to endure status (mode) concept. 
+Cant force type. 
+Mode is 1 of 4.
+WaitingFor is a suprastatus that put on hold any mode.   
+...
+Ugly html contruct.  Want better. Want to rewrite entirely. 
+I dont want someone telling "See? x framework is easier."
+htm template? Problem: Smartest is htm and basic prop same place.  Yes, I know frameworks do that.
+...
+Fuck!
+set buttons names is cleaner from the collection  .buttonRemoveName = 'Remove? Oh No!' 
+but inside the setRemove(,,, textButtonRemoveName)  is a nice touch.
+json file is really better?
+...
+Buttons code is getting too verbosed.
+I could use "registry" functions.    *******  chek  naming  **************  register, store, repo.
+-PAdButtons  
+-ServerRequest types. 
+-Maybe custom buttons too.
+So 
+-one line to add            register(globalstorebutton, somebutton, onclickfunction )      register()
+-Another to check / get     registered(globalstorebutton, somebutton) -> onclick   
+Can name 
+- setReg(globalstorebutton, buttonRemove, _funcDbRemove)
+- getReg(globalstorebutton, buttonRemove)  -> function
+- isReg(globalstorebutton, buttonRemove)  -> boolean
+I can test a class instead of using globals
+-  regPadButtons = new regStore
+-  regPadButtons.Set(button, onclick)
+FUCK again!
+I am thinking RIGHT?  PadButtons collection should be the one who has these methods!!! NO NEED of ANY OF THESE.
+I'm on this.
+...
+More functions implemented.
+...
+Promises, callback.  HOW do I do my own?  Training always use callbacks from DOM.
+I'll fake one until I figure it out.
+UF!!! I hope it works... 
+It was hard.
+...
+NEED to focus on element to VERY FIRST try!  It is crazy not to.  
+1000+ lines not a single run could be a total vaporware.
+Coming soon.
+
+
 
 19-05-17
 
@@ -12,9 +64,15 @@ Nothing to commit today... but still...
 Just trying to understand git.    
 Stage, commit, push, publish.  I dont get.  I can understand request, never used.
 Project folder in dropbox... in the "editable" folder, autozip cumulative. Just in case
-Fatal: git taskcanceled excepcion
+Fatal: git taskcanceled exeption
     I didnt do it
-    
+Fatal: unable to access 443 time outside
+    wifi is good.
+    ok I dont care.
+aaahhh...  I should use 'vanilla' like js in the learning process.  
+  Inside VS CODE many things may be hidden for my confort 
+  Later. If I need it.
+
 
 
 19-05-16
