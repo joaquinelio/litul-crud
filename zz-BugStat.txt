@@ -1,0 +1,13 @@
+this.  missing               5
+this._MakeButton               spell   2
+push()                          padButtons spell, 
+[]  init array                                      REAL BUG
+bolInputBox is not defined         spell
+this.botModi.onclick          spell
+this.customButton.length      spell, spell
+this.btOK.onclick             spell  OK Ok 
+this.divCrud.appendChild(this.div1)   divMain      real BUG 
+this.mode = newMode                   _mode     real BUG
+if (esObj(element                 spell
+this.customButton is not iterable               spell
+this.pMensaje.textContent = what        spell

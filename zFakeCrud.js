@@ -23,7 +23,7 @@ const transreadonly = 'readonly'  // crazy but the right thing
 
 
 let db    //db
-let x     //crudpanel
+let x     //crudpad
 
 //let myDbPromise = null  // not needed, panel makes it KISS anyway
 
@@ -51,9 +51,14 @@ function main(){
 
   // ******************** panel
 
-  let x = new CrudPanel()  // or whatever it is called  // HEY SO WHERE IS THE ELEMENT!!!??? standing by...
-  let xx = x.status        // dont need it
+  // let x = new CrudPanel()  // or whatever it is called  // HEY SO WHERE IS THE ELEMENT!!!??? standing by...
+  // let xx = x.status        // dont need it
   
+
+  let x = document.getElementById('idmenu')
+  //alert (x.mode)
+
+
   // mandatory
   x.setFormControl(zFrmEmpty, zFrmBlock )
   
@@ -67,7 +72,7 @@ function main(){
   //   x.start() // no need for a promise,  needed in real db work like update storage
   // })  
 
-
+  x.start()
   
   // ******************** DB open/create
 

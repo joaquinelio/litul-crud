@@ -4,6 +4,48 @@
 *** ----- ***
 
 
+
+
+190523
+
+Shoulder is killing me.  No artrosis, I'm lucky.  Is this the meaning of being
+a 20 years old lad... the third time?  
+Well... What was going on here...
+I dont feel like doing element today.  I'll fill some gaps maybe.
+...
+No gaps? (nearly). 
+ The htm part, only the new confirm div left,
+ plus of course the surely lots of wrong var names fucking JS no help there.
+The best thing to do is register the element and START DEBUG at once, then I'll be plenty of work to do.
+One thousnd never tested lines... 
+A language I never used before...
+with code strongly based on the async concept I never used before...
+Ha! A genious or a foul.
+The worst, no compiler to help to make code robust.
+...
+window.customElements.define ? Thats it?
+what a surprise, not working.
+Well, here we go.
+line 417  '_promiseResult  not defined', forgot 'this.' 
+a REAL language would point it before any test.  Hate js. 
+looks good anyway. At least it recognites (sorry spelling...) js
+...
+New CSS, some. Ugly show anyway, coudnt test any interaction.
+IndexedDB fails to create.
+Tired. Very.
+
+
+
+
+
+19-05-20 at noon
+
+Where the heck do I register element.
+Why do I need it to be an element.  Not something I manage outside the class, maybe useless.
+Dont need to register it.  Maybe.
+
+
+
 19-05-20
 
 Dear diary. Sad sunday.
@@ -41,7 +83,7 @@ I can test a class instead of using globals
 -  regPadButtons = new regStore
 -  regPadButtons.Set(button, onclick)
 FUCK again!
-I am thinking RIGHT?  PadButtons collection should be the one who has these methods!!! NO NEED of ANY OF THESE.
+I am thinking RIGHT?  PadButtons collection should be the one having these methods!!! NO NEED of ANY OF THESE.
 I'm on this.
 ...
 More functions implemented.

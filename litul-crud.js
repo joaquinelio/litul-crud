@@ -76,7 +76,7 @@
 
 */ 
 
-class CrudPad extends HTMLElement  {
+window.customElements.define('lito-crudpad', class extends HTMLElement  {
 
   constructor(){
     super()  
@@ -88,10 +88,10 @@ class CrudPad extends HTMLElement  {
 
 
   // ** shared objects 
-  padButtons      // internal, exposed for easy apeareance tuning. DONT change behaviour (onclick, enable)
-  customButtons   // custom, created by .createCustomButton.  Everything else is on you, Dev.   
+  padButtons = []     // internal, exposed for easy apeareance tuning. DONT change behaviour (onclick, enable)
+  customButtons = []     // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
-  _requestTypes    // pad on hold waiting for one of these.
+  //_requestTypes    // pad on hold waiting for one of these.
 
 
 
@@ -106,7 +106,7 @@ class CrudPad extends HTMLElement  {
   _mode = 0 // as ST_LIST he-he // 0=invalid. Dont =IDLE here so it sets things to idle on first run   
   
 
-  _promiseResult = null     // sorry I dunno how to do it
+  _promiseResult = null     // sorry I dunno how to do it, even if it would work
   // get _WAITNG_LIST =   
   // //  _waitingForRequest = 0
   // _waitSuccess = null
@@ -124,31 +124,31 @@ class CrudPad extends HTMLElement  {
 
   _funcEraseForm 
   _funcDisableForm
-  //_textButtonOk
-  //_txtButtonCancel
+  _textButtonOk
+  _txtButtonCancel
   _txtConfirmCancel
 
   _funcCreate_FormEditNew
   _funcCreate_DbInsert
-  //  _txtButtonCreate
+  _txtButtonCreate
 
   _funcUpdate_FormEditModify
   _funcUpdate_DbUpdate
-  //  _txtButtonModify
+  _txtButtonModify
 
   _funcRemove_DbDelete
-  //  _txtButtonDelete
+  _txtButtonDelete
   _txtConfirmDelete
 
   _funcSearchAndShow
-  //  _txtButtonSearch
+  _txtButtonSearch
   _boolWithSearchInputBox
 
   _funcNavMoveFrst
   _funcNavMovePrev
   _funcNavMoveNext
   _funcNavMoveLast
-  //  _arrayButtonNavTxt
+  _arrayButtonNavTxt  /////////////////////////////////// CAMBIAR !!!!!!!!!!!!!!!!!!!!
 
   _txtConfirmExit
 
@@ -240,6 +240,8 @@ class CrudPad extends HTMLElement  {
 
 
   _setPromise(successMode, errorMode=''){
+    // not a promise, since can be only one and uses a global
+    // but I use its .then
 
     let tt = this._changeMode   // this way?  If it works sucks either.
 
@@ -316,7 +318,7 @@ class CrudPad extends HTMLElement  {
 
       this.divMain.appendChild(this.divYesNo)  //no matter where,  always middle-left
       //mg.textContent = mensaje
-      inputYes.textContent = 'SI'
+      inputYes.textContent = 'YES'
       inputNo.textContent = 'NO'
 
      // di.returnValue.
@@ -334,23 +336,24 @@ class CrudPad extends HTMLElement  {
 
   }
   hey(what){
-      this.pMensaje.textContent = what
+      this.pMsg.textContent = what
       //this.pMensaje.innerHTML = what
   }
   
   // fires pad.  Use it when all settings are done and db ready.  
   start(){
     this._letsMakeButtonPanel()
+    this.divCrud.visibility = true
     this._changeMode(this.MODE_LIST.IDLE)
   }
 
   // *** implement behaviour ***
   //set control mandatory.   ---Should  i do it Via constructor????  
-  setFormControl(funcCleanForm, funcDisableForm){ //}, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
+  setFormControl(funcCleanForm, funcDisableForm, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
     this._funcCleanForm = funcCleanForm   
     this._funcDisableForm = funcDisableForm
-    // this._textButtonOk = textOkButton
-    // this._txtButtonCancel = textCancelButton
+    this._textButtonOk = textOkButton
+    this._txtButtonCancel = textCancelButton
   }
 
   // These 5 methods implement bahaviour and they all are optional.
@@ -387,7 +390,7 @@ class CrudPad extends HTMLElement  {
     this._arrayButtonNavTxt = arrayButtonText   // its ok?  copy array? i dont remember. to check
     this._implementedNav = true 
   }
-  setExit(funcExit, textButton){
+  setExit(funcExit, textButton = 'Exit'){
     this._funcExit = funcExit
     this._txtButtonExit = textButton
     this._implementedExit = true
@@ -412,12 +415,12 @@ class CrudPad extends HTMLElement  {
 
   // this change the pad status, results from db operations // true/false (ok/err) for now, maybe let complex later  
   result(success, msg){    // success TRUE FALSE for now.  Msg optional msg <p>.
-    if ( _promiseResult == null ){
-      hey("Int err:  No promise pending")
+    if ( this._promiseResult == null ){  
+      this.hey("Int err:  No promise pending")
       return
     }
 
-    ;(success)? _promiseResult.resolve(): _promiseResult.reject()   //can I do that?
+    ;(success)? this._promiseResult.resolve(): this._promiseResult.reject()   //can I do that?
 
 
     // if (success){
@@ -426,7 +429,7 @@ class CrudPad extends HTMLElement  {
     //   _promiseResult.reject()
     // }
 
-    hey(msg)
+    this.hey(msg)
   }
 
   // get CB_RESULT_MSG_LIST(){ // do I really need this?   Nav !!
@@ -510,10 +513,10 @@ class CrudPad extends HTMLElement  {
     //
     if ( this._implementedSearch ){  
       this.divSearch = document.createElement( 'fieldset') 
-      this.btSearch = this._MakeButton(this.divSearch, 'cmdSearch', this._txtButtonSearch  )
+      this.btSearch = this._makeButton(this.divSearch, 'cmdSearch', this._txtButtonSearch )
       {let tt = this; this.btSearch.onclick = function(){ tt._btSearch()} } // me cago en el yavascrít
     
-      if ( bolInputBox ){   // with input text? 
+      if ( this._boolWithSearchInputBox ){   // with input text? 
         this.inpSearch = document.createElement('input') 
         this.divSearch.appendChild(this.inpSearch) 
       }
@@ -532,18 +535,18 @@ class CrudPad extends HTMLElement  {
       //mod
       if ( this._implementedModify  ) {  
         this.btModi = this._makeButton(this.divCrud,'cmdModi', this._txtButtonModify) 
-        {let tt = this; this.botModi.onclick = function(){ tt._btModi()} } // me cago en el yavascrít
+        {let tt = this; this.btModi.onclick = function(){ tt._btModi()} } // me cago en el yavascrít
       }
       //del
       if ( this._implementedRemove ) {
-        this.btDel = this._MakeButton(this.divCrud, 'cmdDel', this._txtButtonDelete)   
+        this.btDel = this._makeButton(this.divCrud, 'cmdDel', this._txtButtonDelete)   
         {let tt = this; this.btDel.onclick = function(){ tt._btDel()} } // me cago en el yavascrít
       }
-    this.div1.appendChild(this.divCrud) 
+      this.div1.appendChild(this.divCrud) 
     }
 
     //divCustom      user but? je-je
-    if( this.customButton.length > 0 ){
+    if( this.customButtons.lenght > 0 ){
       this.divCustom = document.createElement('div') 
       this.divCustom.className = 'div_custom' 
       //  
@@ -559,7 +562,7 @@ class CrudPad extends HTMLElement  {
       this.divOkCancel.className = 'div_okcancel' 
       this.btOk = this._makeButton(this.divOkCancel, 'cmdOK',  this._textButtonOk ) 
       this.btCancel = this._makeButton(this.divOkCancel, 'cmdCancel', this._txtButtonCancel ) 
-      {let tt = this; this.btOK.onclick = function(){ tt._btOK()} } // me cago en el yavascrít
+      {let tt = this; this.btOk.onclick = function(){ tt._btOK()} } // me cago en el yavascrít
       {let tt = this; this.btCancel.onclick = function(){ tt._btCancel()} } // me cago en el yavascrít
       this.div1.appendChild(this.divOkCancel) 
     }
@@ -618,8 +621,10 @@ class CrudPad extends HTMLElement  {
 
 
 
-    this.divCrud.appendChild(this.div1) 
-    this.divCrud.appendChild(this.div2)
+    this.divMain.appendChild(this.div1)         //crud  
+    this.divMain.appendChild(this.div2)         //nav msg 
+    //this.divMain.appendChild(this.div3)       //confirm
+    this.appendChild(this.divMain)
 
   }
 
@@ -634,8 +639,8 @@ class CrudPad extends HTMLElement  {
     context.appendChild(boton) 
     boton.textContent = text
 
-    this.buttons.push(boton)   // is it correct?********** Yes, but this way cant: "buttons.buttonRemove"
-
+    this.padButtons.push(boton)   // is it correct?********** Yes, but this way cant: "buttons.buttonRemove"
+    // this.button[boton]     // what about this.  I forgot the training
     return boton 
   }
 
@@ -643,17 +648,17 @@ class CrudPad extends HTMLElement  {
     // enable/disable buttons and div
     // Tests are masks of bynary flags. Do NO TEMPT to put "||" (logical OR) instead of bynary sum, it would fail.
 
-    if (this.mode != newMode  ) {     
+    if (this._mode != newMode  ) {     
 
-      this.mode = newMode 
+      this._mode = newMode 
 
       // for testing
       let stEditing =  
-          this.mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
+          this._mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
       let stNoEditing = 
-          this.mode & (this.MODE_LIST.IDLE + this.MODE_LIST.SHOW) 
+          this._mode & (this.MODE_LIST.IDLE + this.MODE_LIST.SHOW) 
       let stShowing = 
-          this.mode & this.MODE_LIST.SHOW 
+          this._mode & this.MODE_LIST.SHOW 
 
           //check buttons to enable
           //this._rever(this.divBusqueda, stNoEditando)     //fck div cant be disabled
@@ -680,7 +685,7 @@ class CrudPad extends HTMLElement  {
          
           }
           {let tstActive = 0 
-              for (let bo of this.customButton){
+              for (let bo of this.customButtons){
                 tstActive +=  this._enableElement(bo,  Number( bo.dataset.modes ) & this.mode ) 
               }
               this._enableDiv(this.divCustom, tstActive) 
@@ -707,7 +712,7 @@ class CrudPad extends HTMLElement  {
 
   
   _enableElement(element, conditionToEnable){  // buttons and fieldsets,  enable or disable
-    if (esObj(element)){
+    if (isObj(element)){
       element.disabled = !conditionToEnable
       return conditionToEnable 
     }
@@ -741,8 +746,8 @@ class CrudPad extends HTMLElement  {
     }
   }
 
-} // class end
-
+} // class end anonima
+)
 
 // can I do this, here?
 function isObj(what){return typeof what == 'object'   }   // NEVER fucking parameters inside ' ' !!! Hate you js.  
