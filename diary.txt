@@ -3,6 +3,100 @@
 *** Diary ***   
 *** ----- ***
 
+199693
+
+Learning css.  Again.  Not the bigger problem but the one with every move is a pain.
+...
+Found THE bug!!! In a forum.  Fieldset dsnt let flex row.  WHY???  It would make sense.
+But I need flex, and I need disabled.  A div inside the fieldset works ok... Mmm... too dirty.
+Ok, I'll use div and replace disable with css alternative.
+Done.
+...
+Crudpad is now 
+    bottom, row, 100% width
+It would be nice to let, say 
+    left, column, 100% height  
+with just a litul-crudpad class / attr 
+...
+Slower than expected, but this is learning no production. 
+I dont want the things fixed, I want to know WHY.
+I dont want good enough, I want them perfect refactoring to death. 
+Dont expext that in production altought  ;)   good enough is good.
+
+
+
+190601
+
+Hard days.  Too personal to even put it here, this personal diary nobody reads.
+...
+Too many spelling bugs (hate js more and more). Before further debug:
+Cleaner html gen.  
+Cleaner confirm.
+Cleaner element naming, classes. Maybe css atr conflict, good naming should help. 
+I know a framework would help.  Thats the point, the big js lang failure, the freedom to step on the flowers.
+Cleaner readme.  Just cause I love coding but I love writing the more. Frees my mind. 
+...
+Leaving it here, story to write in my blog no-blog but personal no-daily diary.  
+...
+to-do, unify 
+ the serverwaiting stat from fake promise 
+ with the confirm enablemenu() from .confirm
+then debug.
+CSS first.  Learn again.
+
+
+
+190529
+
+Pad refuses to stick.  
+css. htm class.  Need to delegate more to css. 
+
+
+
+190526
+
+What a "locro" yesterday, what a meal, feeling full, feeling patriotic.
+...
+div dont have disabled. ok, fieldset will do the trick.
+form + fieldset, design meaning. 
+...
+bugs 'cause css and js are disconnected. CANT declare trem in one place only 
+Problem keeps.  css OR js.  
+Design tells not to style inside js,
+am I allowed to set visible / hidden / flex / none ? I need them.
+MAYBE create a property 'div_active' and let css choose hid or disabl depending on media
+...
+focus.
+Define elements, element classes, then continue.  
+1
+divMain = form.  When disabled (waiting server), what if user wants to abort.
+If I let it, (or timeout, doesnt have it yet) what about the pending result, what if it finally comes.
+My mind is boiling.  Can I put id on my sui generis promise? 
+Did I UNDERSTAND promises anyway? Is my implementation any good? How should it be.  Didnt find.
+Pretty sure a good promise implementation would NOT have parent uncertities issues.
+Ha ha!  I coudnt focus, abort button defines where the form div ends
+...
+Besides, indexeddb not working.  Not now.
+
+
+
+190524
+
+Nothing is working.  Cant see.   
+Wow! Status bar is working. Showing an error, but still.
+CSS?
+difficult to see correlations between dom css dom js...
+Oh... Frameworks may help.  Dont care, there are not so many elements. 
+Stop.
+May CSS class names do the trick.  Clean start. 
+...
+Should I go deeper in css? I'm manipulating css properties inside js, may conflict with visual tuning. Not ok.
+Mat delegate this in a couple of functions or 
+work with classes only, no 'flex' 'hidden' etc 
+Should I do it now?  
+first debug, then refactor?
+break and take css training?
+Taking too long.
 
 
 
@@ -16,7 +110,7 @@ I dont feel like doing element today.  I'll fill some gaps maybe.
 No gaps? (nearly). 
  The htm part, only the new confirm div left,
  plus of course the surely lots of wrong var names fucking JS no help there.
-The best thing to do is register the element and START DEBUG at once, then I'll be plenty of work to do.
+The best thing to do is to register the element and START DEBUG at once, then I'll be plenty of work to do.
 One thousnd never tested lines... 
 A language I never used before...
 with code strongly based on the async concept I never used before...
@@ -26,15 +120,19 @@ The worst, no compiler to help to make code robust.
 window.customElements.define ? Thats it?
 what a surprise, not working.
 Well, here we go.
+...
 line 417  '_promiseResult  not defined', forgot 'this.' 
 a REAL language would point it before any test.  Hate js. 
 looks good anyway. At least it recognites (sorry spelling...) js
 ...
+32 spelling errors so far (JS LANG ERROR), 3 REAL bugs.    I HATE JS
+missing this.  , wrong method refs,  wrong var name is JS FAULT !!!! Much more to discover.  
+...
 New CSS, some. Ugly show anyway, coudnt test any interaction.
 IndexedDB fails to create.
 Tired. Very.
-
-
+...
+I miss Wang 2200 MVP
 
 
 
@@ -439,3 +537,118 @@ linea hecha en casa con  VS CoDE
   que corno significa stage 
   
   
+
+
+
+  // from here and down
+  // early stages, no even time existed.  
+  // Pre big bang area. 
+  // I took it off from the readme, but I couldnt erase it from being cause the archeological value.
+  // No chronological, it was continuosly edited and overwriten, some archeo is lost.
+  
+
+Still thinking process. CB makes me nervous.
+
+Still thinking how to feedback ops. How to manage callback...  yet KISS.
+
+Status WAITINGSERVER, a 5ft status or a special status? To define.
+
+What about ERRORS. Mmm....
+
+So far, only 5 optional methods to be implemented by dev.  Looks good.
+Up to 11 optional functions to implement, CLEAN nearly pure functions.  
+
+
+What about msgs. 
+  a better confirm() inside panel. 
+  Msgs confirmation goes inside implementXxx ?  
+  implementRemove(,,,
+    txtMsgConfirmDelete = 'Confirm deletion?'  ,
+  ) 
+
+What about button names, should I put inside implementXxx() too?  
+  implementCreate(,,,,
+    txtButtonNew = 'New',
+  )     
+  and maybe
+  .implementGeneralSettings(   // The only one Mandatory?
+    funcEraseForm,      // Mandatory. code for closing/cleaning show/edit form. Avoids dirty views.
+                        // called first showup and whenever status goes to idle- 
+    txtButtonOk,
+    txtButtonCancel, 
+    etc...
+  )
+  or just leave them as properties  .msgConfirmExit, .txtButtonOk, ...
+
+
+Azure devops, github... How do they keep version history? To check. Forks only? Too crazy.
+
+
+***What dev should see and fill***
+===
+
+// RAW.  Not even alpha.  It's still a thinking thing, hi-hi.   
+
+// It'll need a way to do an EMPY view: when first shows, when the user cancels edition, when a painting fails. 
+// so this method is mandatory:
+.implementFormControl( // Neither CRUD nor NAV, but the only one mandatory.
+
+    funcEraseForm,  // code for closing/cleaning any show/edit frm. To show emptyness. This avoids dirty views.
+                    // It's called first showup and whenever status goes to idle- 
+    funcBlockForm,  // code to block further editions, either disabling all inputs or disabling the entire form
+                    // WITHOUT erasing the data in the input elements.               
+)
+
+// These 5 methods implement bahaviour and they all are optional.
+.implementCreate(
+  funcCreateFormEditNew,  // local code htm form for edition, can control inputs, NO DB ops just edit
+  funcCreateDbInsert,     // code that reads the form, check, and do the sql insert
+  txtButtonName,           // optional, default = "New"
+)
+
+.implementUpdate(
+  funcUpdateFormEditModify,
+  funcUpdateDbUpdate,
+  txtButtonName,         // optional, default = "Modify"
+)
+
+.implementRemove(
+  funcRemoveDbDelete,     // Code for sql delete showing record.
+  txtButtonName,           // Optional, default = "Delete"
+)
+
+.implementSearch(
+  funcSearchAndShow,    //code that opens a search form  then displays data  
+  bolInputBox,          // optional, if true puts an input box next to the search button,
+                        // its content is passed as param to funcSearchAndShow(inputElement.innerText) 
+                        // so dev can directly search for what's written there.
+  txtButtonName,         // optional, default = "Search"  
+)
+
+.implementNav(
+  funcNavMoveFirst,   
+  funcNavMovePrev,
+  funcNavMoveNext,
+  funcNavMoveLast,  // optional, all of them. 
+                    // Code for  << < > >>.  
+                    // Can be single records step 1 or grid step many, 
+                    // case grid, there MUST be always ONE and ONLY ONE selected for the panel to work well.
+  arrayButtonNames, // Optional, default = [ '<<' , '<' , '>' , '>>' ]
+)
+
+.operationResult(msg)  // To inform the panel so it can change its status. It should be an answer for a CB.
+    //  msg = i dont know yet.  true/false, or an ENUM.  
+    //  I think It'll be obvious only with the project more advanced. I'll start with bool. 
+
+
+.setAllButtonsInnerHTML (txtButtonOk, txtButtonCancel, ... )  // I think it's clean to have the option .
+    // so dev can put icon and SVGs in one place.  Do I need to be careful InnerHTML dsnt overwrite too much? 
+
+
+ 
+  Note: I quit being an all-semicolon paranoic to be an only-to-force-starting-commands advocant 
+  like  for( ;i++)   
+  like  ;[] 
+  like  ;(test)?doThis():doThat()  
+  No debate intended, I just guess fewer errors with this aproach.  Plus a cleaner screen.
+ 

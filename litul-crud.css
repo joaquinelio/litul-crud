@@ -1,140 +1,133 @@
+
 /* super reset super extra intensivo  triturador de navegadores*/
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 
-/* div/*
-/*
-    div_menu                          CHECK NAMES!!!!!!!!!!!!!!!!
-        div_1 
-            div_search
-            div_crud
-            div_spare
-            div_okcancel
-        div_2    
-            div_nav
-            div_msg
-            div_exit
-        div_confirm 
-  
-*/
-/* TO DO  -------------- div msg report mode to user via color */
-/*
-    div_msg-idls
-    div_msg-show
-    div_msg-modi
-    div_msg-crea
-*/
 
-.div_1, .div_2 {        /* dos renglones intended */
 
-    display:flex;
-    width: 100%;
-    flex-wrap:  wrap;
-    justify-content: space-between;
-    /* 
-    background: repeating-linear-gradient(
-        45deg,
-        red 40px,
-        pink 80px,
-        blue 120px ,
-        cyan 160px  
-        
-        )
-        ;
-       */  
+.div_main {      /*  inside:  1 div  OR 2 divs (2 rows) */
+
+  /* Position=  down, full width */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  /* Behaviour as a container*/
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center; 
+  overflow: hidden;  
+
+  /* L&F */
+  background-color: aqua;
+  /*list-style-type: none;*/
+  margin: 10px 0 0 0;
+  padding: 0;
+ }
+
+.div_1, .div_2 {        /* 2divs as 2rows */
+
+  /* Behaviour as a container*/
+  display: flex;
+  flex-direction: row;
+  flex-wrap:  nowrap;
+  justify-content: space-between; 
+ /* align-items: center;*/
+
+
+  /* Pos */
+  width: 100%;
 } 
- 
 
-.div_main {             /* entire element */
-
-    display: flex;
-    flex-wrap: wrap;
-
-    list-style-type: none;
-    margin: 10px 0 0 0;
-    padding: 0;
-    overflow: hidden;  
-    justify-content: space-between;
-    background-color: aqua;
-
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-
-}
-.div_crud div {   /*  li OJOooooo!!!!!!!!   sigo cambiando, todavia no decidi cual elemento...*/
-    display: flex;
-    flex-wrap:  nowrap;
-    flex-direction: row;
-}
-.div_crud div {    /*  div ojoooooooooooooo  si cambio div por otracosa    igual no anda bah*/
-    transition: visibility 2s;
-    transition: disabled 2000ms;  /*parece q ninguna es transitionable o lo estoy implementando mal*/
-}
- 
-.div_msg {
-    /*margin: auto;*/
-    flex: auto;
+.div_search,  .div_crud, .div_custom, .div_okcancel {
+  border: solid 1px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between; 
+  align-items: center;
 }
 
-/* todos y solo mis botones */
-.div_crud button {
 
-    border-radius: 5px;
-    color: white;
-   /* background-color: #0F5897;*/
-   /* padding: 5px 10px 8px 10px;*/
-
-    display:flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    padding: 5px;
-    margin: 1px;
-    outline: none;
-    color: white;
-    background-color: blue;
-    /*border: gray 2px   ;*/
-    text-align: center;      
-    box-shadow: 3px 3px grey;
-  /*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
-}
-/* Sigo experimentando...    */
-.div_crud button:hover {background-color:rgb(0, 102, 255) ; }
-.div_crud button:disabled {
-    color:grey;
-    background-color: grey; 
-    background: linear-gradient(75deg, rgb(143, 155, 206), grey)
-
-}
-.div_crud button:active {
-    background-color: lightblue;
-    box-shadow: 1px 1px #666;
-    transform: translate(5%,5% );
-}
-
-/* --------------------------------------------------------------------------- */
-.div_msg p {               
-    display:flex;
-    text-align: left;
-    align-content: stretch;
-    justify-content: center;
-    
-
-}
-/* mode &  msgs, mode via color, msg independent */
+/* mode & msgs.   mode via color, msg independent                   NOT IN USE  YET -it will be */
 .div_msg-idle {background-color: rgb(204, 202, 202);}
 .div_msg-show {background-color: rgb(141, 255, 47);}
 .div_msg-modi ,
 .div_msg-crea {background-color: rgb(255, 80, 80);}
 
-.div_exit{     /* abajo a la derecha se supone  */
-    display: flex;
-    justify-content: right;
-    align-content: flex-end;
+
+ 
+/*
+.div_main div {    /*  div ojoooooooooooooo  si cambio div por otracosa    igual no anda bah
+  transition: visibility 2s;
+  transition: disabled 2000ms;  /*parece q ninguna es transitionable o lo estoy implementando mal
+}
+*/
+
+.div_msg {
+  margin: auto;
+  flex: auto;
+}
+
+
+/* todos y solo mis botones */
+.div_main button {
+
+  border-radius: 5px;
+  color: white;
+  /* background-color: #0F5897; */
+  /* padding: 5px 10px 8px 10px;  */
+
+  display:flex;         /* no aplicable I think*/
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  justify-content: center;
+
+  padding: 5px;
+  margin: 1px;
+  outline: none;
+  color: white;
+  background-color: blue;
+  /*border: gray 2px   ;*/
+  text-align: center;      
+  box-shadow: 3px 3px grey;
+/*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
+}
+
+/* Sigo experimentando...      */
+/*.div_crud button:hover {background-color:rgb(0, 102, 255) ; }    hover doesnt look good on touch devices */
+.div_main button:disabled {
+  color:grey;
+  background-color: grey; 
+  background: linear-gradient(75deg, rgb(143, 155, 206), grey)
+}
+.div_main button:active {
+  background-color: lightblue;
+  box-shadow: 1px 1px #666;
+  transform: translate(5%,5% );
+}
+
+/* --------------------------------------------------------------------------- */
+.div_msg p {               
+  display:flex;
+  text-align: left;
+  align-content: stretch;
+  justify-content: center;
+  
+}
+
+.div_exit{     /* down right I suppose  */
+  display: flex;
+  justify-content: right;
+  align-content: flex-end;
 }
 
 .div_search input {
-    border: solid 1px black;
-    background-color: lightgreen;
-    margin: 2px;
+  border: solid 1px black;
+  background-color: lightgreen;
+  margin: 2px;
 }

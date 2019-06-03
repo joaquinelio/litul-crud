@@ -1,13 +1,22 @@
-this.  missing               5
-this._MakeButton               spell   2
+
+
+
+this.  missing                                     ***************   23
+this._MakeButton               spell                  ************    2
 push()                          padButtons spell, 
 []  init array                                      REAL BUG
 bolInputBox is not defined         spell
 this.botModi.onclick          spell
-this.customButton.length      spell, spell
+this.customButton.length      spell * 2
 this.btOK.onclick             spell  OK Ok 
-this.divCrud.appendChild(this.div1)   divMain      real BUG 
-this.mode = newMode                   _mode     real BUG
-if (esObj(element                 spell
+this.divCrud.appendChild(this.div1)   divMain       real BUG 
+this.mode = newMode                   _mode         real BUG
+if (esObj(element                 spell           ***************    8
 this.customButton is not iterable               spell
 this.pMensaje.textContent = what        spell
+divmov                                spell           ***********   8 
+divCrud - divMain                                       REAL BUG
+btMov botMove botMove                 spell          **************  12
+fieldset no css flex                                    REAL BUG
+
+

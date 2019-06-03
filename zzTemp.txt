@@ -1,0 +1,29 @@
+
+div_main            form
+  div_1             div
+    div_search      fieldset
+      cmd_search     
+      inp_search    input
+    div_crud        fieldset
+      cmd_new       
+      cmd_modi
+      cmd_dels
+    div_custom      fieldset  
+      ...           
+      ...
+    div_okcancel    fieldset
+      cmd_ok
+      cmd_cancel
+  div_2             div
+    div_nav         fieldset
+      cmd_movfrst   
+      cmd_movprev
+      cmd_movnext
+      cmd_movlast
+    div_msg         div
+      p_msg         p_msg
+    div_exit        div 
+      cmd_exit
+  div_confirm
+    cmd_confirmyes
+    cmd_confirmno      
