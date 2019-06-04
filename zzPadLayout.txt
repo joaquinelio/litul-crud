@@ -1,29 +1,34 @@
 
 div_main            form
   div_1             div
-    div_search      fieldset
+    div_search      div
       cmd_search     
       inp_search    input
-    div_crud        fieldset
+    div_crud        div
       cmd_new       
       cmd_modi
       cmd_dels
-    div_custom      fieldset  
+    div_custom      div  
       ...           
       ...
-    div_okcancel    fieldset
+    div_okcancel    div
       cmd_ok
       cmd_cancel
   div_2             div
-    div_nav         fieldset
+    div_nav         div
       cmd_movfrst   
       cmd_movprev
       cmd_movnext
       cmd_movlast
     div_msg         div
-      p_msg         p_msg
+      p_msg         p 
     div_exit        div 
       cmd_exit
-  div_confirm
+  div_confirm       div
+    p_confirmmsg    p 
     cmd_confirmyes
     cmd_confirmno      
+  div_waiting       div
+    svg_thing       svg
+    cmd_tired
+  

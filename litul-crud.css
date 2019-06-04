@@ -3,9 +3,17 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 
+/*  UGLY4  DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
+/* * {border: 3px gold;}  */
+
+* {
+  /* not too pretty, not my goal yet*/
+  transition-property: height , width , transform ,  ;
+  transition-duration: 500ms;  
+}
 
 
-.div_main {      /*  inside:  1 div  OR 2 divs (2 rows) */
+.div_main {      /*  inside:  1 div,  OR 2 divs in 2 rows */
 
   /* Position=  down, full width */
   position: fixed;
@@ -22,7 +30,7 @@
 
   /* L&F */
   background-color: aqua;
-  /*list-style-type: none;*/
+  list-style-type: none;
   margin: 10px 0 0 0;
   padding: 0;
  }
@@ -34,14 +42,16 @@
   flex-direction: row;
   flex-wrap:  nowrap;
   justify-content: space-between; 
- /* align-items: center;*/
-
+  align-items: center;
 
   /* Pos */
   width: 100%;
+
+  /* L&F */
+  background-color: blueviolet;           /*  UGLY4  DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
 } 
 
-.div_search,  .div_crud, .div_custom, .div_okcancel {
+.div_search,  .div_crud, .div_custom, .div_okcancel, .div_waiting {
   border: solid 1px;
   width: 100%;
   display: flex;
@@ -50,16 +60,58 @@
   justify-content: space-between; 
   align-items: center;
 }
+.div_confirm {
+  border: solid 1px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: left;
+}
+/*
+ Not sure.  They no longer replace divmain, they are inside it now.
+.div_confirm {
+  position: fixed;
+  bottom: 0;
+}
+.div_waiting {
+  position:fixed;
+  bottom:0;
+}
+*/
 
 
-/* mode & msgs.   mode via color, msg independent                   NOT IN USE  YET -it will be */
+/* mode & msgs.   mode via color, msg independent  */
 .div_msg-idle {background-color: rgb(204, 202, 202);}
 .div_msg-show {background-color: rgb(141, 255, 47);}
 .div_msg-modi ,
 .div_msg-crea {background-color: rgb(255, 80, 80);}
 
+.deactived-panel {
+  height: 0%;
+  width: 0%; 
+  max-height: 0px;
+  transform: scaleX(0);
 
- 
+
+
+  /* display: none;
+  transition-delay: display 3s; */
+}
+
+
+
+.svg_thing{
+  animation: movimiento  1s linear 0.4s infinite;
+  transform-origin: center;
+}
+@keyframes movimiento{
+   0% {transform: scaleY(1);}
+  25% {transform: scaleY(0.3);}
+  50% {transform: scaleY(0.7);}
+  75% {transform: scaleY(0.15);}
+}
+
+
+
 /*
 .div_main div {    /*  div ojoooooooooooooo  si cambio div por otracosa    igual no anda bah
   transition: visibility 2s;
@@ -117,7 +169,12 @@
   text-align: left;
   align-content: stretch;
   justify-content: center;
-  
+}
+.div_pconfirmmsg {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  justify-content: center;
 }
 
 .div_exit{     /* down right I suppose  */

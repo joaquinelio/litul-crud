@@ -3,12 +3,44 @@
 *** Diary ***   
 *** ----- ***
 
-199693
+
+
+
+190604
+
+It went surprisingly well.
+Most css problems fixed, enough for a truly debug.  Still need some work.  Later.  Vertical pad? maybe too, easier now.
+All fieldset to div. Display to css hide transition
+1000 lines and very few real bugs so far
+(but spelling bugs hate you JS!!, forgotten this., the fake "hidden" _names., FYFYFY!!!!!)
+...
+Stole some svg code  ("Clouding..." wait), added a problem to solve: a pretty svg.
+...
+Added an abort waiting with a WORKING dirty solution I dont know how to do it right.
+...
+Now, indexeddb fix... (to continue the real debug he he )
+Maybe fix the fake promise doing it right. Should I start learning how to?
+Lets be...
+Feeling going to dismay.  I'll get some sleep instead.
+
+
+
+190603 after some sleep
+
+Crazy spell bugs.  
+...
+The very outdated w3schools is still the greatest for html5 and css3 like flex.
+...
+
+
+
+190603
 
 Learning css.  Again.  Not the bigger problem but the one with every move is a pain.
 ...
 Found THE bug!!! In a forum.  Fieldset dsnt let flex row.  WHY???  It would make sense.
-But I need flex, and I need disabled.  A div inside the fieldset works ok... Mmm... too dirty.
+But I need flex, and I need disabled.  
+A div inside the fieldset works ok... Mmm... too dirty.
 Ok, I'll use div and replace disable with css alternative.
 Done.
 ...
@@ -20,8 +52,8 @@ with just a litul-crudpad class / attr
 ...
 Slower than expected, but this is learning no production. 
 I dont want the things fixed, I want to know WHY.
-I dont want good enough, I want them perfect refactoring to death. 
-Dont expext that in production altought  ;)   good enough is good.
+I dont want good enough, I want them perfect, refactoring to death. 
+Dont expext that in production altought  ;)   good enough is nice.
 
 
 
