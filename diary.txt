@@ -4,19 +4,164 @@
 *** ----- ***
 
 
+190606 again.  
+
+Noisy. Bright. Day. 10:30.
+Why did I wake up? Does it mean I was sleeping?
+Well, who cares Im not getting paid for this.
+Lets start with the out of place error message.
+...
+_setResultCaller() 
+getting rid of fakepromise. good.
+Coudnt resolve via promise nor cb
+Guess I did it the better way possible, 
+secured I hope with a caller list 
+I cannot know now where the result comes from
+but I know the result I can expect
+What to do whit the needed and implemented bored abort button... 
+just a message if result finally arrives
+GREAT!  I changed 'unexpected promise' by 'unexpected result'
+... 
+Cant follow.
+Something looks very wrong in the flow.
+...
+Just broke the panel
+...
+It's back. ok, start again
+...
+Im stuck.
+cause I dont believe is not working.
+Should I commit a failure.
+...
+going well
+BIG mistake easy fix: set wait before sending request !!
+more spelling, too busy didnt count, 1:4 at least.  Hate js.
+... 
+IDBDatabase': One of the specified object stores was not found.
+stoped crudpad debug,
+start test app debug
+tired
+commit
+later
+
+
+
+190606
+
+Note: The way I show and enable panels in js. Last successful test playing with css maxheight = 0. 
+Some working but vulnerable code and one dirty solution. It does the trick.
+The hidden panel keeps status, so I guess it has to be a better way.
+My mind keeps telling me: It will be a common scenario, it has to be an easy abstraction, I have too much js code for this.
+Or at least hide the code inside a lonely function, not spreading lines here and there.
+Again, common scenario.  Show panel, hide the others.  Then Show another OR go Back to previous panel.
+ok, I need this, just not now I'm telling back to my brain.
+yeah, maybe there is a component over there, lets search for it only in not learning projects.
+...
+Note:  Maybe I should create all the buttons then show whats needed. Didnt want to create too many unuseful onclick events,
+maybe is not that important. 
+The thing: Unlike old apps, they can change while working.  
+Example. I could let "Remove" button stay but disabled if working offline, then enable when online.
+I can practice event delegation, may this particular case improve the code, 
+one single function switch-case instead of the many _btXXXX() I have now,
+PLUS the many crazy  {onclick this.  }  workaround (hate you JS)  would be unified.  An isolated crazy {this.} would be great.  
+...
+I have ZERO entusiasm put on fixing indexedDB.  What a fiasco. The doc is clear, chrome and firefox: 
+persistent can be deleted just because.
+I never wanted it to be a replacement for local express or mysql... 
+(mmm... I lie, it crossed my mind as nosql option, I rejected just because I am devoted to traslate all my skills to the cloud) 
+...but I tought it would be an excelent offline cache of the... 
+customer work. 
+In his home.
+Then he reads news, checks facebook, plays online in other galaxy, then some porno, 
+then download the last Deepin ISO (or w10 its last ThisTimeEverythingIsGoingToBeOk patch)... 
+...and his browser will decide the indexeddb is not that important. Flush.
+Some offline work lost.
+Unlikely? maybe, It CAN happen. More users, It WILL happen.  Docs state: no warranty.  Not because an understable bug, just because.
+If the users PC explode, ok, his fault, he worked too hard.  Browser bug? Ok, understable calamity.
+But I cannot force the update, 
+neither tell him you were too lazy and didnt update so I deleted your data.
+...
+I prefered to practice skills I will use in real work.  (before toying with frameworks)
+But indexedDB is now maybe half implemented, and the easiest async db for testing. AND maybe is not half, but fully working
+and I already have what I wanted, crudpad debug tool.
+...
+Taking too long.  How about node, cloudsql.  
+Ok, the three.  
+Plus maybe TS (TYPES!) and one or more frameworks and components that will EASE the job)
+This IS the hard part.  No shortcuts, learn hard.  
+Then the customer needs will be the easy job, as always been, after I built the infrastructure. 
+...
+Ok, stop crying, start debug.
+...
+What a difficult is to debug the async thing!  Sometimes lost in "where to now?".
+Now it is doing nothing, but nothing is wrong.
+MMmmppff... should I start node now?  debug in chrome is not enough.  Add another source of unkown issues?
+I got here with zero debug, pretty good crazy achievement.  
+Im tired, maybe I'll keep the old way.  Debug at home with the listing and the mind as the only tool.
+Yeah, I miss 2200MVP.
+...
+
+
+
+190605 
+
+190605 again but it's no dark anymore.  Nice sunny cold morning.
+60years old and one month and counting.
+I need to finish this before my first "ACV". 
+Stroke as it's called in English.
+
+
+
+190605
+
+Lets go for the test app! 
+...
+UnknownError: The user denied permission to access the database.
+When??? Ive never bn asked.
+no google nor mozilla nor w3 spec solved this.
+Again, stackoverflow pointed inconsistencies. 2015 article, outdated too.
+Google info is outdated.  Tells "config" no working dprecated link
+Lets see.
+Browser keeps showing blocking info, "allow" doesnt allow.  
+Cookies? What cookie? So I enabled "3rd partie" (DONT. EVER.)...  Its working now.  But... Cookies?
+issue is related to local file system access, not cookies.
+More info: Chrome and Firefox will DELETE your "persistent database" if they see they are too big. Or too old.
+Ah, ok.
+Crazy complex persistent transactioned and full featured local DB, deleted with no warning while you are reading the news.  
+Why in the hell let me waste time in learning this, usable only to test AND if you hack your browser. And your customer browser. Mmm.
+And hack the customer phone too?  What kind of demo would it be.
+Kill indexeddb.  Later.
+...
+When I start learning Node... will it be the same?  
+No please when I go cloud SQL and noSql...
+Google, Im angry with your documentation system. It's not wrong, it lies.  
+Azure, Amazon, you sell secure data. Are you all the same? 
+Any free learning account? I NEED cloud db, no app of mine is usable without it.
+I'll need demos to sell.
+Trusty data if I can ask.
+...
+Bored abort button should show only after a timeout. Later.
+...
+Idb Not working.  But not related to idb but crudpad, so i'll keep it for now.
+My Sui generis promise I bet.
+...
+Thanks, f.lux  I'll keep it in mind.  Let's...
+...
+
+
 
 
 190604
 
 It went surprisingly well.
-Most css problems fixed, enough for a truly debug.  Still need some work.  Later.  Vertical pad? maybe too, easier now.
+Most css problems fixed, enough for a truly debug.  Still need some work.  Later.  Vertical pad? maybe too, it's easier now.
 All fieldset to div. Display to css hide transition
 1000 lines and very few real bugs so far
 (but spelling bugs hate you JS!!, forgotten this., the fake "hidden" _names., FYFYFY!!!!!)
 ...
 Stole some svg code  ("Clouding..." wait), added a problem to solve: a pretty svg.
 ...
-Added an abort waiting with a WORKING dirty solution I dont know how to do it right.
+Added an abort waiting with a WORKING dirty solution I dont know how to do it right.  Some warning comments, it will do.
 ...
 Now, indexeddb fix... (to continue the real debug he he )
 Maybe fix the fake promise doing it right. Should I start learning how to?

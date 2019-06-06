@@ -3,8 +3,6 @@
   Lituls
   litul-crudpad  HTMLelement  
 
-  learning vanilla js, my very first project
-
   by
   Joaquin Elio "Lito" Fernandez
   
@@ -19,11 +17,11 @@
     db nav << < > >> , 
     OK, Cancel
     Custom buttons  (can be enabled on specific status of choice)
-    msg   
+    msg    
 
   It will show and enable-disable buttons depending on:
     functions implemented:  db create, db update, ...  
-    internal status: 1 of 4  Idle, showing record, creating new record,  modifing existing record.  
+    internal status (mode)  1 of 4:  Idle, showing record, creating new record,  modifing existing record.  
 
   dev implements simple operations only (forget the onclick !)
     form operations:  clean the form, show a record, create a form for editing
@@ -40,13 +38,11 @@
   Or not.
   Maybe
   The parameters are handy.  
+*/ 
 
+window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
-  */ 
-
-window.customElements.define('lito-crudpad', class extends HTMLElement  {
-
-  constructor(){   // remains empy...  Whats intended to put here?  
+  constructor(){   // remains empty...  Whats intended to put here?  
     super()  
 
     
@@ -63,13 +59,13 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   get MODE_LIST() {return {
     'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,    
   }}
-  MODE_CLASSES = {              // classes for css, just some ornament
+  MODE_CLASSES = {              // classes for css, just some ornament as feedback
     1:'div_msg-idle',  
     2:'div_msg-show',
     4:'div_msg-crea',
     8:'div_msg-modi',
   }
-  _PANEL_LIST = {               // panels:  crudpad,  inbox confirm replacement,  waitingserverresponse. 
+  _PANEL_LIST = {               // panels:  crudpad,  confirm replacement,  waitingserverresponse. 
     'CRUD':1, 'CONFIRM':2, 'WAITING':3, 'LAST_PANEL':99
   }
   _panelCurrent = 0  // invalid on purpose
@@ -81,24 +77,24 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   _mode = 0  // 0=invalid on purpose.  Dont '.IDLE' here so it SETS things to idle on first run   
   
 
-  // NEED TO UNDERSTAND WHAT TO DO!
-  _promiseResult = null  // sorry  I'DONT KNOW WHAT I AM DOING, trying to get things working.  I should refactor even if it works. 
-  // get _WAITNG_LIST =   
-  // //  _waitingForRequest = 0
-  // _waitSuccess = null
-  // _waitError = null     // unused until now.
-  
+  // result() related:
+  // []         [caller, modeOnSuccess, modeOnFailure]
+  _resultCall = ['', null, null]
 
 
   // *** internal var ***     // USELESS ??? no declaration needed, no way to prevent typos?? this.ANYTHING?
   // *** internal var 1of2: From dev ***
-  _implementedCreate = false  // cleaner than asking 4 valid functions
+  
+                              // implementedXX,  to know what elements to create  
+  _implementedCreate = false  // shorter than asking 4 valid functions
   _implementedModify = false
   _implementedRemove = false 
   _implementedSearch = false
   _implementedNav = false     // humpf!  4 separated optional buttons, clean? not anymore
   _implementedExit = false
 
+  //                  _funcXXXXX      to record the methods implemented by dev
+  //                  _txtButtonXXX   to record the label a button shows  (optional)  //  Didn try svg icon innerHTML
   _funcEraseForm 
   _funcDisableForm
   _textButtonOk
@@ -125,7 +121,6 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   _funcNavMovePrev
   _funcNavMoveNext
   _funcNavMoveLast
-//  _arrayButtonNavTxt  /////////////////////////////////// CAMBIAR !!!!!!!!!!!!!!!!!!!!
   _txtButtonMoveFirst
   _txtButtonMovePrev
   _txtButtonMoveNext
@@ -133,8 +128,8 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
 
   _txtConfirmExit
 
-  _funcConfirmYes
-  _funcConfirmNo
+  _funcConfirmYes = null
+  _funcConfirmNo  = null
   _txtButtonConfirmYes = 'Yes'
   _txtButtonConfirmNo  = 'No'
   
@@ -142,31 +137,30 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   // *** internal var 2of2: predefined (hidden pad work) ***
   
 
-  // *** onclick *** hidden for Mr Dev
-  // fire finction implemented, wait for result..  
-          // Should I put a 'cancelable' ? waiting a search result is cancelable, result from update isnt. 
-          // timeout and otrhe stuff in waitingserver function
+  // crudpad *onclick* functions  hidden from Dev
+  //  they fire dev stuff, set the wait for result(), response to user interaction, change mode, en/disable buttons according that result()   
+  //
   async _btSearch(){
-    this._funcSearchAndShow(this.inpSearch.value)  // input if any
-    this._setPromise(this.MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)  ? 
+    this._setResultCaller('search', this.MODE_LIST.SHOW,)    //  ,MODE_LIST.IDLE)  ? 
+    this._funcSearchAndShow(this.inpSearch.value)           // input if any
   }
   
   _btNew(){
+    this._setResultCaller('frmNew', this.MODE_LIST.CREATE,  )   //  ,MODE_LIST.IDLE)  ? 
     this._funcCreate_FormEditNew()
-    this._setPromise(this.MODE_LIST.CREATE,  )   //  ,MODE_LIST.IDLE)  ? 
   }
 
   _btModi(){
+    this._setResultCaller('frmMod', this.MODE_LIST.MODIFY,  ) //  ,MODE_LIST.IDLE)  ? 
     this._funcUpdate_FormEditModify()
-    this._setPromise(this.MODE_LIST.MODIFY,  ) //  ,MODE_LIST.IDLE)  ? 
   }
   
   _btDel(){
     this.confirm(
       this._txtConfirmDelete,
       ()=>{
+        this._setResultCaller('dbDelete', this.MODE_LIST.IDLE,)   // err, keep showing 
         this._funcRemove_DbDelete()
-        this._setPromise(this.MODE_LIST.IDLE,)   // err, keep showing 
       },
       // no, stays the same
     )
@@ -174,13 +168,13 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   
   _btOK(){
     if(this.mode == this.MODE_LIST.CREATE){
+      this._setResultCaller('dbInsert', this.MODE_LIST.SHOW,)  
       this._funcCreate_DbInsert()
-      this._setPromise(MODE_LIST.SHOW,)  
     } else if(this.mode == this.MODE_LIST.MODIFY) {
+      this._setResultCaller('dbUpdate', this.MODE_LIST.SHOW,)  
       this._funcUpdate_DbUpdate()
-      this._setPromise(MODE_LIST.SHOW,)  
     } else {
-      this.hey ('int err: okbutton is no create nor modify')
+      this.hey ('int err: okbutton is neither create nor modify')
     }
   }
   
@@ -195,23 +189,21 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   }
   
   _btMoveFirst(){
+    this._setResultCaller('mvFrst', MODE_LIST.SHOW)
     this._funcNavMoveFrst()
-    this._setPromise(MODE_LIST.SHOW)
   }
-  
   _btMovePrev(){
+    this._setResultCaller('mvPrev', MODE_LIST.SHOW)
     this._funcNavMovePrev()
-    this._setPromise(MODE_LIST.SHOW)
   }
   
   _btMoveNext(){
+    this._setResultCaller('mvNxt', MODE_LIST.SHOW)
     this._funcNavMoveNext()
-    this._setPromise(MODE_LIST.SHOW)
-  }
-  
+  }  
   _btMoveLast(){
+    this._setResultCaller('mvLst', MODE_LIST.SHOW)
     this._funcNavMoveLast()
-    this._setPromise(MODE_LIST.SHOW)
   }
   
   _btExit(){
@@ -224,8 +216,8 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   _btTired(){
     this.confirm("Stop the waiting? It won't stop the request.", 
       function(){
-        // stop any promise  // dont remember how, check.
-        // ??
+        // stop any result wait 
+        this._setResultCaller('')
 
         // reset crudpad to idle
         this._changeMode(this.MODE_LIST.IDLE)
@@ -235,64 +227,14 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
 
         // any other thing I should worry? 
         // ??
-    
       },
       function(){
         // go back
-        // ok then thats it.
+        // ok then thats it
+        // nothing to do
       }
     )
   }
-
-
-  _setPromise(successMode, errorMode=''){
-    // not a promise, since can be only one and uses a global
-    // but I use its .then
-
-    let t = this  // ??????????????????????
-    let tt = this._changeMode   // this way?  If it works sucks either.
-
-    let promise = new Promise(function(resolve, reject)  {
-      // reqUserRespones(promise)
-      t._enablePanel(t._PANEL_LIST.WAITING)
-
-
-
-
-
-
-      // t._enablePanel(t._PANEL_LIST.CONFIRM)  // DONT put it HERE.  just to see how it shows
-      // t.confirm('seguro?', function(){alert('yes')}, function(){alert('no')} )
-
-
-
-
-
-
-    })      
-    this._promiseResult = promise 
-    promise.then(              //  CHECK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      ()=> tt( successMode ),  // I'm afraid the fucking THIS will ruin like onclick
-      ()=> {if(errorMode != ''){tt(errorMode)}}  //(error) => this._changeMode( MODE_LIST.IDLE ) do nothing, if fail stay the same.  
-    )
-    promise.finally (()=>{ 
-      this._promiseResult = null
-      this._enablePanel(this._PANEL_LIST.CRUD)
-    })   
-  }
-
-  // _crudpadActive(tf){                 // !!!!!!!!!!!!!!!!!  UNIFY WITH enableMenu() from confirm() !!!!!!!!!!
-  //   this.crudpadActive = tf
-  //   if (tf){
-  //     //some 
-  //   }
-  // }
-
-
-  // get RESULT_LIST(){ return {
-  //   'reset':1, 'search_ok':2, 
-  // }}
-
 
   _enablePanel(panel){    // Select super operation: Crud, confirm(), waitingServerResult
                           // It doesnt alter any status but the view,  and restrict user from interaction.
@@ -330,7 +272,9 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     }
   }
 
-  // --- .confirm ---------------
+
+  // ********************** .confirm() ********************
+  //onclick
   _btConfirmYes(){
     this._funcConfirmYes()
     this._confirmHide()
@@ -339,68 +283,41 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     this._funcConfirmNo()  // check if ?
     this._confirmHide()
   }
-  _confirmHide(){     // hide with style? 
-    // this.divConfirm.style.display = 'none'
+  // panel
+  _confirmHide(){     // _confirmPanelHide
     this._enablePanel(this._PANEL_LIST.LAST_PANEL)
-    this._funcConfirmYes = undefined
-    this._funcConfirmNo = undefined
+    this._funcConfirmYes = null
+    this._funcConfirmNo = null
   }
-  _confirmShow(){
+  _confirmShow(){     // _confirmPanelShow
     this._enablePanel(this._PANEL_LIST.CONFIRM)
-    // this.divConfirm.style.position = 'fixed'   
-    // this.divConfirm.style.bottom = 0
   }
-
+  // 
   confirm(textMsg, funcYes, funcNo){  // just cause I dont like browser confirm 
-      //verify  
-      if (!isFun(funcYes) || !isFun(funcNo) ) {return}  /// !!!!!!!!!!!!!!!!!!!!!!!!!! TO DO Show err
+    //check
+    if (!isFun(funcYes) || !isFun(funcNo) ) {return}  /// !!!!!!!!!!!!!!!!!!!!!!!!!! TO DO Show err
+    if (isFun(this._funcConfirmYes) || isFun(this._funcConfirmNo)) {
+      this.hey('internal error - .confirm() already waiting')  // It cannot happen.  Can it?
+      return
+    } 
 
-      if (isFun(this._funcConfirmYes) || isFun(this._funcConfirmNo)) {
-          this.hey('internal error - .confirm() already waiting')  // It cannot happen.  Can it?
-          return
-      } 
+    // msg = '':  does not requiere confirmation...  Why? To abstract its use.  I'll use it later.
+    if (textMsg == '') { funcYes() ; return }
 
-      // msg = '',  does not requiere confirmation...  Why? To abstract its use.  I'll use it later.
-      if (textMsg == '') { funcYes() ; return }
-
-
-      //semimodal
-      this.pConfirmMsg.textContent = textMsg 
-      this._funcConfirmYes = funcYes
-      this._funcConfirmNo = funcNo
-      this._confirmShow()
-
-      //ya esta, no puedo hacer mas nada, returno con las manos vacias
-
-    // PROBLEMS to fix:  
-    // Names.  
-    // Dom elements, I need to create them from start (and add to .buttons[])  even if I never use this.
-    // Style..? Im not sure I have to force it here, I dont see another option. 
-      /*
-        //  PROBLEM:  move it to _letsMakeThePanel(), here only show  
-        this.divYesNo = document.createElement('div')
-        this.divYesNo = this.divYesNo      //despues veo...  *************************************
-        //let msg = document.createElement('p')
-        let inputYes = document.createElement('button')
-        let inputNo = document.createElement('button')
-        this.divMain.appendChild(this.divYesNo)  //no matter where,  always middle-left
-        //mg.textContent = mensaje
-        inputYes.textContent = 'YES'
-        inputNo.textContent = 'NO'
-       // di.returnValue.
-          this.divYesNo.textContent = textMsg
-      //       this.divYesNo.appendChild('form')
-          this.divYesNo.appendChild(inputYes)
-          this.divYesNo.appendChild(inputNo)
-          this.divYesNo.style.position = 'fixed'
-          this.divYesNo.style.bottom = 0      */   
+    //semimodal
+    this.pConfirmMsg.textContent = textMsg 
+    this._funcConfirmYes = funcYes
+    this._funcConfirmNo = funcNo
+    this._confirmShow()
   }
 
+
+  // careful, html text, check.  Is there a function to replace symbols and stuff like > á  to htm representation?  
   hey(what){
-      this.pMsg.textContent = what
+    this.pMsg.textContent = what
   }
   
-  // fires pad.  Use it when all settings are done and db ready.  
+  // fires crudpad.  Use it when all settings are done.
   start(){
     this._letsMakeCrudpadHTML()
     this._changeMode(this.MODE_LIST.IDLE)
@@ -408,9 +325,9 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   }
 
   // *** implement behaviour ***
-  //set control mandatory.   ---Should  i do it Via constructor????  
-  setFormControl(funcCleanForm, funcDisableForm, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
-    this._funcCleanForm = funcCleanForm   
+  //set control mandatory.  
+  setFormControl(funcEraseFormContent, funcDisableForm, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
+    this._funcCleanForm = funcEraseFormContent   
     this._funcDisableForm = funcDisableForm
     this._textButtonOk = textOkButton
     this._txtButtonCancel = textCancelButton
@@ -442,18 +359,15 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     this._boolWithSearchInputBox = bolInputBox   // box content will be passed to search func
     this._implementedSearch = true
   }
-  setNav(funcMoveFirst, funcMovePrev, funcMoveNext, funcMoveLast, arrayButtonText = ['<<','<','>','>>']){
+  setNav(funcMoveFirst, funcMovePrev, funcMoveNext, funcMoveLast, textButtonFirst = '&lt;&lt;', textButtonPrev = '&lt;', textButtonNext = '&gt;', textButtonLast = '&gt;&gt;' ){ 
     this._funcNavMoveFrst = funcMoveFirst
     this._funcNavMovePrev = funcMovePrev
     this._funcNavMoveNext = funcMoveNext
     this._funcNavMoveLast = funcMoveLast
-
-    this._arrayButtonNavTxt = arrayButtonText   // its ok?  copy array? i dont remember. to check
-
-
-          // NO ARRAY, to to: individual txt for each one
-  
-
+    this._txtButtonMoveFirst = textButtonFirst
+    this._txtButtonMovePrev = textButtonPrev
+    this._txtButtonMoveNext = textButtonNext
+    this._txtButtonMoveLast = textButtonLast  
     this._implementedNav = true 
   }
   setExit(funcExit, textButton = 'Exit'){
@@ -466,7 +380,7 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     let bot = document.createElement("button") 
 
     bot.name = name 
-    bot.className = className + " boton " 
+    bot.className = " cus_button " 
     //bot.value = value 
     bot.innerHTML = caption 
     bot.id = name 
@@ -479,21 +393,51 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     return bot 
   }
 
-  // this change the pad status, results from db operations // true/false (ok/err) for now, maybe let complex later  
-  result(success, msg){    // success TRUE FALSE for now.  Msg optional msg <p>.
-    if ( this._promiseResult == null ){  
-      this.hey("Int err:  No promise pending")
+  // setWait or setWaitForResult should name 
+  _setResultCaller(caller, modeSuccess = null, modeFail = null ){
+    //check
+    if (caller != '' && this._resultCall[0] != ''  ) {    // want to set but is already set
+      this.hey('Int err: Unexpected req *' + caller + '* Already waiting result from *' + this._resultCall[0] + '*' )
+      return
+    }
+    if (caller == '' && this._resultCall[0] == ''  ) {    // want to reset but is already reset
+      this.hey('Int err: No result to reset' )
       return
     }
 
-    ;(success)? this._promiseResult.resolve(): this._promiseResult.reject()   //can I do this?
+    //reset
+    if (caller=='') {
+      this._resultCall = ['', null, null]
+      // this._changeMode(this.MODE_LIST.IDLE)
+      // this._enablePanel(this._PANEL_LIST.CRUD)      
+      return
+    }
 
-    this.hey(msg)
+    //set
+    this._resultCall = [caller, modeSuccess, modeFail]
+    this._enablePanel(this._PANEL_LIST.WAITING)
   }
 
-  // get CB_RESULT_MSG_LIST(){ // do I really need this?   Nav !!
-  //   return {'DB_CREATE_OK':1,  'DB_UPDATE_OK':2,               }
-  // }
+  // triggered by dev  
+  // Change the crudpad status from waiting to some mode.  Results from db operations  true/false (ok/err)
+  result(success, msg){    // success = true/false    msg = optional text msg <p>.
+    //check
+    if (this._resultCall[0] == '' ){
+      this.hey('Int Err: Unexpected result()')
+      return
+    }
+
+    //panel wait  off
+    this._enablePanel(this._PANEL_LIST.CRUD)
+
+    // success [1] unsuccessful [2]
+    this._changeMode(this._resultCall[ (success? 1 : 2)])    
+
+    //reset result wait 
+    this._setResultCaller('')
+
+    if (msg > '' ) {this.hey(msg)}
+  }
 
   /*
   setAllButtonsInnerHTML ( btOk, btCancel, btSearch, btCreate,  etcetcetcetc, ){   // I dont like it. At all. better expose dom array buttons ?  Or forget and Let dev query buttons? 
@@ -501,88 +445,75 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
   }
   */ 
   
-
-
   //  ------------------
-
-
-  _changeMode(newMode, focus){      // *** enable/disable buttons and div depending on MODE ***
-
-    // focus? is it usable? dunno yet. 
+  _changeMode(newMode){      // *** enable/disable buttons and div depending on MODE ***
 
     // buttons use disabled attr, divs use css class
-    // Tests are masks of bynary flags. Do NO TEMPT to put "||" (logical OR) instead of bynary sum, it would fail.
+    // Tests are masks of bynary flags. Dont be tempted to put "||" (logical OR) instead of bynary sum, it WILL fail.
 
+    //check
     const oldMode = this._mode
+    if (newMode == null ) return      //magic? why? isnt it an err?
+    if (oldMode == newMode) return     
 
-    if (oldMode != newMode  ) {     
+    this._mode = newMode 
 
-      this._mode = newMode 
+    // for easy
+    const stEditing =  
+        this._mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
+    const stNoEditing = 
+        this._mode & (this.MODE_LIST.IDLE + this.MODE_LIST.SHOW) 
+    const stShowing = 
+        this._mode & this.MODE_LIST.SHOW 
 
-      // for easy
-      const stEditing =  
-          this._mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
-      const stNoEditing = 
-          this._mode & (this.MODE_LIST.IDLE + this.MODE_LIST.SHOW) 
-      const stShowing = 
-          this._mode & this.MODE_LIST.SHOW 
-
-      //check buttons to enable
-      //div search
-      {let tstActive = 0 
-          tstActive = 
-              this._enableElement(this.btSearch, stNoEditing) +
-              this._enableElement(this.inpSearch, stNoEditing) 
-          this._enableDiv(this.divSearch, tstActive > 0)  
-      }
-      //div crud
-      {let tstActive = 0 
-          tstActive = 
-              this._enableElement(this.btNew, stNoEditing) +
-              this._enableElement(this.btModi, stShowing) +
-              this._enableElement(this.btDel, stShowing) 
-          this._enableDiv(this.divCrud, tstActive > 0) 
-      }
-      //div okcancel
-      {let tstActive = 0 
-          tstActive = 
-              this._enableElement(this.btOk, stEditing) +
-              this._enableElement(this.btCancel, stEditing) 
-          this._enableDiv(this.divOkCancel, tstActive > 0)    // > 0 no haria falta
-      }
-      //div custom
-      {let tstActive = 0 
-            for (let bo of this.customButtons){
-              tstActive +=  this._enableElement(bo,  Number( bo.dataset.modes ) & this.mode ) 
-            }
-            this._enableDiv(this.divCustom, tstActive) 
-      }
-      //div nav
-      {let tstActive = 0
-          tstActive =
-            this._enableElement(this.btMoveFirst, stNoEditing) +
-            this._enableElement(this.btMovePrev, stNoEditing) +
-            this._enableElement(this.btMoveNext, stNoEditing) +
-            this._enableElement(this.btMoveLast, stNoEditing)   // no sense here, but still... 
-          this._enableDiv(this.divNav, tstActive > 0)         
-      }
-      //div exit
-      this._enableElement(this.btExit, stNoEditing)  
-
-
-      // show mode with style...  Changes divmsg color.  Remove oldmode class and add newmode class
-      // --------PRETTY SURE IT DOESNT WORK.  No hard to replace.
-      this.divMsg.classList.remove(this.MODE_CLASSES[oldMode]) 
-      this.divMsg.classList.add(this.MODE_CLASSES[newMode])
-
-    }  // endif _mode != newMode.  
-
-    if (focus){         // should I ?   useless? 
-      // focus on bt OK  if enabled 
-        //    cmdOk.SetFocus
-      // otherw
-        //  focus on  btnew  if enabled 
+    //check buttons/divs to enable depending on mode
+    //tstActive check if at least one.  If none, div disabled. (useful to hide div in small screens... css to do )  
+    //
+    //div search
+    {let tstActive = 0 
+        tstActive = 
+            this._enableElement(this.btSearch, stNoEditing) +
+            this._enableElement(this.inpSearch, stNoEditing) 
+        this._enableDiv(this.divSearch, tstActive > 0)  
     }
+    //div crud
+    {let tstActive = 0 
+        tstActive = 
+            this._enableElement(this.btNew, stNoEditing) +
+            this._enableElement(this.btModi, stShowing) +
+            this._enableElement(this.btDel, stShowing) 
+        this._enableDiv(this.divCrud, tstActive > 0) 
+    }
+    //div okcancel
+    {let tstActive = 0 
+        tstActive = 
+            this._enableElement(this.btOk, stEditing) +
+            this._enableElement(this.btCancel, stEditing) 
+        this._enableDiv(this.divOkCancel, tstActive > 0)    // > 0 no haria falta
+    }
+    //div custom
+    {let tstActive = 0 
+          for (let bo of this.customButtons){
+            tstActive +=  this._enableElement(bo,  Number( bo.dataset.modes ) & this.mode ) 
+          }
+          this._enableDiv(this.divCustom, tstActive) 
+    }
+    //div nav
+    {let tstActive = 0
+        tstActive =
+          this._enableElement(this.btMoveFirst, stNoEditing) +
+          this._enableElement(this.btMovePrev, stNoEditing) +
+          this._enableElement(this.btMoveNext, stNoEditing) +
+          this._enableElement(this.btMoveLast, stNoEditing)   // no sense here, but still... 
+        this._enableDiv(this.divNav, tstActive > 0)         
+    }
+    //div exit
+    this._enableElement(this.btExit, stNoEditing)  
+
+    // show mode with style...  Changes divmsg color.  Remove oldmode class and add newmode class
+    // --------PRETTY SURE IT DOESNT WORK.  No harm, No hard to replace.
+    this.divMsg.classList.remove(this.MODE_CLASSES[oldMode]) 
+    this.divMsg.classList.add(this.MODE_CLASSES[newMode])
   }
 
   
@@ -594,14 +525,14 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     return false 
   }
 
-  _enableInNav(){
-    // to implement this, i need more info than .result(true-false)
-    //
-    // a) add a second .resultNav(resultNav-ok-bof-eof-fail)                     puaj
-    // b) change .result(truefalse, optionalResulNav)                            puaj, already a 2d param
-    // c) change .result(itDepends...) to acept both bool & and act acordlinly   maybe
-    // d) do nothing.  Just to disable one button? Come on.                      easy way.  Easier for dev too.
-  }
+  // _enableInNav(){
+  //   // to implement this, i need more info than .result(true-false)
+  //   //
+  //   // a) add a second .resultNav(resultNav-ok-bof-eof-fail)                     puaj
+  //   // b) change .result(truefalse, optionalResulNav)                            puaj, already a 2d param
+  //   // c) change .result(itDepends...) to acept both bool & and act acordlinly   maybe
+  //   // d) do nothing.  Just to disable one button? Come on.                      easy way.  Easier for dev too.
+  // }
 
   _enableDiv(div, yesOrNo){  
     //to do: delegate to css 
@@ -734,14 +665,9 @@ window.customElements.define('lito-crudpad', class extends HTMLElement  {
     this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', "I'm tired")
     {let tt = this; this.btTired.onclick = function(){ tt._btTired()} } // me cago en el yavascrít   
 
-    // I had it afanao de poráhi   , need something else, something pretty
-    this.svgThing.innerHTML = '<svg height="100" width="400"><defs>'+
-      '<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">'+
-      '<stop offset="0%" style="stop-color:rgb(100,100,100);stop-opacity:1" />'+
-      '<stop offset="100%" style="stop-color:rgb(100,50,50);stop-opacity:1" /></linearGradient></defs>' + 
-      '<ellipse cx="80" cy="30" rx="100" ry="20" fill="url(#grad1)" />' +
-      '<text fill="#555555" font-size="45" font-family="Verdana" x="50" y="86">Clouding...</text>'
-    }
+    //  need something else, something pretty
+    this.svgThing.innerHTML = '<svg height="100" width="400"><ellipse cx="80" cy="20" rx="80" ry="10" />' 
+  }
 
   _makeElement(context, elemtype, id, initialClass = '',   ) {    
     let e = document.createElement(elemtype)

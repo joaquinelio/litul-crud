@@ -2,11 +2,12 @@
 
 CRUD PAD  htmlElement, 
 
-My very first js project  html-css-js vanilla, doing-LEARNING js same time.
-Thanks to javascript.info. It's great.
+My very first js project  html-css-js vanilla, doing-learning js same time.
+Thanks to javascript.info. The site is great.
 
 Warning
----There should be a better tool...  and far more complete and integrated frameworks over there---
+Still LEARNING process.
+There should be a better tool...  and far more complete and integrated frameworks over there---
 This is just a practice field.
 For now.
 
@@ -24,9 +25,9 @@ A panel with buttons. Yes. That's it.
   CRUD operations (with Ok/Cancel buttons when needed)  and
   DB search/show/navigation
 
-JUST the buttons.   No form editions, No sql nor callback code here. That's on you, dev.
+JUST the buttons. No form editions, No sql nor callback code here. That's on you, dev.
 
-These buttons have behaviour althougth.  They show up, hidd, enable/disable themselves automatically depending on: 
+These buttons have behaviour althougth.  They show up, hide, enable/disable themselves automatically depending on: 
   panel status (idle, showing, editing) and
   the functions actually implemented by dev (search, create, update, remove, nav)
 
@@ -43,8 +44,9 @@ Second, I still see too many unresponsive buttons over there,
 when dev forgets the user while doing fancy server ops.
 Well, this should be responsive.  Both, appeareance AND commands behaviour. 
 
-Clean, simple, reusable, leaving dev to just write cleaner:
-  DB (insert, update...) and 
+Clean and simple, leaving dev to just write the
+  DB   (insert, update...) 
+and 
   Form (form show, form edit ) 
 operations, passed as function parameters
 
@@ -56,9 +58,9 @@ operations, passed as function parameters
 Each CRUD and the NAV operations has to be implemented by its method (i.e. .implementCreate())
 
 Dev has to code the functions to perform the very specific task and pass them as a function parameter.
-Example for CREATE: passing two functions, pretty pure: 
-1) For drawing a form with the input controls,  
-2) For checking data and doing the SQL (or nosql)  insert.
+Example for CREATE: passing two functions, pretty pure:  
+ 1) For drawing a form with the input controls,  
+ 2) For checking data and doing the SQL (or nosql)  insert.
 NO onclick listening, no taking care of buttons status.
 
 Dev has to manage the cb and inform the panel its result
@@ -77,10 +79,10 @@ So far
 ...  5 real bugs, real errors, real learning.
 ... 63 from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG
 The found spell bugs is a problem, exhausting and time consuming.
-The biggest problem is those you didnt find. You NEVER know when it's finished, cause never finish. 
+The biggest problem is for those you didnt find. You NEVER know when it's finished, cause never finish. 
 Any untested line is a treath, any mod you do you can reintroduce same bugs. It is crazy.
 Only bet is rely on frameworks and  strong styling.
-I'd try to switch to TS from MS, they know the importance of types.  
+Maybe better is to try to switch to TS from MS, they seem to know the importance of types.  
 Parameters inside quotes? What a source of problems.
    mode = 'idle' 
 Tried 
@@ -90,3 +92,14 @@ but you are never protected cause you can do everything anyway.
 so
       JS, the freedom to step on the flowers.
       ===
+
+Async
+Trap for newbies usually said.  I fell down too.
+Because. The many training courses that don't have the word "ASYNC" in their very first sentence are wrong.
+Async is great, great.  No need to fork a thread and wait.
+You are the boss
+You dont tell your minions what to do then sit and wait until they finish.
+You send them to work with a list, 
+and go and do another boss thing.
+With sometimes the philosophical issue:
+Now it is doing nothing, but nothing is wrong.

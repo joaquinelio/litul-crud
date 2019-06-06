@@ -1,14 +1,15 @@
 /* FAKE crud playground          
                     with indexedDB fake no more
 */
-'use strict'
+
+'use strict'  // strict says. Dont make me laugh.
 
 
 
 
 
 // mmm...  what is best practice to do this kind of things
-const myDbName  = 'fakedb' 
+const myDbName  = 'fakedb1' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'         // It's a test, I go classic. 
 
@@ -21,9 +22,14 @@ const transreadonly = 'readonly'  // crazy but the right thing
 //        FK!!! should *type* properties too? HATE js 
 //        a CLASS wont protect it either.     HATE js
 
-
+// differences from spec, Ill try using spec examples (but with no var)
 let db    //db
-let x     //crudpad
+let store     //pppppppppppppppppppppppppppppppppp
+let tx    // transaction // pppppppppppppppppppppppppppppppp
+//let index // let s see...//pppppppppppppppppppppppppppppppppp
+
+let crudpad     //crudpad
+
 
 //let myDbPromise = null  // not needed, panel makes it KISS anyway
 
@@ -37,59 +43,45 @@ function main(){
 
 
 
-
-
-  //const  object createDb?????   
-  // // open, create a store&key if non existent
-  // myDbPromise = idb.open(myDbName, 1, function(createdb){
-  //   if (!createdb.objectStoreNames.contains(myStoreName)){
-  //     createdb.createObjectStore(myStoreName, {keyPath: myKeyName})
-      
-  //   } 
-  // })
-  
-
   // ******************** panel
 
-  // let x = new CrudPanel()  // or whatever it is called  // HEY SO WHERE IS THE ELEMENT!!!??? standing by...
-  // let xx = x.status        // dont need it
-  
 
-  let x = document.getElementById('idmenu')
-  //alert (x.mode)
-
+  crudpad = document.getElementById('idmenu')
 
   // mandatory
-  x.setFormControl(zFrmEmpty, zFrmBlock )
+  crudpad.setFormControl(zFrmEmpty, zFrmBlock )
   
   //optional
-  x.setCreate(zFrmCreate, zDbCreate, )
-  x.setUpdate(zFrmUpdate, zDbUpdate )
-  x.setRemove(zDbRemove )
-  x.setSearch(zSearch, true, )
+  crudpad.setCreate(zFrmCreate, zDbCreate, )
+  crudpad.setUpdate(zFrmUpdate, zDbUpdate )
+  crudpad.setRemove(zDbRemove )
+  crudpad.setSearch(zSearch, true, )
 
   // myDbPromise.then( function(){  // hope 
-  //   x.start() // no need for a promise,  needed in real db work like update storage
+  //   crudpad.start() // no need for a promise,  needed in real db work like update storage
   // })  
 
-  x.start()
   
+
+
   // ******************** DB open/create
 
-  let openDb = indexedDB.open(myDbName, 1)
+  let openDb = indexedDB.open(myDbName)
+  
 
   openDb.onupgradeneeded = function(){
-    // version 1, create db  // not more...
-    let db = openDb.result
-    db.createObjectStore( myStoreName, {keypath: myKeyName} ) //no keypath, I'll do classic.  
+    // version 1, create db  // no more...
+    db = openDb.result
+    store = db.createObjectStore( myStoreName, {keyPath: myKeyName} ) //no keypath, I'll do classic.  
     //SYNC!! should catch err and report to panel...
   }
-  openDb.onerror = function(){
-    x.result(false, "Couldnt open. Why, I dunno ")
+  openDb.onerror = function(e){
+    //crudpad.result(false, e)
+    alert (e.srcElement.error )
   }
   openDb.onsuccess = function(){   //fires after upgrade?
-    let db = openDb.result
-    x.result(true,  'db ready')
+    db = openDb.result
+    crudpad.start()       // I can start() without the db ready, I dont need it until I need it (I mean from crud buttons).
   }    
 }
 
@@ -104,7 +96,7 @@ function main(){
 // implement FormControl
 // form - empty
 function zFrmEmpty(){     // just clear all input elements
-  myFrmShow(['','',''])
+  myFrmShow(makeItem('','',''))
 }
 // form - block
 function zFrmBlock(){     // disble all input elements
@@ -115,11 +107,12 @@ function zFrmBlock(){     // disble all input elements
 // implement CREATE
 // Form - edit new
 function zFrmCreate(){
-  myFrmShow(['','',''])           // clear all inputs  - no need maybe...  may put some default... Whatever.
-  myFrmBlock([false,false,false]) // enable all inputs
+  myFrmShow(makeItem('','aa',''))            // clear all inputs  - no need maybe...  may put some default... Whatever.
+  myFrmBlock([false,false,false])           // enable all inputs
+  crudpad.result(true, 'Ready to edit NEW item')    //--- should wait for dom ready , better  yet simulate a big delay
 }
 // DB - insert
-function zDbCreate(){//database, adata){
+function zDbCreate(){//database, adata){ 
   //fakeDB.push(  myFrmRead() )
   //fakeCB(fakeSQLInsertOK)
   //database.setItem(adata[0], adata[1]+','+adata[2])  // truchíssimo sorry... sync!
@@ -141,10 +134,10 @@ function zDbCreate(){//database, adata){
   //save CREATE 'add'
   let request = myStore.add(a)  // item key id automatic 
   request.onerror = function(){
-    x.result(false, 'some error Creating')
+    crudpad.result(false, 'some error Creating')
   }
   request.onsuccess = function(){
-    x.result(true, 'saved new')
+    crudpad.result(true, 'saved new')
   }
 
   // thats it? Too easy I suspect.
@@ -160,7 +153,6 @@ function zFrmUpdate(){
 }
 // DB - update
 function zDbUpdate(){
-  // if I understand indexeddb I have to use 'put'
 
   
     // 1st, data to be stored
@@ -168,7 +160,7 @@ function zDbUpdate(){
   
     //should check before any attempt 
     // if not valid 
-    //    x.result(false, 'didnt pass') bla bla
+    //    crudpad.result(false, 'didnt pass') bla bla
     //    return 
   
     //db.transaction('myDb', 'readwrite')   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
@@ -178,10 +170,10 @@ function zDbUpdate(){
     //save UPDATE 'put'
     let request = myStore.put(a)  // item key id automatic 
     request.onerror = function(){
-      x.result(false, 'some error Updating')
+      crudpad.result(false, 'some error Updating')
     }
     request.onsuccess = function(){
-      x.result(true, 'overwritn')
+      crudpad.result(true, 'overwritn')
     }
 
 
@@ -199,10 +191,10 @@ function zDbRemove(){
   // kill
   let request = myStore.delete(a.id)
   request.onerror = function(){
-    x.result(false, 'coudnt delete')
+    crudpad.result(false, 'coudnt delete')
   }
   request.onsuccess = function(){
-    x.result(true, 'deleted')
+    crudpad.result(true, 'deleted')
   }
 }
 
@@ -216,15 +208,15 @@ function zSearch(what){
 
   let request = myStore.get(what) // odd
   request.onerror = function(){
-    x.result(false, ' error searching ')
+    crudpad.result(false, ' error searching ')
   }
   request.onsuccess = function(){
     let a = request.result
     if (a == undefined){
-      x.result (false, 'not found')
+      crudpad.result (false, 'not found')
     } else {
       myFrmShow (a)               
-      x.result(true, 'listo pa mirar y editar') // wwooooaa!! DOM ready? 
+      crudpad.result(true, 'listo pa mirar y editar') // wwooooaa!! DOM ready? 
     }
   }
 }
