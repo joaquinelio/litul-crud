@@ -57,7 +57,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     return this._mode
   }
   get MODE_LIST() {return {
-    'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,    
+    'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,  'EDIT':12,     //added EDIT 8+4, I never iterate so shouldn hurt   
   }}
   MODE_CLASSES = {              // classes for css, just some ornament as feedback
     1:'div_msg-idle',  
@@ -99,7 +99,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   _funcDisableForm
   _textButtonOk
   _txtButtonCancel
-  _txtConfirmCancel
+  _txtConfirmCancel = 'Cancel edition?'
+  _txtCancelDone = 'Canceled'
 
   _funcCreate_FormEditNew
   _funcCreate_DbInsert
@@ -166,7 +167,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     )
   }
   
-  _btOK(){
+  _btOk(){
     if(this.mode == this.MODE_LIST.CREATE){
       this._setResultCaller('dbInsert', this.MODE_LIST.SHOW,)  
       this._funcCreate_DbInsert()
@@ -182,9 +183,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     this.confirm(
       this._txtConfirmCancel,
       ()=>{ 
-        this.hey(_txtCancelDone)
+        this.hey(this._txtCancelDone)
         this._funcEraseForm()
-      }
+        this._changeMode(this.MODE_LIST.IDLE)
+      },
+      ()=>{}  //do nothing
     )
   }
   
@@ -327,7 +330,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   // *** implement behaviour ***
   //set control mandatory.  
   setFormControl(funcEraseFormContent, funcDisableForm, textOkButton = 'Ok', textCancelButton = 'Cancel', ){
-    this._funcCleanForm = funcEraseFormContent   
+    this._funcEraseForm = funcEraseFormContent   
     this._funcDisableForm = funcDisableForm
     this._textButtonOk = textOkButton
     this._txtButtonCancel = textCancelButton
@@ -380,7 +383,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     let bot = document.createElement("button") 
 
     bot.name = name 
-    bot.className = " cus_button " 
+    bot.className = className 
     //bot.value = value 
     bot.innerHTML = caption 
     bot.id = name 
@@ -605,7 +608,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
       this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
       this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._textButtonOk ) 
       this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._txtButtonCancel ) 
-      {let tt = this; this.btOk.onclick = function(){ tt._btOK()} } // me cago en el yavascrít
+      {let tt = this; this.btOk.onclick = function(){ tt._btOk()} } // me cago en el yavascrít
       {let tt = this; this.btCancel.onclick = function(){ tt._btCancel()} } // me cago en el yavascrít
     }
 

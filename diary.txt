@@ -4,6 +4,30 @@
 *** ----- ***
 
 
+
+190607
+
+dark side outside
+...
+button naming. careful.
+should give 2 options, text inside functions is handy, using textContent to avoid problems with simbols like nav << < > >> 
+and other centralized, maybe json, to set innerHTML so can buld iconic buttons and replace more hidden texts like alerts
+...
+debugging tricky indexdb, going well. You need to hack your browser.
+again, most bugs are from spelling.  Some from context, but the same source: shitty js.    
+...
+getting hard.
+Need a bigger screen. Chrome has Too many debug panels, all needed. And needy.   
+...
+WTF
+indexeddb store not found,  
+and
+object store with the specified name already exists.
+same var
+...
+
+
+
 190606 again.  
 
 Noisy. Bright. Day. 10:30.
@@ -43,6 +67,9 @@ start test app debug
 tired
 commit
 later
+oops  Fatal unable to access github
+phone dry 
+plug...
 
 
 
