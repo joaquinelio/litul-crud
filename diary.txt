@@ -1,7 +1,88 @@
--
+
 *** ----- ***
 *** Diary ***   
 *** ----- ***
+
+
+
+190608 after nap.  WORKING VERSION 
+
+indexeddb with events
+no control nor trycatch
+working Anyway
+...
+css un/disabled should be more pronounced 
+css hey() should flash when changes 
+confirm should fire error OR let one of the two cb to be empty. Do nothing makes sense
+didnt test button naming param, bet lot of spelling errs
+...
+custom buttons noshow.
+customButtons.lenght not defined !!!!!!!! SPELLING AGAIN  hate js
+this.customButton   not iterable  SPELL  FY!!!!
+bot.dataset.estados    SPELL   FYFYFYFY!!!!!
+Working now.  ALL JS FAULT.
+Reckless css is getting ugly.
+...
+Only nav buttons debug left
+need to implement cursor in test app
+...
+        LOL 
+I got it wrong.   Create Read Update Delete 
+Ok, I'll change names and test to fit it.
+If I a dont the function names would be misleading.
+Oh No!!!  JS fucking var freedom wont help!!!!!!!!!
+anyway, has to be done.
+...
+In slowmotion, jumps too much.  Shouldnt.  
+Maybe is just putting defaults at pad creation time,
+and check if the there is a "disable then enable" line
+...
+But it IS working.
+VERY few bugs.
+check  to do 
+then some shining
+and ready to the next step.
+
+
+
+
+
+190608
+
+Replacing waiting panel is becaming a priority factor.
+Its Ugly
+Too agresive and anoying, even for a temporary thing.  It hurts me.
+It would fireup the user bored factor and force him to hit the abort bored button.
+I have to steal a nicer svg.  Not a gif please.  I want everything scalable,  
+CEO wall screen desktop, minion 5'' pad like my phone. 
+SAME app.  It's what I'm commited to sell. 
+...
+SQL. Is it a problem? 
+Nosql are easier to maintain, easier to spread, easier to make them independent from... everything. 
+The prehistoric Nosql is now the new thing, because most of the data today fits nosql better.
+...
+Cant find the bug indexeddb,  a big one.
+Some things started working  when I went to specs, not examples. And after hack the browser. 
+I dont want to learn it.
+All cloud db seems paid.
+1 year free? looks ok.  Maybe not starting now.  Nosql?   Mmm.  
+I can do nosql.  But my data fits sql better.
+And I have a clear ,very specific, goal.  
+Mmm.
+Even when indexedDb woudnt be useful even as a cache.  One Don google may delete whenever he wishes just because.
+check: Sql, free, secured & well known (the service I wanna sell), 
+the customer has to see a well working demo, he goes to home, uses the phone after dinner, he can edit his same data, same app.
+data secured by something he can trust: MS, Google, Amazon(after little research) .
+And the customer app server? Where do I put it? Strong user auth.  Login MS, integration to Office Cloud is nice.
+Forget your lan issues and troubled servers  Even datacenters. 
+Servers down, inet provider down, trasportation on strike, building on fire, who cares.  You have a phone?
+Buy my service, secure your data so you dont need me, in MS cloud.
+amazon + redhat, then azure?  
+I already have redhat account... but I was too "raw" then.  "green" is the word? inmature? unbearded? need a context traslator.
+I can do research after learning node.
+Yet I am short on real world practice on js promises and js map 
+indexedDB... puf.
+Lets finish this.
 
 
 

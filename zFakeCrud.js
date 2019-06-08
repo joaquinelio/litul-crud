@@ -1,8 +1,8 @@
-/* FAKE crud playground          
-                    with indexedDB fake no more
+/** FAKE crud playground          
+                          with indexedDB fake no more
 */
 
-'use strict'  // strict says. Dont make me laugh.
+'use strict'  // strict says. Dont make me laugh. I hate JS.
 
 
 /*
@@ -12,13 +12,16 @@
   send crudpad.result(trueSuccess) to let it know the async op finished well (or not)
 
   here I use same form to show and edit for ease
-  you can show a grid and let user move without crudpad nav buttons, 
-  but ONE must be selected so YOU can see wich one to modify when frmEditMod fires 
+  It could show a grid and let user move without the crudpad nav buttons instead, 
+  but ONE must be selected, the to be modified when frmEditMod fires 
   so you need to fill the inputs with the old data then enable the edit
 
   here I use search with (...,true) the input box   
-  you can throw an advanced search instead and fill the form if its found
+  Dev can throw an advanced search instead, then fill the form if its found
   then crudpad.result(true) if a record is shown or (false) if not  
+
+  mode_list works as masks, binary sum.  The parameter for any of this two modes: 
+  crudpad.MODE_LIST.SHOW + crudpad.MODE_LIST.IDLE
 
   indexeddb is tricky  
   shoud I go fire.
@@ -26,7 +29,8 @@
 */
 
 
-
+// *********************************************** DB stuff *********************
+//
 // indexedDB globals:    NAMES   db,store, index
 const myDbName  = 'fakedb3' 
 const myStoreName = 'fakestore'
@@ -38,19 +42,25 @@ let store     //
 let tx        // transaction //  
 let index     // let s see...//   didnt use
 
+// And just because I do HATE ' ' parameters.  Wherever they are vulnerable and easily hidden typos, set const.
+const transreadwrite = 'readwrite'
+const transreadonly = 'readonly'
+//
+// *********************************************** DB stuff **********************
+
+
+
+
+
+
 //crudpad
 let crudpad 
 
 
-// And just because I do HATE ' ' parameters.  Wherever they are vulnerable and easily hidden typos, set const.
-const transreadwrite = 'readwrite'
-const transreadonly = 'readonly'
-
-
 //lets do
 document.addEventListener('DOMContentLoaded', main);
-
 function main(){
+
 
   // ******************** pad
   crudpad = document.getElementById('idmenu')
@@ -58,45 +68,44 @@ function main(){
 
   //                                                                      parameters----------------
   // mandatory  set
-  crudpad.setFormControl(zFrmEmpty, zFrmBlock )  //                       form erase inputs, form block inputs   
+  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                       form emptied inputs, form blocked inputs   
   
   // optional set                                                          
-  crudpad.setCreate(zFrmCreate, zDbCreate, )    // C                      frm to edit new, db insert
-  crudpad.setRemove(zDbRemove )                 // R                      db delete
-  crudpad.setUpdate(zFrmUpdate, zDbUpdate )     // U                      frm to edit mod, db update
-  crudpad.setSearch(zSearch, true, )            // s ¿? So D stands for?  db search(input)+ show item,  show input text 
-  // crudpad.setNav(                            // nav  << < > >>         db movecursor   + show item
+  crudpad.setCreate(zFrmCreate, zDbCreate, )   // C                      frm to edit new,  db insert
+  crudpad.setRemove(zDbRemove, )               // R                      db delete
+  crudpad.setUpdate(zFrmUpdate, zDbUpdate, )   // U                      frm to edit mod,  db update
+  crudpad.setSearch(zSearch, true, )           // s ¿? So D stands for?  db search(input)+ show item,  show input text 
+  // crudpad.setNav(                           // nav  << < > >>         db movecursor   + show item
   //   zDbMovFirst,
   //   zDbMovPrev, 
   //   zDbMovNext, 
   //   zDbMovLast, 
   // )                                           
 
-  // optional custom buttons   
-  crudpad.addCustomButton('buttonXls', 'custom-button', 'to XLS', crudpad.MODE_LIST.SHOW, function(){crudpad.hey('pressed to xls')})
-  crudpad.addCustomButton('buttonCheck', 'custom-button', 'let me...',  crudpad.MODE_LIST.EDIT,  function(){crudpad.hey('checking something')})
-  crudpad.addCustomButton('buttonWhat', 'custom-button', 'SpecialSearch',  crudpad.MODE_LIST.IDLE,  function(){crudpad.hey('special search ')})
+  // optional custom buttons, examples for different views
+  //                       htmlnname,    initial class,    innertext,   modes where is active,   onclick        
+  crudpad.addCustomButton('buttonXls',   'custom-button', 'to XLS',     crudpad.MODE_LIST.SHOW, function(){crudpad.hey('pressed to xls')})
+  crudpad.addCustomButton('buttonCheck', 'custom-button', 'let me...',  crudpad.MODE_LIST.EDIT, function(){crudpad.hey('checking something')})
+  crudpad.addCustomButton('buttonWhat',  'custom-button', 'Search2',    crudpad.MODE_LIST.IDLE, function(){crudpad.hey('special search ')})
+
+
+
+
 
 
   // ******************** DB open/create
-  let openDb = indexedDB.open(myDbName, 1)
-
-  openDb.onupgradeneeded = function(){
-    // version 1, create db, create store  
-    db = openDb.result
-    store = db.createObjectStore( myStoreName, {keyPath: myKeyName} )   
-    //SYNC!! should catch 
-
-    // seems I need 1st store
-    store.put(makeItem('11','Descr11','11.11'))
-    // error?? where manag
-  
+  let request = indexedDB.open(myDbName, 1)
+  request.onupgradeneeded = function(event){    // version 1, create db, create store  
+    db = request.result
+    store = db.createObjectStore( myStoreName, {keyPath: myKeyName} )     //SYNC? should catch     
   }
-  openDb.onerror = function(e){
+  request.onerror = function(e){
     alert (e.srcElement.error )
   }
-  openDb.onsuccess = function(){
-    db = openDb.result
+  request.onsuccess = function(event){
+    db = request.result
+
+    // START CRUDPAD
     crudpad.start()       // I could start() without the db ready, I dont need it until I need it (I mean from crud buttons).
   }    
 }
@@ -104,7 +113,7 @@ function main(){
 
 /*
 ************************************
-** z Dev functions for CRUD & NAV **  crud panel parameters 
+** z Dev functions for CRUD & NAV **  used as crud panel parameters. 
 ************************************
 */
 
@@ -113,27 +122,28 @@ function main(){
 //
 // form - empty
 function zFrmEmpty(){             //shows empty 
-  myFrmShow(makeItem('','',''))  // ok just erase all input elements. You may just hide them.
+  myFrmShow(makeItem('','',''))  // ok just erase all input elements. You may just hide them too.
 }
 // form - block
 function zFrmBlock(){           // disble all input elements
   myFrmBlock([true,true,true])
 }
 
-// -------------------------------------------------------
-// ---------------- implement CREATE ----------- new item
+// -------------------------------------------------------------
+// ---------------- implement CREATE ----------- new item to db
 //
 // Form - edit new item
 function zFrmCreate(){
-  myFrmShow(makeItem('','default',''))        // clear all inputs...  may put some default... may autocalculate id
+  myFrmShow(makeItem('','default',''))            // clear all inputs...  may put some default... may autocalculate id
   myFrmBlock([false,false,false])                 // enable all inputs
   // should put input restrictions, ranges, emptyness, etc.
   crudpad.result(true, 'Ready to edit NEW item')                    //should wait for dom ready? , better yet simulate a big delay to test boredness
-  // function leaves form in edit mode
+  // function leaves form able to be edited 
 }
 //
 // DB - insert item
 function zDbCreate(){     // create: new item in db, the C of crud, like 'sql insert' not 'sql create' 
+ 
   // data to be stored
   let item =   myFrmRead()    // read inputs returns  object item   
   
@@ -143,18 +153,18 @@ function zDbCreate(){     // create: new item in db, the C of crud, like 'sql in
   //    return 
   
   // indexdb stuff
-  tx = db.transaction(myDbName, transreadwrite)    
-  store = tx.objectStore(myStoreName)
+  tx = db.transaction(myStoreName, transreadwrite)    
+  store = tx.objectStore(myStoreName)     //wtf is not ready? async?
 
   //save
-  let request = store.add(item)  // item key id automatic    // idb add = sql insert
+  let request = store.add(item)  // item key id automatic    // idb add ~ sql insert  // 
   request.onerror = function(e){
     crudpad.result(false, 'some error Creating' + e)
+    console.error
   }
   request.onsuccess = function(){
     crudpad.result(true, 'saved new item')
   }
-  // thats it? Too easy. Hope it works
 }
 
 // ---------------------------------------------------------
@@ -182,8 +192,8 @@ function zDbUpdate(){
     //    return 
   
     //db.transaction('myDb', 'readwrite')   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
-    tx = db.transaction(myDbName , transreadwrite)   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
-    store = transaction.objectStore(myStoreName)
+    tx = db.transaction(myStoreName , transreadwrite)   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
+    store = tx.objectStore(myStoreName)
   
     //save UPDATE 'put'
     let request = store.put(item)  // item key id automatic         // idb put ~ sql update 
@@ -202,7 +212,7 @@ function zDbUpdate(){
 function zDbRemove(){
   let item = myFrmRead()
   tx = db.transaction(myDbName, transreadwrite)
-  store = transaction.objectStore(myStoreName)
+  store = tx.objectStore(myStoreName)
 
   // kill
   let request = store.delete(item.id)
@@ -210,7 +220,7 @@ function zDbRemove(){
     crudpad.result(false, 'coudnt delete')
   }
   request.onsuccess = function(){
-    crudpad.result(true, 'deleted')
+    crudpad.result(true, 'deleted'+ item.id)
   }
 }
 
@@ -220,8 +230,8 @@ function zDbRemove(){
 // ---------------- implement SEARCH ---------------- 
 //
 function zSearch(what){  
-  tx = db.transaction(myDbName, transreadonly)
-  store = transaction.objectStore(myStoreName)
+  tx = db.transaction(myStoreName, transreadonly)
+  store = tx.objectStore(myStoreName)
 
   let request = store.get(what) // odd
   request.onerror = function(){
@@ -233,7 +243,7 @@ function zSearch(what){
       crudpad.result (false, 'not found')
     } else {
       myFrmShow (item)               
-      crudpad.result(true, 'listo pa mirar y editar') // wwooooaa!! DOM ready? Not here too simple, but...
+      crudpad.result(true, 'listo pa mirar y editar. I mean "READY"') // wwooooaa!! DOM ready? Not here too simple, but...
     }
   }
 }

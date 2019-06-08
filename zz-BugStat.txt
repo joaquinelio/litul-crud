@@ -19,4 +19,25 @@ divCrud - divMain                                       REAL BUG  --------------
 btMov botMove botMove                 spell          **************  12
 fieldset no css flex                                    REAL BUG -------------------------
 WAiTING CONFiRM                       spell         ***** 4+
+confirm noshow                                      REAL BUG-------------------------
+
+
+
+To do : to test & to fix 
+Button custom names  
+- Test params test textcontent,  
+- write json file for innerhtml , test svg icons
+svg waiting ugly
+css hey() should flash
+css enabled inputs should be more visible
+css media to diferentiate, hide via visibility or via display
+css msg background to show mode... maybe not.  too obvious with the enabled buttons.  
+css vertical pad?  why not, flex column
+css everything  uglyness
+tst app: cursor to test nav
+func naming to fit CRUD acronym
+refactor dirty panel selection, spread code should be one place.
+confirm() let one of the 2 cb to be empty.
+party
+
 

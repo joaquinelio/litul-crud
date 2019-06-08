@@ -32,14 +32,6 @@
 */
 
 
-/*
-  To-Do
-  Cleaner if doing _makeButton() while set()  so  fewer _variables   like _txtButtonXXX
-  Or not.
-  Maybe
-  The parameters are handy.  
-*/ 
-
 window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
   constructor(){   // remains empty...  Whats intended to put here?  
@@ -163,7 +155,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
         this._setResultCaller('dbDelete', this.MODE_LIST.IDLE,)   // err, keep showing 
         this._funcRemove_DbDelete()
       },
-      // no, stays the same
+      ()=>{}       // no, stays the same
     )
   }
   
@@ -389,7 +381,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     bot.id = name 
     bot.onclick = onclick   
     bot.type = "button" 
-    bot.dataset.estados = activeModesBinarySum  
+    bot.dataset.modes = activeModesBinarySum  
     bot.disabled = true 
 
     this.customButtons.push(bot) 
@@ -499,7 +491,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
           for (let bo of this.customButtons){
             tstActive +=  this._enableElement(bo,  Number( bo.dataset.modes ) & this.mode ) 
           }
-          this._enableDiv(this.divCustom, tstActive) 
+          this._enableDiv(this.divCustom, tstActive > 0) 
     }
     //div nav
     {let tstActive = 0
@@ -597,9 +589,9 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
       }
     }
     //main-div1-divCustom   
-    if( this.customButtons.lenght > 0 ){
+    if( this.customButtons.length > 0 ){
       this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
-      for(let bo of this.customButton){
+      for(let bo of this.customButtons){
         this.divCustom.appendChild(bo)    
       }
     }
