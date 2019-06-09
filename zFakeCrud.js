@@ -30,16 +30,19 @@
 
 
 // *********************************************** DB stuff *********************
-//
+// delay test
+const DESPIOJANDO = true      //debugging
+const yawning = 100000        //yawns
+
 // indexedDB globals:    NAMES   db,store, index
 const myDbName  = 'fakedb3' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'          
 
-// indexedDB globals:    THINGS   db, store, transaction, index,           could be locals
-let db        //db
-let store     // 
-let tx        // transaction //  
+// indexedDB globals:    THINGS   db, store, transaction, index       could be locals
+let db        // db
+let store     // store
+let tx        // transaction   
 let index     // let s see...//   didnt use
 
 // And just because I do HATE ' ' parameters.  Wherever they are vulnerable and easily hidden typos, set const.
@@ -51,11 +54,8 @@ const transreadonly = 'readonly'
 
 
 
-
-
 //crudpad
 let crudpad 
-
 
 //lets do
 document.addEventListener('DOMContentLoaded', main);
@@ -66,16 +66,16 @@ function main(){
   crudpad = document.getElementById('idmenu')
 
 
-  //                                                                      parameters----------------
+  //                                                               parameters----------------
   // mandatory  set
-  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                       form emptied inputs, form blocked inputs   
+  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                  form emptied inputs, form blocked inputs   
   
   // optional set                                                          
-  crudpad.setCreate(zFrmCreate, zDbCreate, )   // C                      frm to edit new,  db insert
-  crudpad.setRemove(zDbRemove, )               // R                      db delete
-  crudpad.setUpdate(zFrmUpdate, zDbUpdate, )   // U                      frm to edit mod,  db update
-  crudpad.setSearch(zSearch, true, )           // s ¿? So D stands for?  db search(input)+ show item,  show input text 
-  // crudpad.setNav(                           // nav  << < > >>         db movecursor   + show item
+  crudpad.setCreate(zFrmCreate, zDbCreate, )  // C              frm to edit new,  db insert
+  crudpad.setRemove(zDbRemove, )              // D              db delete
+  crudpad.setUpdate(zFrmUpdate, zDbUpdate, )  // U              frm to edit mod,  db update
+  crudpad.setSearch(zSearch, true, )          // R              db search(input)+ show item, true:show input text 
+  // crudpad.setNav(                             // nav << < > >>  db movecursor   + show item
   //   zDbMovFirst,
   //   zDbMovPrev, 
   //   zDbMovNext, 
@@ -83,10 +83,10 @@ function main(){
   // )                                           
 
   // optional custom buttons, examples for different views
-  //                       htmlnname,    initial class,    innertext,   modes where is active,   onclick        
-  crudpad.addCustomButton('buttonXls',   'custom-button', 'to XLS',     crudpad.MODE_LIST.SHOW, function(){crudpad.hey('pressed to xls')})
-  crudpad.addCustomButton('buttonCheck', 'custom-button', 'let me...',  crudpad.MODE_LIST.EDIT, function(){crudpad.hey('checking something')})
-  crudpad.addCustomButton('buttonWhat',  'custom-button', 'Search2',    crudpad.MODE_LIST.IDLE, function(){crudpad.hey('special search ')})
+  //                       htmlElemname,  initial class,   innertext,   modes where is active,   onclick        
+  crudpad.addCustomButton('buttonXls',   'custom-button', 'to XLS',     crudpad.MODE_LIST.SHOW, 'custom xls'  ,function(){crudpad.hey('I pressed "to xls"')})
+  crudpad.addCustomButton('buttonCheck', 'custom-button', 'let me...',  crudpad.MODE_LIST.EDIT, 'custom some' ,function(){crudpad.hey('I am checking something')})
+  crudpad.addCustomButton('buttonWhat',  'custom-button', 'Search2',    crudpad.MODE_LIST.IDLE, 'custom srch' ,function(){crudpad.hey('I do special search ')})
 
 
 
@@ -136,7 +136,10 @@ function zFrmBlock(){           // disble all input elements
 function zFrmCreate(){
   myFrmShow(makeItem('','default',''))            // clear all inputs...  may put some default... may autocalculate id
   myFrmBlock([false,false,false])                 // enable all inputs
+
+  // form validation!
   // should put input restrictions, ranges, emptyness, etc.
+
   crudpad.result(true, 'Ready to edit NEW item')                    //should wait for dom ready? , better yet simulate a big delay to test boredness
   // function leaves form able to be edited 
 }
@@ -159,11 +162,17 @@ function zDbCreate(){     // create: new item in db, the C of crud, like 'sql in
   //save
   let request = store.add(item)  // item key id automatic    // idb add ~ sql insert  // 
   request.onerror = function(e){
-    crudpad.result(false, 'some error Creating' + e)
-    console.error
+    
+    setTimeout(function(){
+      crudpad.result(false, 'some error Creating' + e)
+    }, yawning)
+    
+    
   }
   request.onsuccess = function(){
-    crudpad.result(true, 'saved new item')
+    yawn(()=>{
+    crudpad.result(true, 'saved new item'+ item.id)
+    })
   }
 }
 
@@ -174,35 +183,40 @@ function zDbCreate(){     // create: new item in db, the C of crud, like 'sql in
 function zFrmUpdate(){
   myFrmBlock([true,false,false])            // enable all inputs but code field
 
-  // unattended checks 
+  // unattended checks   form validation!!
   // some input checks restrictions then
-  // crudpad.hey('description too short ') something like this
+  // crudpad.hey('description too short ') <- something like this
+  // then 
 
-  crudpad.result(true, "ready to modify item")
+  crudpad.result(true, "ready to modify item (code field disabled)")
 }
 // DB - update
 function zDbUpdate(){
 
-    // 1st, data to be stored
-    let item =   myFrmRead()   
-  
-    //should check before any attempt 
-    // if not valid 
-    //    crudpad.result(false, 'didnt pass') bla bla
-    //    return 
-  
-    //db.transaction('myDb', 'readwrite')   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
-    tx = db.transaction(myStoreName , transreadwrite)   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
-    store = tx.objectStore(myStoreName)
-  
-    //save UPDATE 'put'
-    let request = store.put(item)  // item key id automatic         // idb put ~ sql update 
-    request.onerror = function(){
-      crudpad.result(false, 'some error Updating')
-    }
-    request.onsuccess = function(){
-      crudpad.result(true, 'overwritn')
-    }
+  // 1st, data to be stored
+  let item =   myFrmRead()   
+
+  //should check before any attempt 
+  // if not valid 
+  //    crudpad.result(false, 'didnt pass') bla bla
+  //    return 
+
+  //db.transaction('myDb', 'readwrite')   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
+  tx = db.transaction(myStoreName , transreadwrite)   // I HATE " " PARAMETERS !!!!! MAIN SOURCE OF ELUSIVE ERRORS
+  store = tx.objectStore(myStoreName)
+
+  //save UPDATE 'put'
+  let request = store.put(item)  // item key id automatic         // idb put ~ sql update 
+  request.onerror = function(){
+    yawn(()=>{
+    crudpad.result(false, 'some error Updating')
+    })
+  }
+  request.onsuccess = function(){
+    yawn(()=>{
+    crudpad.result(true, 'overwritn')
+    })
+  }
 }
 
 // -----------------------------------------------------------
@@ -211,16 +225,20 @@ function zDbUpdate(){
 // DB - delete
 function zDbRemove(){
   let item = myFrmRead()
-  tx = db.transaction(myDbName, transreadwrite)
+  tx = db.transaction(myStoreName, transreadwrite)
   store = tx.objectStore(myStoreName)
 
   // kill
   let request = store.delete(item.id)
   request.onerror = function(){
+    yawn(()=>{
     crudpad.result(false, 'coudnt delete')
+    })
   }
   request.onsuccess = function(){
+    yawn(()=>{
     crudpad.result(true, 'deleted'+ item.id)
+    })
   }
 }
 
@@ -242,14 +260,17 @@ function zSearch(what){
     if (item == undefined){
       crudpad.result (false, 'not found')
     } else {
-      myFrmShow (item)               
-      crudpad.result(true, 'listo pa mirar y editar. I mean "READY"') // wwooooaa!! DOM ready? Not here too simple, but...
+      myFrmShow (item)
+      yawn(()=>{
+        crudpad.result(true, 'listo pa mirar y editar. I mean "READY"') // wwooooaa!! DOM ready? Not here too simple, but...
+      })
     }
   }
 }
 
-// ---------------------------------------
-// implement NAV
+// ----------------------------------------------------
+// --------------implement NAV ---------------------------
+//
 // DB - showFirst
 // DB - showPrev
 // DB - showNext
@@ -264,7 +285,7 @@ function makeItem(a,b,c){
   return {id:a, description:b, price:c}
 }
 
-// misc  related to html.    
+// misc  related to html --------------------------------   
 // FRM - shows an item
 function myFrmShow(item){  // myFrmShow(arrayData){
   document.getElementById("i1").value = item.id
@@ -286,3 +307,14 @@ function myFrmBlock(arrayDisabled){
   document.getElementById("i3").disabled = arrayDisabled[2]
 }
 
+
+// debug --------------------------------------------------
+function yawn(whatdoyouwant){  
+  ;(DESPIOJANDO)? setTimeout(whatdoyouwant, yawning):  whatdoyouwant
+}
+function wtf(who, what, when, where){
+//  if  (DESPIOJANDO){
+//      console.log  
+//  } 
+}
+ 

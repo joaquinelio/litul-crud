@@ -5,6 +5,47 @@
 
 
 
+190609 after wine 
+
+Some refining, pretty well.
+Some bug enumeration, easy to fix, but prefered to give time to be creative on the bug list :)
+Now there is refined to-do list.
+the remaining 20% in 80% of the time rule? After TWO months????  No way.
+Has to be presto.
+
+
+
+190609
+
+challenge: touch & drag the toolbar to a new position. left, up, right.  Not my current scope, but...
+...
+is there a -lint- extension for vscode? pretty sure there is. Surely CANNOT fix many things, 
+but may help. Or give some advice.
+WOA!!  its overwelming.  need to learn about scoring now?  Nah, just ask google.
+...
+readme looks ugly.  DO I HAVE TO LEARN GIT MARKDOWN TOO??
+...
+Delete button... doesnt delete...  testapp bug, ok.
+HEA! bored button stoped working!!!
+...
+Mmm...
+indexeddb too fast. 
+How can I test async delay? Any atempt stops the js execution so waiting panel is a noshow.
+Thx stackoverflow!  setTimeout(function, milliseconds); is async.
+...
+moved to-do list to zzBugStat.txt
+...
+It Worked!  
+  ()=>{this._btTired()} 
+parameter better (some) than 
+  {let tt = this; this.btTired.onclick = function(){ tt._btTired()} } // me cago en el yavascrít   
+...
+tooltip (title attr) for custom buttons
+...
+
+
+
+
 190608 after nap.  WORKING VERSION 
 
 indexeddb with events
@@ -42,8 +83,6 @@ VERY few bugs.
 check  to do 
 then some shining
 and ready to the next step.
-
-
 
 
 

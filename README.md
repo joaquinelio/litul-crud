@@ -1,4 +1,6 @@
-# litul-crudpad
+
+**litul-crudpad**
+
 
 CRUD PAD  htmlElement, 
 
@@ -18,8 +20,8 @@ By
 Joaquin Elio 'Lito' Fernandez
 
 
-***What is***
-===
+**What is**
+
 A panel with buttons. Yes. That's it.
   For 
   CRUD operations (with Ok/Cancel buttons when needed)  and
@@ -34,9 +36,7 @@ These buttons have behaviour althougth.  They show up, hide, enable/disable them
 Pretty rigid. Not a tool for creating new stuff
 
 
-
-***The story***
-===
+**The story**
 
 First, abstractions.  I dont see good ones, this will be. Talking Crud.
 
@@ -51,9 +51,7 @@ and
 operations, passed as function parameters
 
 
-
-*** How  ***
-===
+**How to**
 
 Each CRUD and the NAV operations has to be implemented by its method (i.e. .implementCreate())
 
@@ -64,36 +62,38 @@ Example for CREATE: passing two functions, pretty pure:
 NO onclick listening, no taking care of buttons status.
 
 Dev has to manage the cb and inform the panel its result
-You have to inform me if it was a success
-   db.requestsomething()
-   db.onsuccess = (){ crudpad.result(true) }
-   db.onerror =   (){ crudpad.result(false, "I'm so, so sorry")}
+You have to inform me if it was a success:
+
+    db.requestsomething()
+    db.onsuccess = (){ crudpad.result(true) }
+    db.onerror =   (){ crudpad.result(false, "I'm so, so sorry")}
 
 
-*** JavaScript thoughts ***
-===
+**JavaScript thoughts**
 
-Learning.
+Learning...
 I learn to hate JS. 2 Months.
 So far 
 ...  5 real bugs, real errors, real learning.
-... 63 from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG
+... 63 from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
 The found spell bugs is a problem, exhausting and time consuming.
 The biggest problem is for those you didnt find. You NEVER know when it's finished, cause never finish. 
 Any untested line is a treath, any mod you do you can reintroduce same bugs. It is crazy.
-Only bet is rely on frameworks and  strong styling.
+Only bet is rely on frameworks and strong styling.
 Maybe better is to try to switch to TS from MS, they seem to know the importance of types.  
 Parameters inside quotes? What a source of problems.
-   mode = 'idle' 
-Tried 
-  MODES = {'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,}
-  mode = MODES.IDLE
+
+    mode = 'idle' 
+Tried:
+
+    MODES = {'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,}
+    mode = MODES.IDLE
 but you are never protected cause you can do everything anyway.
 so
-      JS, the freedom to step on the flowers.
-      ===
+    **JS, the freedom to step on the flowers.**
+      
 
-Async
+Async.
 Trap for newbies usually said.  I fell down too.
 Because. The many training courses that don't have the word "ASYNC" in their very first sentence are wrong.
 Async is great, great.  No need to fork a thread and wait.
@@ -102,4 +102,4 @@ You dont tell your minions what to do then sit and wait until they finish.
 You send them to work with a list, 
 and go and do another boss thing.
 With sometimes the philosophical issue:
-Now it is doing nothing, but nothing is wrong.
+    **Now it is doing nothing, but nothing is wrong.**
