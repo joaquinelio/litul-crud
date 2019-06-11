@@ -21,53 +21,74 @@ WAiTING CONFiRM                       spell         *************** 4+
 confirm noshow                                      REAL BUG-------------------------
 .lenght .customButton .dataset.estados    SPELL  ******************  3 
 confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
-
+From to-do list...                                    REAL BUGS -----------------  1
 
 To do, to test & to fix 
 =======================
-js:
+** js: **  Bugs
+- refactor dirty panel selection, now spread code should be one place.
+** js: ** Improvement 
+- Maybe.  REMOVE the crudpad as html element class part.  Make it just a function that injects html crudpad.
+    Looks scary.  Shoudn't be.  
+    var names would be more controlable
+    all 'this.' would be erradicated. 
 - svg waiting ugly
-- func naming to fit CRUD acronym
-- refactor dirty panel selection, spread code should be one place.
-- confirm() let one of the 2 cb to be empty.  
 - some lint for vscode? 
-- Bored button should show after some timeout
-- after search, inputs enabled!  in mode.show 
-- Button custom names: Test params test textcontent,  
-- Button custom names: write json file for innerhtml , test svg icons
-- BOF EOF to disable nav buttons?   
-    Would need more info in result(), too specific to be a clean new param.  after error? Too dirty. 
-    Easy: I can add methods for Dev to call .navBof() .navEof(), after thas related nav buttons remain disabled until  new, del or mov. 
--delegation? is worthy? Can unify 14 onclick 14 _function in just one switch case.  Custom remain individual.
--txtButtons for NAV: finish mod.
-css:
+- Bored button should show after some timeout 
+- Button custom names: write -json file?- for innerhtml 
+- Button custom names: let svg icons
+- BOF EOF to disable related nav buttons?   
+    Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
+    Easy: methods for Dev to call: .navBof() .navEof(), after thas, related nav buttons remain disabled until  new, del or mov. 
+-delegation? is worthy? Can unify 14 onclick 14 _function in just one switch case. Custom onclick remain individual and dev responsability.
+-changemode() focus parameter? seems no worthy. 
+    Good taste rules require focus to be implemented. So, here it is again.
+    plus TAB navigation inside, buttons & inputs.
+-create HARD buttons instead of _makeButton() on the fly.
+    it 'll be easy for dev to access the allowed properties, svg icon, title, text, hover...
+        .divcrud.ButtonOk.innerHtml = '<svg>... 
+    Then the other elements instead of _createElement() then add properties:  
+        .confirm.buttonYes = 'Yep!'    
+        .crud.confirmCancelMsg = 'really?' 
+** css: **
 - everything, flex arrangement the first!
 - hey() should flash. Wanted more discrete than alert, but it is too shy.
 - transitions, not all the same.  1/2s too long
 - enabled inputs should be more visible
-- media to diferentiate, hide via visibility (so dont jump) or via display (more free space)
+- media query to diferentiate, hide via visibility (so dont jump) or via display (more free space)
 - vertical pad?  why not, flex column via class, just with
-- msg hoover: msg as tip, useful if vertical
 - everything  uglyness 
-chalenge: 
-- touch & drag the toolbar to a new position. left, up, right.  Not my current scope, but...
-tst app: 
-- cursor to test nav
+** chalenge: ** 
+- touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
+** tst app: ** 
+- Button naming: test the optional parameter
+- db cursor to test nav
 party.
 
 
 
+===========================
 Done?  Philosophical issues 
 ===========================
-- changemode() focus parameter? seems no worthy 
 - msg background to show mode... maybe not, too obvious with the enabled buttons.  
 - Help button? Dev can use a custom button, so maybenot.
 
 
-
+=====
 Done.
 =====
-- ()=>{this._crudfunction()}  It works!  less crazy but still:  I hate js.  
+- ()=>{this._crudfunction()} as onclick parameter: It works!  Cleaner code. Less crazy but still. I hate js.  
 - Tooltip parameteer in button!  This is useful.   Custom buttons only, title attr parameter 
 - diferentiate 'unexpected result' from 'unexpected error'. Just info to the user to let him feel guilty cause he hit abort.
 - tst app: simulate big async delay
+- func naming to fit CRUD acronym
+- short for Button is not... ejem... Butt.  bt or btn.  
+- Button custom names: Test params test textcontent,  
+- nav buttons: no custom text parameter. They still should support custom icons
+- nav buttons: tooltip first prev next last to let readers.     
+- confirm() let one of the 2 cb to be empty. Doing nothing in one of them makes sense.  
+- crudpad.result(), the method to change modes,  
+  renamed to .resultOk() to differentiate from db.result readonly property
+  sendResult() didnt like it, tellResult() would have been more suitable 
+- after search, inputs still enabled!  in mode.show 
+- msg hoover: msg as tip, useful if (ever) vertical

@@ -4,12 +4,72 @@
 *** ----- ***
 
 
+190611
+
+Working version. Time to start log... 
+Do I need it? Uhm... No.  I'll do if crudpads were used by me or others. 
+To-do list & bug list, 
+done & philosophical done (meaning cheat to-do drop) 
+will do instead.
+Time related, this diary. It makes me remember concepts better and take stronger design decitions. 
+e.g.
+Philosophilcal drop of focus behaviour was prematurely triggered.  
+Will it be implemented? No. But the thing will move away from philosophical done. 
+...
+Woa, the lots of thing I left if I want crudpad to be a respectful element.
+It cannot be. Is Nearly an app. Its rather a... reusable component?
+I decided from start not to use events for dev in favor of function parameters,
+far clearer for dev to set behaviour. 
+I didnt use attr to set things either, too complex and the html would be too long and difficult to read,
+it is clearly oriented to js.
+The only attr I used is data prop in custom buttons, 
+(stored in the dom but transparent to the user) but I could have used js vars instead,
+maybe extend the button to have a modesActive prop. No need.  
+Ok.
+This writting helped:
+I am ok with the decitions.
+Even it doesnt make too much sense to be a custom element extend class,
+the very first shot was to inject html inside a div as pure text and it seemed to work very well
+and I am afraid...  Wouldn it be FASTER? To let chrome understand the text and create everything internally,
+rather than so many object creation and addChild...
+then manipulate everything from js is all the same.
+I thought manipulate objects from desingn would be safer than text, but JS (I hate JS) does not help AT ALL.
+...
+Crudpad seems ok, but it is not an abstract project.  
+It is part of the big, real life cloud app for cloud bussiness. 
+...
+Now.
+Long goal and its path is clear, what to do RIGHT NOW after finishing debug list is not:
+-Take js training again.  
+  It would be far more productive now, there were too many new concepts then.
+  (for a sqlserver2003+vb6 developer)   
+-Rebuild the project
+  to meet the custom components good taste & etiquete, using concepts related to that,
+  like the shadow dom (I dont get it) and this thing that filters events fired I dont remember the name. 
+-What about pwa. No. No yet. Focus, I'm a server side guy.  
+-Replace the now working indexeddb with real cloud.   
+  Do I have free cloud sql? Unlike indexeddb real cloud would be a rock seller.
+-Just jump to node.
+  then refactor this project to make a clear separation between client and server request.
+  Building the crudpad and its abstracted requests inside the client IS SAFE, 
+  but to code the db operation (like the test app here) client side IS NOT.
+It took two months plus the (faulty) freecodecamp  trainig  to get here.
+next  typescript (?) (I hate JS), Node , framework client (?), framework server (?), sql cloud,  
+(Im ok with nosql, easier and maybe cheaper, but my apps fit sql better), unknown challenges, 
+then THE app.
+But I want money from this next week.
+So stop crying.
+...
+Uh... Breakfast time already?  I should fix my insane circadian cycle. 
+Having a bug-lag.
+
+
 
 190609 after wine 
 
 Some refining, pretty well.
-Some bug enumeration, easy to fix, but prefered to give time to be creative on the bug list :)
-Now there is refined to-do list.
+Some bug enumeration, easy to fix, but prefered to give time to be creative making the bug list :)
+Now there is a refined to-do list.
 the remaining 20% in 80% of the time rule? After TWO months????  No way.
 Has to be presto.
 
@@ -37,7 +97,7 @@ moved to-do list to zzBugStat.txt
 ...
 It Worked!  
   ()=>{this._btTired()} 
-parameter better (some) than 
+parameter is (some) better than 
   {let tt = this; this.btTired.onclick = function(){ tt._btTired()} } // me cago en el yavascrít   
 ...
 tooltip (title attr) for custom buttons
