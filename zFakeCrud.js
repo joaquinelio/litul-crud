@@ -25,7 +25,7 @@
     crudpad.MODE_LIST.SHOW + crudpad.MODE_LIST.IDLE
 
   You  enable (un-disable?) apropiate inputs in CREATE and MODIFY modes inside respective funFrmEditxxxx functions.
-  When crudpad enters in SHOW mode it calls FrmDisableForm to block the inputs and stop further editions.
+  When crudpad enters in a non-edit mode it calls FrmDisableForm to block the inputs.
 
   indexeddb is tricky, 
   I had to hack browser (just settings), it doesnt ask the user as documentation says.  

@@ -8,15 +8,14 @@
   
 */
 
+
+
 window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
   constructor(){   // remains empty...  Whats intended to put here?  
     super()  
 
-    
-  } 
-
-  DESPIOJANDO = true   // debug mode
+    this.DESPIOJANDO = true
 
 
   // ** shared objects 
@@ -24,6 +23,9 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   customButtons = []    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
   
+  } 
+
+
 
   get mode(){              // Current mode.
     return this._mode

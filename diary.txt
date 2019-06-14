@@ -3,6 +3,83 @@
 *** Diary ***   
 *** ----- ***
 
+190614
+
+No node yet.  Thanks to FogosaZorra i'll be here for a while.  
+She has better checks.  But accepts fewer things, not sure if that is right or wrong.
+...
+So far (still 0 code) liking Typescript, lot of concepts I dont understand, just the TYPE thing sells me a lot.  I hate JS.
+...
+Need more JS, going to javascript.info to get them.  freecodecamp is not that good.
+async, modules, big project struct, generators...
+Vue & TS look good...  fit me.
+But I need server side more.
+quick firefox fix then server long journey.  later, 
+fork node version, ts, generators
+lot of refactor  I am SURE i will not do with plain js.  (I hate JS I think I already told that)
+
+
+
+190612 after nap before Lunch
+
+oops...
+la zorrafogosa...
+does not support "fields" (?) 
+meaning properties with/wo  'this.'  inside class body ouside constructor.
+Mmmm.  Is it ok?
+VSCode does not complain, 
+Chrome works with not even a warning.
+I would applaud if it forces me to declare them... (but I still cannot use let/const)
+but inside the constructor seems to ignore declaration, work with/wo "this." and wo "let", no issue.
+Its all the same, but less.
+Umpf.
+I'll be around some longer...
+...
+How is it supposed to use let?  
+inside constructor as properties with this. ?
+outside class as global let ?
+what about methods...
+
+
+
+190612
+Dear diary.
+freecodecamp js training sucks. For me, a vanilla guy.
+-js, after a dozen discouraginly boring if() challenges, 'let' and a couple of silly challenges, 
+it jumps to challenge on method concatenation and map() with barely any explanation,
+solved reading specs, discouraginly hard if you dont have the missing training.
+-No word of ASYNC. COME ON!  What defines JS.  You get there only in the framework training. 
+Frameworks oriented, too much framework stuff you dont need.  
+Ah, they dont get the meaning of "user stories". They use it just for low level requirements, 
+it is an important concept when you deal with customers.  
+but
+I guess it is PERFECT for getting a job.
+The frameworks palette.
+They use projects as learning tool, this is GREAT.  MY BAD: not to use them and jump to this my own learning project, 
+so I remember almost nothing of their js & css advanced topics I learn with challenges success.
+...
+javascript.info !!!
+I got best of js concepts there.  I should do its entire long training.  
+I could help transalating to spanish, the best, learning and helping.
+I just got GENERATORS there.
+I can branch this prject to test...
+Here I call an async function from Dev then I need to react (? wow I get it, React) when it finishes.
+Tried a promise-like solution (from the other side), I failed.
+I wrote _callRequest() to set what I expect and  behave after Dev answers resultOk(), similar to a CB. It worked.
+I can use generators instead, yield, then next() with the resultOk() arriving, all inside the same function, 
+safer than setting what I expect: better code. 
+Dev wont see any difference, he needs to answer his async with resultOk() when he receives the CB.
+Mmm... 
+I can send the generator object to Dev's func then ask him the same obj inside the result(). 
+Simple ask. Woudnt be hard. And my reaction to result() answer wont longer be an almost blindly guess,  
+good bye unexpected result after timout or bored-abort button, no danger of bugs answering the wrong question.
+Far better code.
+But Dev's....    crudpad.resultOk(objWannaMyRawGeneratorObjBack, boolTrueFalseSuccesOrNot, textMessageToFinalUser)   
+Mmmm...  
+Added.  If I survive node training.
+...
+
+
 
 190611
 
@@ -62,6 +139,13 @@ So stop crying.
 ...
 Uh... Breakfast time already?  I should fix my insane circadian cycle. 
 Having a bug-lag.
+...
+smooth debug , 
+lot of improvement left.
+no known js bugs, css need to improve to be in production. 
+some ideas.  Scariest one:  Erradicate all class htmlelement extension, make it just a function.
+I wanna jump to node.  Maybe more productive if I leave crudpad refining after learning server part.  
+-commit-
 
 
 

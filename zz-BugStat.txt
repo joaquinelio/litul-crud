@@ -25,13 +25,16 @@ From to-do list...                                    REAL BUGS ----------------
 
 To do, to test & to fix 
 =======================
+
 ** js: **  Bugs
-- refactor dirty panel selection, now spread code should be one place.
+- Dirty panel selection. The now spread code should be one place. Bug? Bug cryer. Better code allows expansion.
+- It seems too jumpy. Need to check excessive enable/disable divs. No much a bug, better code.
+
 ** js: ** Improvement 
 - Maybe.  REMOVE the crudpad as html element class part.  Make it just a function that injects html crudpad.
     Looks scary.  Shoudn't be.  
     var names would be more controlable
-    all 'this.' would be erradicated. 
+    all 'this.' would be erradicated.  onclick = _btTired  would work fine wo any hacks.
 - svg waiting ugly
 - some lint for vscode? 
 - Bored button should show after some timeout 
@@ -49,7 +52,10 @@ To do, to test & to fix
         .divcrud.ButtonOk.innerHtml = '<svg>... 
     Then the other elements instead of _createElement() then add properties:  
         .confirm.buttonYes = 'Yep!'    
-        .crud.confirmCancelMsg = 'really?' 
+        .crud.confirmCancelMsg = 'really?'
+-Generators instead of _setReusltCaller()? Would be big. Works well without, but it can be better code.  
+
+
 ** css: **
 - everything, flex arrangement the first!
 - hey() should flash. Wanted more discrete than alert, but it is too shy.
@@ -70,7 +76,7 @@ party.
 ===========================
 Done?  Philosophical issues 
 ===========================
-- msg background to show mode... maybe not, too obvious with the enabled buttons.  
+- msg background to show mode... half coded, not implemented.  Maybe not, too obvious with the enabled buttons.  
 - Help button? Dev can use a custom button, so maybenot.
 
 
