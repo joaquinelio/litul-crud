@@ -162,6 +162,11 @@
   align-content: stretch;
   justify-content: center;
 }
+.div_msg p::after {/*careful*/
+  opacity: 0;
+  transition: all 0.8s;
+}
+
 .div_pconfirmmsg {
   display: flex;
   text-align: left;

@@ -3,6 +3,242 @@
 *** Diary ***   
 *** ----- ***
 
+
+
+190624  monday again
+
+Debug is insane.  I hate js.
+From a entirely working program, turned to scrap after multiple refactor.  It shouldnt be so difficult.
+1 Real bug,  
+1 big " ()=>{this.f()} " onclick headache from the new event delegation,  
+7 from... SPELLING and stoped counting !!!  Easy to fix, hard to catch.
+I AM THE NO-BUG GUY.  ONCE MY PROGRAMS COMPILE OK, THEY ARE ERROR FREE
+I miss compilers and preprocesors. 
+I hate js.
+Would it be faster if I move to TS?
+...
+wtf inedxeddb bug? store not found?  I didnt touch it.  Never used on zorrafogosa, but specs are the same.
+store...  bet updateneeded.  Later.
+...
+Refactor: (still broken)
+* Event delegation.  
+  It Wasnt the simplification paradise. Coudnt avoid crazy  ()=>{this.f()} they just moved
+  I decided to leave the many onclick "hidden" small _bt methods, 
+  otherwise switchcase would have been too big. Its ok, they are completely standalone. The bug is js cant hide them.
+* Constructor, defined vars (ok, props) inside  (Why LET CONST not allowed? Who knows)
+  forced by zorrafogosa.  GOOD! Structure is better.
+* Big obj so store data from dev sets() instead of multiple _vars
+  They usually match dom objects. Why not unified obj?  
+  Cause I dont trust in such overstore.
+  Some would be cleaner, like button labels, other more complex... leave them outside dom.
+Broken, not working anymore.
+Too much rewritting at once, and js sucks. 
+Need to fix now.
+I am very tempted to play with svg, but it would be childish.
+I would like to test generators... They look important. and cool.  Another refactor.
+But I need to JUMP TO NODE NOW
+
+
+
+190622 after Breakfast
+
+Why? 
+I used a BIG data object, just data, to persist.
+I could have used many small persistent objects instead, say... OOP.
+I didn't even consider it.
+Should I?
+No.  It's ok, but I would have used that aproach if I were using them many times each.
+In fact, they ARE objects inside .devStuff. but only hold data.  They are  strongly related to the DOM objects I cannot avoid.
+Correct oop would have been extending DOM objects to hold my special properties: more encapsulation and  fewer temp variables.
+But... I don't trust it enough.
+Same reason I took of then many onclick from the dom via delegation...  
+each button were holding its own onclick, but i dont use those anymore.
+Resulted in not the clean code I expected but I 'll keep them outside.
+Still, I feel... guilty. 
+I already have padButtons{} and customButtons{}.  They hold the same DOM buttons.  Is this a well designed structure?
+
+
+
+190622  
+
+You may seem slow. 
+No. You are the FireTurttle.
+You dont pop up forms, buttons and icons and pretty message boxes every single moment from the start.
+You trace and follow a longer path.
+But when you finally reach the front door past the garden, ready along with your well trained partners,
+you'll see your careless mates already there, 
+still sitting and furiously cleaning the mud off their pants 
+and broken flowers from their shoes. 
+There is a better way, guys. Come on, I'll show you.
+...
+Ok, this is taking TOO long,  but just because it is still a LEARNING project being refactored over and over...
+Hope this lead to a strong infrastructure for future projets.
+
+
+
+190621 diying (spelling..?)
+
+Insane refactor, all the changes at once.
+Big devStuff object instead of the many let from dev set(),
+allowed css classes object !!!????  nobody would understand why.  Im maniac.
+delegation,
+contructor reconstruction, from empty to all on me
+and no way to test any of this until I finish them all.
+...
+Besides, delegation COULD have get rid of the many exposed onclick functions,
+but it resulted in a insanely long onclick.  
+So: the many exposed this._bt() stay,  clear and better code.  Exposed because JS fault, not mine. 
+advantages remain:
+just one lissening, (except custom buttons)
+no onclick = ({()=>this._bt()}) trick, 
+no server (I mean future, no server code yet) functions names exposed as onclick in the dom... it could have been shadow but...
+I wanna sleep.
+
+
+
+190621 after nap
+
+Decitions.
+More element good taste.
+(javascript.info is getting better and better, I love it).
+I could set 
+functions via attributes (simil onclick) , then
+connectedCallback to render
+This would be a well designed custom element
+But this element is too complex, 
+I dont like letting html do so much behavior set
+Far more clear and easy to read,
+  crudpad.setUpdate(funFrmEdit, funDbUpdate)
+inside js  (SERVER side, SECURITY matters.)
+than lots of attr inside html.
+
+
+
+190621  No dark anymore...  Morning?  I'll get some coffee.
+
+Test code? I never used it,  still my programs were bug free.
+I come from assembler:
+You write the program, you compile it, 
+you put it in a PROM.
+"It doesn't move" says someone.
+That's the error message.  
+If you are lucky, the device has a led.  
+Then you check the eprom, then print the program, 
+maybe take it home to squizze your brain and figure out what's going on.
+Thats the debug.
+No magic numbers, no loose vars, no quoted parametrs, no standalone flags.  
+Strong naming (types? whats that? Not invented yet... maybe a C programmer can tell...)  
+Replace all of them and fill the preprocesor, 
+so the compiler CAN FIX most of your mistakes.
+And no handwriting PROM, RS232. 
+When the code reaches the PROM, only conceptual errors remain.
+I did the same in Wang Basic, dbase-Clipper, Access, VB6-SQLserver. 
+VS intellisense actually can be VERY intelligent if you write good code,
+better than any linter can be if you are not strict.
+strong naming,  strong typing,
+unique and easy to identify responsibles,
+centralize responsabilities, 
+start the structure before the functionality, 
+and DO every tool you can help the COMPILER to understand your code.
+"your code doesnt have bugs" a surprised boss told me.
+It compiles. So no, never.  
+Until now.  I hate js.
+
+
+
+190621
+
+DOM
+I'm tempted to do the same (big object with subcategories) with the dom.
+Create all elements at start, make them visible later if implemented.
+Much, much clear...
+Wouldnt be neither bug fixing nor learning nor performance tuning.
+Just easier to read.
+I should learn other options first, It seems I'm missing important stuff 
+regarding htm construction.  Templates, shadow, I need to understand them first.
+I'd rather finish this (this._dev_) first. 
+...
+Hey, Firefox was a shock.  So many js strong points, so many js flaws (I hate js)
+AND proper etiquete.
+No style, no frameworks, no good taste, nothing helps too much.  Errors can be everywhere. 
+JS sucks.  It is hard, but YOU have to be more strict in how to do things, 
+js does not help AT ALL.
+...
+
+
+
+190620
+
+I hate js.
+Big wash. 
+=Before. All internal vars (over 30) were set as this._var exposed properties, i didn't like it.
+=Later I set all var as module let...  so I no longer needed the "this._", 
+but dev needs"type = module"   in his html, otherwise they all were global. I didn't like it.
+more: the worst? BAD IDEA, I never meant to have multiple crudpads 
+but actually you CAN have 2+ crudpads, in diferent tabs, it wouldn work. I broke it!!!! 
+=Now.  kill'em all.  property again. Just one, a BIG one:    
+      this._devStuff.category.item   
+functions, flags, texts, buttonNames, messages,  
+all what dev had set via methods, all of them inside _devStuff.  Still exposed, I still dont like it, 
+but data has far better structure (from none) now.
+larger text?  Not so. var names are shortened because of the known context.   
+    this._devStuff.update.funEdit()
+Still over 20 this._function() internal exposed methods, (no related to dev sets), I won't do anything here...
+unless I apply delegation... 
+I WISH it would lead to better code control, but JS don't care. 
+You can do anything, js wont stop you from breaking everything. 
+Freedom sucks.
+I hate js.
+
+
+
+190618
+
+Why the gap... I dont remember
+...
+Re-learn is getting hard
+Dont trust anyone.  Too much new stuff, too many wrong explanations.
+freecodecamp:
+Ok, more than ok if you DO the training projects there and you want to apply for a job, 
+since there will be directives about HOW they want you to do things.
+modules, promises, async, generators,  I got all wrong or missing.
+So if you wanna do in the wild by your own, with minimun interaction (mostly google & stackoverflow, usually out of date)
+you need far better infrastructure.  Badly.
+javascript.info is getting better and better, in deep,  up to date and mainly accurate info,
+both the how and the why.  
+I look my current code here and I feel ashamed...  
+But Chrome let me! 
+My fault either way.
+Need to fix, need an apocalliptic refactor... need a better understanding first.
+Still hate JS. More than ever cause you can do it ALL WRONG and it still works.
+
+
+
+190616
+
+Dont trust GOOGLE DEVELOPERS.  They lie, they have reckless implementation, they got the loosy view of specs. 
+They let WRONG things work.
+instead
+mozilla got it right.
+firefox fire err when they should, then work as they can because thats the internet way.
+I know much is js lang fault (I hate js), some are no yet implemented functionality,
+but they dont do things worst.
+developer.mozilla.org is better in every... thing.
+I'll fix scope, modules importing, class, htm, 
+.THEN I'll move on.  
+Promise
+...
+WTF
+wifi again
+FY movistar
+...
+Sorry Movistar, I just learn  all the country went to darkness.  Not just the country, a couple of neighbor countriies too.
+A few hours without XXI century conectivity in South America on sunday, I wonder if milenials survived the hunger. I would have recommended them
+just go to sleep until  electricity comes back
+Reminded me "Destruction" from Barjavel.
+ 
+
+
 190614
 
 No node yet.  Thanks to FogosaZorra i'll be here for a while.  
@@ -186,7 +422,6 @@ parameter is (some) better than
 ...
 tooltip (title attr) for custom buttons
 ...
-
 
 
 
@@ -438,7 +673,6 @@ My Sui generis promise I bet.
 ...
 Thanks, f.lux  I'll keep it in mind.  Let's...
 ...
-
 
 
 

@@ -22,15 +22,29 @@ confirm noshow                                      REAL BUG--------------------
 .lenght .customButton .dataset.estados    SPELL  ******************  3 
 confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
 From to-do list...                                    REAL BUGS -----------------  1
+Firefox era                                     Spell *********************** 7
+Firefox era                                         REAL BUGS               1
+
+
 
 To do, to test & to fix 
 =======================
 
 ** js: **  Bugs
 - Dirty panel selection. The now spread code should be one place. Bug? Bug cryer. Better code allows expansion.
-- It seems too jumpy. Need to check excessive enable/disable divs. No much a bug, better code.
+- It seems too jumpy. Need to check excessive enable/disable divs. No much a bug, still is. Better app.
+- Other panels but crud: Buttons should be disabled inmediatly after pressed instead of expect the correct behaviour may not ocurr.  
+- ERROR handle.  Reckless work of mine.  throw new Error("something") everywhere.  Not a bug, close to. It has to be done.
+
+
 
 ** js: ** Improvement 
+- get mode:
+  I dont see why Dev would want it, but I let it anyway.
+  But it is a number (I hate js).  He can check  crudpad.mode == crudpad.MODE_LIST.MODIFY 
+  I can do the js way, the WRONG way:  crudpad.mode == 'modify'
+  or keep the object & replace numbers by texts, Dev cannot (well... js) set .mode so wouldnt hurt, 
+  but I should rewrite code because binary  flag sum wouldnt be available anymore  MODE_LIST.MODIFY + MODE_LIST.CREATE   
 - Maybe.  REMOVE the crudpad as html element class part.  Make it just a function that injects html crudpad.
     Looks scary.  Shoudn't be.  
     var names would be more controlable
@@ -40,20 +54,39 @@ To do, to test & to fix
 - Bored button should show after some timeout 
 - Button custom names: write -json file?- for innerhtml 
 - Button custom names: let svg icons
+- Button custom names:
+    instead of padButtons[], a get/set(button) specific property innerHtml. CSS can still apply without it.
+    or nothing, given the method to alter all innerHtml.
+    customButtons can stay, dev owns them. 
 - BOF EOF to disable related nav buttons?   
     Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
-    Easy: methods for Dev to call: .navBof() .navEof(), after thas, related nav buttons remain disabled until  new, del or mov. 
--delegation? is worthy? Can unify 14 onclick 14 _function in just one switch case. Custom onclick remain individual and dev responsability.
--changemode() focus parameter? seems no worthy. 
-    Good taste rules require focus to be implemented. So, here it is again.
+    Easy: methods for Dev to call: .navBof() .navEof(), after that, related nav buttons remain disabled until  new, del or mov. 
+- changemode() focus parameter? seems no worthy. 
+    Good taste rules require focus to be implemented. So, here it is again.  
     plus TAB navigation inside, buttons & inputs.
--create HARD buttons instead of _makeButton() on the fly.
+- Confirm Ok msg, default ""
+
+
+
+** js ** Structure  Improvement
+-delegation? 
+  is worthy? Can unify 14 onclick 14 _function in just one switch case. Custom onclick remain individual and dev responsability.
+  fewer functions (not sure if this is good)
+-Big this._dom.category.item , complete in constructor
+  replace over 30  this._  related to dev implementation with ONE object
+  this._dev.create.frmEdit  = function(){}
+-Big this._dom.div.element , complete in constructor
+  create HARD buttons instead of _makeButton() on the fly.
     it 'll be easy for dev to access the allowed properties, svg icon, title, text, hover...
         .divcrud.ButtonOk.innerHtml = '<svg>... 
     Then the other elements instead of _createElement() then add properties:  
         .confirm.buttonYes = 'Yep!'    
         .crud.confirmCancelMsg = 'really?'
--Generators instead of _setReusltCaller()? Would be big. Works well without, but it can be better code.  
+-Generators instead of _setReusltCaller()? 
+  Would be big. Works well without, 
+  if i understand it can be better code:
+  fewer functions (can be good or not), lesser blind guess behaviour.
+
 
 
 ** css: **
@@ -64,11 +97,14 @@ To do, to test & to fix
 - media query to diferentiate, hide via visibility (so dont jump) or via display (more free space)
 - vertical pad?  why not, flex column via class, just with
 - everything  uglyness 
+
 ** chalenge: ** 
 - touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
+
 ** tst app: ** 
 - Button naming: test the optional parameter
 - db cursor to test nav
+
 party.
 
 

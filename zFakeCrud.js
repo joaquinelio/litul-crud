@@ -35,7 +35,7 @@
 
 // delay test
 const DESPIOJANDO = true      //debugging
-const yawns = 5000        
+const yawns = 0        
 
 // *********************************************** DB stuff *********************
 //
@@ -99,7 +99,7 @@ function main(){
   // ******************** DB open/create *********************************
   let request = indexedDB.open(myDbName, 1)
   request.onupgradeneeded = function(event){    // version 1, create db, create store  
-    //db = request.result
+    db = request.result
     //store = 
     db.createObjectStore( myStoreName, {keyPath: myKeyName} )     //SYNC? should catch     
   }
@@ -132,7 +132,7 @@ function zFrmEmpty(){             //shows empty
 }
 // form - block
 function zFrmBlock(){           // disble all input elements.  Prevents user further input edition.
-  myFrmBlock([true,true,true])  // disable the entire form would work too.  Intended to set readonly inputs 
+  myFrmBlock([true,true,true])  // disable the entire form would work too.  Intended to see inputs as readonly  
 }
 
 // -------------------------------------------------------------
@@ -223,7 +223,7 @@ function zDbUpdate(){
 }
 
 // -----------------------------------------------------------
-// ---------------- implement REMOVE ------------- delete item
+// ---------------- implement DELETE ------------- delete item
 //
 // DB - delete
 function zDbDelete(){
@@ -295,7 +295,7 @@ function myFrmShow(item){  // myFrmShow(arrayData){
   document.getElementById("i2").value = item.description
   document.getElementById("i3").value = item.price
 }
-// FRM - read form Input, return item 
+// FRM - read form Inputs, return item 
 function myFrmRead(){
   return makeItem(
     document.getElementById("i1").value,
