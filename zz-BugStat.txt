@@ -52,7 +52,6 @@ To do, to test & to fix
 - svg waiting ugly
 - some lint for vscode? 
 - Bored button should show after some timeout 
-- Button custom names: write -json file?- for innerhtml 
 - Button custom names: let svg icons
 - Button custom names:
     instead of padButtons[], a get/set(button) specific property innerHtml. CSS can still apply without it.
@@ -61,7 +60,7 @@ To do, to test & to fix
 - BOF EOF to disable related nav buttons?   
     Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
     Easy: methods for Dev to call: .navBof() .navEof(), after that, related nav buttons remain disabled until  new, del or mov. 
-- changemode() focus parameter? seems no worthy. 
+- changemode() focus parameter?. 
     Good taste rules require focus to be implemented. So, here it is again.  
     plus TAB navigation inside, buttons & inputs.
 - Confirm Ok msg, default ""
@@ -69,14 +68,7 @@ To do, to test & to fix
 
 
 ** js ** Structure  Improvement
--delegation? 
-  is worthy? Can unify 14 onclick 14 _function in just one switch case. Custom onclick remain individual and dev responsability.
-  fewer functions (not sure if this is good)
--Big this._dom.category.item , complete in constructor
-  replace over 30  this._  related to dev implementation with ONE object
-  this._dev.create.frmEdit  = function(){}
--Big this._dom.div.element , complete in constructor
-  create HARD buttons instead of _makeButton() on the fly.
+-create HARD buttons instead of _makeButton() on the fly.
     it 'll be easy for dev to access the allowed properties, svg icon, title, text, hover...
         .divcrud.ButtonOk.innerHtml = '<svg>... 
     Then the other elements instead of _createElement() then add properties:  
@@ -114,6 +106,7 @@ Done?  Philosophical issues
 ===========================
 - msg background to show mode... half coded, not implemented.  Maybe not, too obvious with the enabled buttons.  
 - Help button? Dev can use a custom button, so maybenot.
+- Button custom names: write -json file?- for innerhtml. // Custom labesl are needed. Not json. 
 
 
 =====
@@ -134,3 +127,5 @@ Done.
   sendResult() didnt like it, tellResult() would have been more suitable 
 - after search, inputs still enabled!  in mode.show 
 - msg hoover: msg as tip, useful if (ever) vertical
+- delegation. Unified onclick, switch-case.  Multiple _bt() stay. js should hide them, js fault.
+- Big this._dev.category.item  replace over 30  this._  related to dev implementation with ONE object

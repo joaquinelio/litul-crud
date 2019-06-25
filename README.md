@@ -74,9 +74,6 @@ You have to inform me if it was a success:
 
 ***Warning: Still in the LEARNING process.***
 
-I think it is a really,  REALLY good... idea.
-It works pretty well on Chrome, but it needs a cataclismic REFACTOR.
-
 freecodecamp.org is pretty good, 
 PERFECT palette (frameworks AND projects I DIDN'T take) if you want to work for someone else
 but in the wild, it left me without some fundamentals:
@@ -97,24 +94,15 @@ So far
 ...  5 real bugs, real errors, real learning.
 ... 63 from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
 The found spell bugs is a problem, exhausting and time consuming.
-The biggest problem is for those you didnt find. You NEVER know when it's finished, cause never finish. 
+The biggest problem is for those you didnt find. You NEVER know when it's finished, cause it never finishes. 
 Any untested line is a treath, any mod you do you can reintroduce same bugs. It is crazy.
 Only bet is rely on frameworks and strong styling.
-Maybe better is to try to switch to TS from MS, they seem to know the importance of types.  
 Parameters inside quotes? What a source of problems.
+Freedom sucks.      
 
-    mode = 'idle' 
-Tried:
+  **JS, the freedom to step on the flowers.**
 
-    MODES = {'IDLE':1, 'SHOW':2, 'CREATE':4, 'MODIFY':8,}
-    mode = MODES.IDLE
-but you are never protected cause you can do everything anyway.
 
-this too:
-   array.lengt   "oh, I think you want to add a new property... Ok."
-so
-    **JS, the freedom to step on the flowers.**
-      
 
 Async.
 Trap for newbies usually said.  I fell down too.

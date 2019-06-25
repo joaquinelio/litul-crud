@@ -9,18 +9,17 @@
 
 "use strict"   //  strict? STRICT??? All let are GLOBAL! YOU CAN NOT FORCE AS TYPE MODULE  FY FYFYFYFYFY JS!!!
 
-const _DESPIOJANDO = true    // DEBUGGING itchy
+const _DESPIOJANDO = true    //  itchy
 
 /*
 //   **********************       
 //   HERE THE ELEMENT CLASS       
 //   **********************
 */
-window.customElements.define('litul-crudpad', class extends HTMLElement  {
+window.customElements.define('litul-crudpad', class extends HTMLElement {
 
   constructor(){
     super()  
-
 
     //this.padButtons = []       // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
     this.customButtons = []    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
@@ -35,9 +34,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     this._panelCurrent = 0  // invalid on purpose   I miss nullable
     this._panelLast = 1   // one level history only, will enable the last used panel:  example confirm Yes->crud No->Last 
     // this._deactived_panel_class = 'deactived-panel'
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // resultOk() related:                            // What if..... GENERATOR???  
     //                 [caller, modeOnSuccess, modeOnFailure]
@@ -95,7 +92,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
         txtBtOk : 'ok',
         txtBtCancel : 'cancel',
         txtConfirmCancel : 'Cancel edition?',
-        txtMsgCancelDonde : 'Canceled',
+        txtMsgCancelDone : 'Canceled',
       },
       confirm:{ 
         txtBtYes : 'yes',
@@ -132,15 +129,34 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
             '</g>'+
             '<g>'+
             '<title>Layer 2</title>'+
-            '<path fill-rule="evenodd" d="m76.5,121c-25.13875,0 -45.5,21.01512 -45.5,46.96116c0,20.78031 13.02438,38.33205 31.11063,44.5544c2.275,0.41091 3.12813,-0.99792 3.12813,-2.23066c0,-1.11533 -0.05688,-4.81352 -0.05688,-8.74652c-11.43188,2.17195 -14.38938,-2.87637 -15.29938,-5.51794c-0.51188,-1.35013 -2.73,-5.51794 -4.66375,-6.63326c-1.5925,-0.88052 -3.8675,-3.05248 -0.05688,-3.11118c3.58313,-0.0587 6.1425,3.40468 6.99563,4.81352c4.095,7.10288 10.63563,5.10703 13.25188,3.8743c0.39813,-3.05248 1.5925,-5.10703 2.90063,-6.28106c-10.12375,-1.17403 -20.7025,-5.22443 -20.7025,-23.18707c0,-5.10703 1.76313,-9.33353 4.66375,-12.62081c-0.455,-1.17403 -2.0475,-5.98755 0.455,-12.44471c0,0 3.81063,-1.23273 12.5125,4.81352c3.64,-1.05663 7.5075,-1.58494 11.375,-1.58494c3.8675,0 7.735,0.52831 11.375,1.58494c8.70188,-6.10495 12.5125,-4.81352 12.5125,-4.81352c2.5025,6.45716 0.91,11.27068 0.455,12.44471c2.90063,3.28728 4.66375,7.45508 4.66375,12.62081c0,18.02135 -10.63563,22.01305 -20.75938,23.18707c1.64938,1.46754 3.07125,4.28521 3.07125,8.68782c0,6.28106 -0.05688,11.32938 -0.05688,12.91432c0,1.23273 0.85313,2.70027 3.12813,2.23066a45.57394,47.03747 0 0 0 30.99688,-44.5544c0,-25.94604 -20.36125,-46.96116 -45.5,-46.96116l-0.00001,0z" id="svg_1" fill="black"/>'+
+            '<path fill-rule="evenodd" d="m76.5,121c-25.13875,0 -45.5,21.01512 -45.5,46.96116c0,20.78031 13.02438,38.33205 31.11063,44.5544c2.275,0.41091 3.12813,-0.99792 3.12813,-2.23066c0,-1.11533 -0.05688,-4.81352 -0.05688,-8.74652c-11.43188,2.17195 -14.38938,-2.87637 -15.29938,-5.51794c-0.51188,-1.35013 -2.73,-5.51794 -4.66375,-6.63326c-1.5925,-0.88052 -3.8675,-3.05248 -0.05688,-3.11118c3.58313,-0.0587 6.1425,3.40468 6.99563,4.81352c4.095,7.10288 10.63563,5.10703 13.25188,3.8743c0.39813,-3.05248 1.5925,-5.10703 2.90063,-6.28106c-10.12375,-1.17403 -20.7025,-5.22443 -20.7025,-23.18707c0,-5.10703 1.76313,-9.33353 4.66375,-12.62081c-0.455,-1.17403 -2.0475,-5.98755 0.455,-12.44471c0,0 3.81063,-1.23273 12.5125,4.81352c3.64,-1.05663 7.5075,-1.58494 11.375,-1.58494c3.8675,0 7.735,0.52831 11.375,1.58494c8.70188,-6.10495 12.5125,-4.81352 12.5125,-4.81352c2.5025,6.45716 0.91,11.27068 0.455,12.44471c2.90063,3.28728 4.66375,7.45508 4.66375,12.62081c0,18.02135 -10.63563,22.01305 -20.75938,23.18707c1.64938,1.46754 3.07125,4.28521 3.07125,8.68782c0,6.28106 -0.05688,11.32938 -0.05688,12.91432c0,1.23273 0.85313,2.70027 3.12813,2.23066a45.57394,47.03747 0 0 0 30.99688,-44.5544c0,-25.94604 -20.36125,-46.96116 -45.5,-46.96116l-0.00001,0z" id="svg_1" fill="black"/> '+
             '</g>'+
             '</svg>',
-      svgCloud : '<svg height="100%" >'+
-            '<ellipse fill="#eeaaaa" cx="161" cy="72" rx="99" ry="36"/>'+
-            '<ellipse fill="#eeaaaa" cx="183" cy="55" rx="70" ry="40"/>'+
-            '<ellipse fill="#eeaaaa" cx="122" cy="61" rx="54" ry="30"/>'+
-            '</svg>',   
+      svgCloud : 
+        '<svg height="100%" >'+
+          '<ellipse fill="#eeaaaa" cx="161" cy="72" rx="99" ry="36"/>'+
+          '<ellipse fill="#eeaaaa" cx="183" cy="55" rx="70" ry="40"/>'+
+          '<ellipse fill="#eeaaaa" cx="122" cy="61" rx="54" ry="30"/>'+
+          '</svg>',
+      svgCloud2 :  
+        '<svg height="100%" >'+
+        '<defs>'+
+        ' <linearGradient y1="0" x1="0" spreadMethod="reflect" y2="0.820313" x2="1" id="svg_10">'+
+        '  <stop offset="0" stop-color="#ff56ff"/>'+
+        '  <stop offset="1" stop-color="#33a533"/>'+
+        ' </linearGradient>'+
+        '</defs>'+
+        '<g display="inline">'+
+        ' <title>Layer 1</title>'+
+        ' <ellipse fill="url(#svg_10)" cx="100" cy="55.5" rx="100" ry="37.5" />'+
+        ' <ellipse fill="url(#svg_10)" cx="116" cy="34.5" rx="66" ry="34.5" />'+
+        ' <ellipse fill="url(#svg_10)" cx="73" cy="39" rx="54" ry="30"  />'+
+        '</g></svg>',   // not working
     }
+ 
+
+
+
 
 
   } 
@@ -226,7 +242,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
       ()=>{ 
         // this.hey(this._txtCancelDone)
         // this._funcEraseForm()
-        this.hey(this._dev.crudOkCancel.txtMsgCancelDonde)
+        this.hey(this._dev.crudOkCancel.txtMsgCancelDone)
         this._dev.control.funFrmErase()
         this._changeMode(this.MODE_LIST.IDLE)
       },
@@ -266,54 +282,24 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
   _btTired(){
     // this.confirm("Stop the waiting? It won't stop the request.", 
-    this.confirm(this._dev.bored.txtConfirm,
-      function(){
+    this.confirm(
+      this._dev.bored.txtConfirm,
+      ()=>{                           //confirm yes ()
         // stop any result wait 
         this._setResultCaller('')
-
-        // reset crudpad to idle
-        this._changeMode(this.MODE_LIST.IDLE)
 
         //reset panel history.  That's dirty.   Tamper global here? If enablePanel were selected by class it would fail 
         this._panelLast = this._PANEL_LIST.CRUD
 
+        // reset crudpad to idle
+        this._changeMode(this.MODE_LIST.IDLE)
+
         // any other thing I should worry? 
         // ??
       },
-      function(){} // go back  // thats it  // nothing to do  
+      ()=>{}                           //confirm no () // go back  // thats it  // nothing to do  
     )
   }
-/*
-  _buttonCrud_onclick(target){
-    let fun = onReturn(target,        
- 
-      // I wont use an insanely long function!!!  (longer with switch-case)
-      // JS should HIDE _bt() funtions, not me!!! The many _bt() stay.
-
-      this.btSearch,     this._btSearch,
-      this.btNew,        this._btNew,  
-      this.btModi,       this._btModi, 
-      this.btDel,        this._btDel,
-      this.btOk,         this._btOk, 
-      this.btCancel,     this._btCancel,
-      this.btMoveFirst,  this._btMoveFirst,
-      this.btMovePrev,   this._btMovePrev,
-      this.btMoveNext,   this._btMoveNext,
-      this.btMoveLast,   this._btMoveLast,
-      this.btExit,       this._btExit,
-      this.btConfirmYes, this._btConfirmYes, 
-      this.btConfirmNo,  this._btConfirmNo,  
-      this.btTired,      this._btTired,    
-    ) 
-    if (isFun(fun)){
-      fun()
-      return
-    } else {
-      wtf("int err: not found button " + target)
-      return
-    }
-  }
-*/
 
 
   // to do: less jumpy  dont enable no needed
@@ -358,21 +344,12 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   // ********************** .confirm() ********************
   //onclick
   _btConfirmYes(){
-  //   if (isFun(this._funcConfirmYes)){  
-  //     this._funcConfirmYes()
-  //   }
-  //   this._confirmHide()
     if (isFun(this._dev.confirm.funYes)){
       this._dev.confirm.funYes()
     }
     this._confirmHide()
-
   }
   _btConfirmNo(){
-    // if(isFun(this._funcConfirmNo)){
-    //   this._funcConfirmNo()
-    // }
-    // this._confirmHide()
     if(isFun(this._dev.confirm.funNo)){
       this._dev.confirm.funNo()
     }
@@ -381,8 +358,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   // panel
   _confirmHide(){     // _confirmPanelHide
     this._enablePanel(this._PANEL_LIST.LAST_PANEL)
-    // this._funcConfirmYes = null
-    // this._funcConfirmNo = null
     this._dev.confirm.funYes = null
     this._dev.confirm.funNo = null
   }
@@ -406,10 +381,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
     //semimodal
     this.pConfirmMsg.textContent = textMsg 
-    // this._funcConfirmYes = funcYes
-    // this._funcConfirmNo = funcNo
     this._dev.confirm.funYes = funcYes
-    this._dev.confirm.funYes = funcNo
+    this._dev.confirm.funNo = funcNo
     this._confirmShow()
   }
 
@@ -430,67 +403,37 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   // *** implement behaviour ***
   //set control mandatory.  
   setFormControl(funcEraseFormContent, funcBlockForm, ){ // textOkButton = 'Ok', textCancelButton = 'Cancel', ){
-    // this._funcEraseForm = funcEraseFormContent   
-    // this._funcDisableForm = funcDisableForm
-    // this._txtButtonOk     = textOkButton
-    // this._txtButtonCancel = textCancelButton
     this._dev.control.funFrmErase = funcEraseFormContent
     this._dev.control.funFrmBlockAll = funcBlockForm
-
   }
 
   // These 5 methods implement bahaviour and they all are optional.
   setCreate(funcFormEditNew, funcDbInsert, textButton = 'New', ){
     // if ! func throw err...   ??
-    // this._funcCreate_FormEditNew = funcFormEditNew
-    // this._funcCreate_DbInsert = funcDbInsert
-    // this._txtButtonCreate = textButton
-    // this._implementedCreate = true
     this._dev.create.funFrm = funcFormEditNew
     this._dev.create.funDb = funcDbInsert
     this._dev.create.txtBt = textButton
     this._dev.create.isOn = true
   }
   setUpdate(funcFormEditModify, funcDbUpdate, textButton = 'Modify',){
-    // this._funcUpdate_FormEditModify = funcFormEditModify
-    // this._funcUpdate_DbUpdate = funcDbUpdate
-    // this._txtButtonModify = textButton
-    // this._implementedUpdate = true
     this._dev.update.funFrm = funcFormEditModify
     this._dev.update.funDb = funcDbUpdate
     this._dev.update.txtBt = textButton
     this._dev.update.isOn = true
   }
   setDelete(funcDbDelete, textButton = 'Delete', textConfirm = 'Delete Record?' ){
-    // this._funcDelete_DbDelete = funcDbDelete
-    // this._txtButtonDelete = textButton
-    // this._txtConfirmDelete = textConfirm
-    // this._implementedDelete = true 
     this._dev.delete.funDb = funcDbDelete
     this._dev.delete.txtBt = textButton
     this._dev.delete.txtConfirm = textConfirm 
     this._dev.delete.isOn = true
   }
-  setRead(funcSearchAndShow, boolInputBox, textButton = 'Search', ){   // , inputBox default?  ,txtHint?)
-    // this._funcSearchAndShow = funcSearchAndShow
-    // this._txtButtonSearch = textButton
-    // this._boolWithSearchInputBox = bolInputBox   // box content will be passed to search func
-    // this._implementedRead = true
+  setRead(funcSearchAndShow, boolShowInputBox, textButton = 'Search', ){   // , inputBox default?  ,txtHint?)
     this._dev.read.funRead = funcSearchAndShow
     this._dev.read.txtBt = textButton
-    this._dev.read.inputBoxOn = boolInputBox
+    this._dev.read.inputBoxOn = boolShowInputBox
     this._dev.read.isOn =true
   }
   setNav(funcMoveFirst, funcMovePrev, funcMoveNext, funcMoveLast){ //} textButtonFirst = '&lt;&lt;', textButtonPrev = '&lt;', textButtonNext = '&gt;', textButtonLast = '&gt;&gt;' ){ 
-    // this._funcNavMoveFrst = funcMoveFirst
-    // this._funcNavMovePrev = funcMovePrev
-    // this._funcNavMoveNext = funcMoveNext
-    // this._funcNavMoveLast = funcMoveLast
-    // // this._txtButtonMoveFirst = textButtonFirst
-    // // this._txtButtonMovePrev = textButtonPrev
-    // // this._txtButtonMoveNext = textButtonNext
-    // // this._txtButtonMoveLast = textButtonLast  
-    // this._implementedNav = true 
     this._dev.nav.funMvFrst = funcMoveFirst
     this._dev.nav.funMvPrev = funcMovePrev
     this._dev.nav.funMvNext = funcMoveNext
@@ -498,9 +441,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     this._dev.nav.isOn = true    
   }
   setExit(funcExit, textButton = 'Exit', textConfirmExit = 'Exit?'){
-    // this._funcExit = funcExit
-    // this._txtButtonExit = textButton
-    // this._implementedExit = true
     this._dev.exit.funExit = funcExit
     this._dev.exit.txtBt = textButton
     this._dev.exit.txtConfirm = textConfirmExit
@@ -526,8 +466,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     return bt 
   }
 
-  // setWait or setWaitForResult should rename to.
-  
+  // setWait or setWaitForResult, should rename to.
+  // set/resets waiting,  displays waiting panel,   
   _setResultCaller(caller, modeSuccess = null, modeFail = null ){        
     // caller, just a name to show, or check for empty. 
     // the 3 params stored in _resultCall[] for resultOk() to use. 
@@ -557,10 +497,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
   // triggered by dev  
   // Change the crudpad status from waiting to some mode.  Results from db operations  true/false (ok/err)
-  resultOk(success, msg){    // success = true/false    msg = optional text msg <p>.
+  resultOk(success, msg =''){    // success = true/false    msg = optional text msg <p>.
     //check
     if (this._resultCall[0] == '' ){
-      this.hey( (success)? 'Unexpected success from server': 'Unexpected error from server') 
+      this.hey( (success)?'Unexpected success from server':'Unexpected error from server' ) 
       return
     }
 
@@ -575,6 +515,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
     if (msg > '' ) {this.hey(msg)}
   }
+
 
   /*
   setAllButtonsInnerHTML ( btOk, btCancel, btSearch, btCreate,  etcetcetcetc, ){   // I dont like it. At all. better expose dom array buttons ?  Or forget and Let dev query buttons? 
@@ -595,7 +536,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
 
     this._mode = newMode 
 
-    // for easy             // logical ADD and AND
+    // for easy             // logical ADD and AND.   dont try to fix doing OR ||
     const stEditing =  
         this._mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
     const stNoEditing = 
@@ -647,11 +588,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     //div exit
     this._enableElement(this.btExit, stNoEditing)  
 
+
     //user form
     // if (stNoEditing)  this._funcDisableForm()
-    if (stNoEditing)  this._dev.control.funFrmBlockAll
+    if (stNoEditing)  this._dev.control.funFrmBlockAll()
+    if (this._mode == this.MODE_LIST.IDLE )  this._dev.control.funFrmErase()
 
-
+    
     // show mode with style...  Changes divmsg color.  Remove oldmode class and add newmode class
     // --------PRETTY SURE IT DOESNT WORK.  No harm, No hard to replace.
     // this.divMsg.classList.remove(this.MODE_CLASSES[oldMode]) 
@@ -670,10 +613,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
   // _enableInNav(){
   //   // to implement this, i need more info than .result(true-false)
   //   //options:
-  //   // a) add a second .resultNav(resultNav-ok-bof-eof-fail ,msg)                     puaj
-  //   // b) change .result(truefalse, msg, optionalResulNav)                            puaj, 3rd param
-  //   // c) change .result(itDepends... ,msg) to acept both bool & and act acordlinly   maybe
-  //   // d) do nothing.  Just to disable one button? Come on.                           easy way.  Easier for dev too.
+  //   // a) add a second .resultNav(resultNav-ok-bof-eof-fail ,msg)                    puaj
+  //   // b) change .result(truefalse, msg, optionalResulNav)                           puaj, 3rd param
+  //   // c) change .result(itDepends... ,msg) to acept both bool&enum, act acordlinly  maybe
+  //   // d) do nothing.  Just to disable one button? Come on.                          easy way.  Easier for dev too.
+  //   // e) add 2 small methods for dev:  crudpad.bof() crudpad.eof()                  Easiest. Clean either if and if NOT in use
   // }
 
   _enableDiv(div, yesOrNo){  
@@ -710,7 +654,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     // MAIN-div1-divSearch
     if (this._dev.read.isOn){ //this._implementedRead ){  
       this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt, ()=>{this._btSearch()} )
+      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,)// ()=>{this._btSearch()} )
     //      {let tt = this; this.btSearch.onclick = function(){ tt._btSearch()} } // me cago en el yavascrít
       if ( this._dev.read.inputBoxOn ){   // with input text? 
         this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
@@ -724,19 +668,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
       // if ( this._implementedCreate ) {  
       if ( this._dev.create.isOn ) {  
 
-        this.btNew = this._makeButton(this.divCrud, 'cmd_New', this._dev.create.txtBt, ()=>{this._btNew()}) 
+        this.btNew = this._makeButton(this.divCrud, 'cmd_New', this._dev.create.txtBt,)// ()=>{this._btNew()}) 
         // {let tt = this; this.btNew.onclick = function(){ tt._btNew()} } // me cago en el yavascrít
       }
       //mod
       // if ( this._implementedUpdate  ) {  
       if (this._dev.update.isOn) {  
-          this.btModi = this._makeButton(this.divCrud,'cmd_modi', this._dev.update.txtBt, ()=>{this._btModi()}) 
+          this.btModi = this._makeButton(this.divCrud,'cmd_modi', this._dev.update.txtBt,)// ()=>{this._btModi()}) 
         // {let tt = this; this.btModi.onclick = function(){ tt._btModi()} } // me cago en el yavascrít
       }
       //del
       // if ( this._implementedDelete ) {
       if ( this._dev.delete.isOn ) {
-          this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt, ()=>{this._btDel()})   
+          this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,)// ()=>{this._btDel()})   
         // {let tt = this; this.btDel.onclick = function(){ tt._btDel()} } // me cago en el yavascrít
       }
     }
@@ -751,8 +695,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     // if( this._implementedCreate || this._implementedUpdate){    
     if( this._dev.create.isOn || this._dev.update.isOn){    
       this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk  , ()=>{this._btOk()} ) 
-      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel, ()=>{this._btCancel()} ) 
+      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk) //  , ()=>{this._btOk()} ) 
+      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,)// ()=>{this._btCancel()} ) 
       // {let tt = this; this.btOk.onclick = function(){ tt._btOk()} } // me cago en el yavascrít
       // {let tt = this; this.btCancel.onclick = function(){ tt._btCancel()} } // me cago en el yavascrít
     }
@@ -765,22 +709,22 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
         this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
       //main-div2-divNav-movFirst
       if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  ' &lt&lt ', ()=>{this._btMoveFirst()}, 'Move first') 
+        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  ' &lt&lt ', 'Move First')// ()=>{this._btMoveFirst()}, 'Move first') 
         // {let tt = this; this.btMoveFirst.onclick = function(){ tt._btMoveFirst()} } // me cago en el yavascrít
       }
       //main-div2-divNav-movPrev
       if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' &lt ', ()=>{this._btMovePrev()}, 'Move previous'  ) 
+        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' &lt ','Move previous' ) // ()=>{this._btMovePrev()},   ) 
         // {let tt = this; this.btMovePrev.onclick = function(){ tt._btMovePrev()} } // me cago en el yavascrít
       }
       //main-div2-divNav-movNext
       if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' &gt ', ()=>{this._btMoveNext()} ,'Move next' ) 
+        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' &gt ', 'Move next' )// ()=>{this._btMoveNext()} ,'Move next' ) 
         // {let tt = this; this.btMoveNext.onclick = function(){ tt._btMoveNext()} } // me cago en el yavascrít
       }
       //main-div2-divNav-movLast
       if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' &gt&gt ', ()=>{this._btMoveLast()} , 'Move Last') 
+        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' &gt&gt ', 'Move Last') // ()=>{this._btMoveLast()} , 
         // {let tt = this; this.btMoveLast.onclick = function(){ tt._btMoveLast()} } // me cago en el yavascrít
       }
     }
@@ -792,22 +736,22 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     //main-div2-divExit
     if (this._dev.exit.isOn) {
       this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-      this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt, ()=>{this._btExit()}  ) 
+      this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt ) //, ()=>{this._btExit()}  ) 
       // {let tt = this; this.btExit.onclick = function(){ tt._btExit()} } // me cago en el yavascrít
     }
 
     //main-divYesNo               ----hides div1 & div2 when showing-----
     this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
     this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
-    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, ()=>{this._btConfirmYes()})
-    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo, ()=>{this._btConfirmNo()})  // todavía me cago en el yavascrít
+    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, ) // ()=>{this._btConfirmYes()})
+    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  ) // ()=>{this._btConfirmNo()})  // todavía me cago en el yavascrít
     // {let tt = this; this.btConfirmYes.onclick = function(){ tt._btConfirmYes()} } // me cago en el yavascrít
     // {let tt = this; this.btConfirmNo.onclick  = function(){ tt._btConfirmNo()} } // me cago en el yavascrít
  
     //main-divWaiting        
     this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
     this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
-    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ()=>{this._btTired()})
+    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) // ()=>{this._btTired()})
     // {let tt = this; this.btTired.onclick = function(){ tt._btTired()} } // me cago en el yavascrít   
 
     //  need something else, something prettier
@@ -863,32 +807,31 @@ window.customElements.define('litul-crudpad', class extends HTMLElement  {
     return e
   }
 
-  _makeButton(context, id, text, onclick, title = ''){
+  _makeButton(context, id, text, title = ''){
     let bt = document.createElement('button') 
     
     bt.id = id   
     bt.type = 'button' 
     bt.disabled = false 
     bt.className = 'button_crud'
+    // bt.onclick = onclick  //  testing DELEGATION   ----------------------------------------------------------------
     bt.title = title
     bt.textContent = text
-    // bt.onclick = onclick  // I'm testing DELEGATION   ----------------------------------------------------------------
     // this.padButtons.push(bt)   // is it correct?********** Yes, but this way cant: "buttons.buttonRemove"
-    // this.button[bt]     // what about this.  I forgot the training
+    // this.padButton[bt]     // what about this.  I forgot the training
     context.appendChild(bt) 
     return bt
   }
-
-
-
 })
-
+//** ******************************************************************************************************************** */
+// Li-brary
 // can I do this, here? are they global now?    Update: No. They are not.   Update: YES THEY CAN BE, YOU CANT FORCE TO BE A MODULE!
 function isObj(what){return typeof what == 'object'   }   // NEVER the f. parameters inside ' ' !!! Hate you js.  
 function isFun(what){return typeof what == 'function' }
+
 // I hate switch case too.
 function onReturn(que, ...casePair){           // stolen from Wang2200 Basic,  easier to read
-                                            //act as:   switch ( what,   case, some+break,  case, some+break,  case, some+break...)
+  //acts as: switch (what,  ...case, some+break,  case, some+break,  case, some+break...)
   for (let i = 0; i < casePair.length;  i +=2 ){
     if (que == casePair[i])  return casePair[i+1] 
   } 

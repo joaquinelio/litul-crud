@@ -4,13 +4,39 @@
 *** ----- ***
 
 
+190625
+
+Ok.  I need to understand js more.  But this is not the right project to do it, async by nature.
+Fix crudpad and move on: node, cloud sql, then the real app.  A Sync friendly app, and how to resolve it with js.
+TS, TS, TS... TS teasing me. JS is a mess. When should I do the move....
+...
+I think google asked their devs: 
+Here, who whants types, struct, clear paths to follow.
+Here, whoever wants THE FREEDOM.
+so, the first group were to golang,  the other assaulted js. 
+Freedom sucks.
+...
+Everything looks working again.
+Needs some work:
+  SHould I enhance panel selection?
+  implement nav test?
+  try await, or generators to replace _resultCaller?
+Maybe make it usable, not so far from it.
+  fix css uglyness?  
+  separate internal from custom css styling?
+  start version number?
+Just jump to node, I'm very of track. 
+I'll be back.
+
+
+
 
 190624  monday again
 
 Debug is insane.  I hate js.
 From a entirely working program, turned to scrap after multiple refactor.  It shouldnt be so difficult.
 1 Real bug,  
-1 big " ()=>{this.f()} " onclick headache from the new event delegation,  
+1 big " ()=>{this.f()} " onclick headache from the new event delegation (new headache replaced the old one)
 7 from... SPELLING and stoped counting !!!  Easy to fix, hard to catch.
 I AM THE NO-BUG GUY.  ONCE MY PROGRAMS COMPILE OK, THEY ARE ERROR FREE
 I miss compilers and preprocesors. 

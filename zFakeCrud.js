@@ -4,7 +4,6 @@
 
 'use strict'  // strict says. Dont make me laugh. I hate JS.
 
-
 /*
   You write functions that do the things, yo do not respond to onclicks.
 
@@ -20,27 +19,23 @@
   here I use search with .setRead(..., true) to show the search input box   
   You can use .setRead(..., false) and show an Advanced Search Form  instead.
 
-  mode_list works as masks, binary sum of bit flags.  
+  mode_list works as masks, a binary sum of bit flags.  
   The parameter if more than one is needed is not an OR ' || ' but a sum ' + ' 
     crudpad.MODE_LIST.SHOW + crudpad.MODE_LIST.IDLE
 
-  You  enable (un-disable?) apropiate inputs in CREATE and MODIFY modes inside respective funFrmEditxxxx functions.
-  When crudpad enters in a non-edit mode it calls FrmDisableForm to block the inputs.
-
-  indexeddb is tricky, 
-  I had to hack browser (just settings), it doesnt ask the user as documentation says.  
-  shoud I go fire.
+  indexeddb is tricky... 
 
 */
 
-// delay test
+
 const DESPIOJANDO = true      //debugging
-const yawns = 0        
+const yawns = 1000        
+
 
 // *********************************************** DB stuff *********************
 //
 // indexedDB globals:    NAMES   db,store, index
-const myDbName  = 'fakedb3' 
+const myDbName  = 'fakedb0' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'          
 //
@@ -58,15 +53,12 @@ const transreadonly = 'readonly'
 
 
 
-
 //crudpad
 let crudpad 
 
 
 //lets do
-document.addEventListener('DOMContentLoaded', main);
-function main(){
-
+document.addEventListener('DOMContentLoaded', ()=>{
 
   // ******************** pad
   crudpad = document.getElementById('idmenu')
@@ -104,17 +96,16 @@ function main(){
     db.createObjectStore( myStoreName, {keyPath: myKeyName} )     //SYNC? should catch     
   }
   request.onerror = function(e){
-    alert (e.srcElement.error ) // I should learn err mng...
+    alert (e.srcElement.error ) // I really should learn err mng...
   }
   request.onsuccess = function(event){
     db = request.result
-
 
     // START CRUDPAD
     crudpad.start()       // I could start() without the db ready, I dont need it until I need it (I mean from crud buttons).
 
   }    
-}
+})
 
 
 /*
@@ -143,7 +134,7 @@ function zFrmCreate(){
   myFrmShow(makeItem('','default',''))            // clear all inputs...  may put some default... may autocalculate/fill id
   myFrmBlock([false,false,false])                 // enable all inputs
 
-  // form validation!
+  // fields validation!
   // should put input restrictions, ranges, emptyness, etc.
 
   crudpad.resultOk(true, 'Ready to edit NEW item')                    //should wait for dom ready? , better yet simulate a big delay to test boredness
@@ -153,7 +144,7 @@ function zFrmCreate(){
 // DB - insert item
 function zDbCreate(){     // create: new item in db, the C of crud, like 'sql insert' not 'sql create' 
  
-  // data to be stored
+  // data to be stored: item
   let item =   myFrmRead()    // read inputs returns  object item   
   
   // // check integrity here !!! 
@@ -248,7 +239,7 @@ function zDbDelete(){
 
 
 // -------------------------------------------------------
-// ---------------- implement SEARCH ---------------- 
+// ---------------- implement READ ---------------- 
 //
 function zSearchAndShow(what){  
   let tx = db.transaction(myStoreName, transreadonly)
@@ -280,7 +271,7 @@ function zSearchAndShow(what){
 // DB - showLast
 
 
-// ---------------- CRUD form no crudpad related functions -----------------------
+// ---------------- CRUD form - no crudpad related functions -----------------------
 
 //first, item  to store-retrieve
 //return item 
@@ -290,7 +281,7 @@ function makeItem(a,b,c){
 
 // misc  related to html --------------------------------   
 // FRM - shows an item
-function myFrmShow(item){  // myFrmShow(arrayData){
+function myFrmShow(item){  
   document.getElementById("i1").value = item.id
   document.getElementById("i2").value = item.description
   document.getElementById("i3").value = item.price
@@ -313,9 +304,9 @@ function myFrmBlock(arrayDisabled){
 
 // debug --------------------------------------------------
 function yawn(whatdoyouwant){  
-  ;(DESPIOJANDO)? setTimeout(whatdoyouwant, yawns):  whatdoyouwant
+  ;(DESPIOJANDO)? setTimeout(whatdoyouwant, yawns):  whatdoyouwant()
 }
-function wtf(who, what, when, where){
+function wtf(what){
 //  if  (DESPIOJANDO){
 //      console.log  
 //  } 
