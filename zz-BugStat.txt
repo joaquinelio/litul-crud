@@ -1,29 +1,17 @@
 
 
-this.  missing                                     ***************   23+
-this._MakeButton               spell                  ************    2
-push()                          padButtons spell,******************** 1  
+this.  missing                                     ***************   30+
+spelling                                          spell  **********  47
 []  init array                                      REAL BUG  -----------------------
-bolInputBox is not defined         spell ***************************** 1
-this.botModi.onclick          spell  ********************************* 1
-this.customButton.length      spell ********************************** 1
-this.btOK.onclick             spell  OK Ok  ************************** 2
 this.divCrud.appendChild(this.div1)   divMain       real BUG  ----------------------
 this.mode = newMode                   _mode         real BUG -----------------------
-if (esObj(element                 spell           ***************    8
-this.customButton is not iterable               spell   ************ 1
-this.pMensaje.textContent = what        spell ********************* 1
-divmov                                spell           ***********   8 
 divCrud - divMain                                       REAL BUG  --------------------------
-btMov botMove botMove                 spell          **************  12
 fieldset no css flex                                    REAL BUG -------------------------
-WAiTING CONFiRM                       spell         *************** 4+
 confirm noshow                                      REAL BUG-------------------------
-.lenght .customButton .dataset.estados    SPELL  ******************  3 
 confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
 From to-do list...                                    REAL BUGS -----------------  1
 Firefox era                                     Spell *********************** 7
-Firefox era                                         REAL BUGS               1
+Firefox era                                         REAL BUGS              2
 
 
 
@@ -39,6 +27,17 @@ To do, to test & to fix
 
 
 ** js: ** Improvement 
+- addCustomInput() 
+  like custom button.  useful for, example, range searchs. I can even replace customButton with
+  addCustomElement() 
+  so dev can do anything like status, text, icons, inputChkbox, sliders;  
+  not only buttons, they all inside crudpad, visible on modes dev chooses.
+  Pretty sure I'll end adding it.  IT IS USEFUL.  Still inline...
+- setRead()  
+  int instead of bool: number of input text elements. 
+  so dev's searchAndShow(input) receives inputtexts values array
+  Useful for ranges. If more complex than text needed, (sliders, date pickers) then
+  the next sugestion: addCustomInput()  or addCustomElement() 
 - get mode:
   I dont see why Dev would want it, but I let it anyway.
   But it is a number (I hate js).  He can check  crudpad.mode == crudpad.MODE_LIST.MODIFY 
@@ -57,13 +56,10 @@ To do, to test & to fix
     instead of padButtons[], a get/set(button) specific property innerHtml. CSS can still apply without it.
     or nothing, given the method to alter all innerHtml.
     customButtons can stay, dev owns them. 
-- BOF EOF to disable related nav buttons?   
-    Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
-    Easy: methods for Dev to call: .navBof() .navEof(), after that, related nav buttons remain disabled until  new, del or mov. 
-- changemode() focus parameter?. 
+- changemode() focus parameter. 
     Good taste rules require focus to be implemented. So, here it is again.  
     plus TAB navigation inside, buttons & inputs.
-- Confirm Ok msg, default ""
+- add Confirm Ok msg, default ""
 
 
 
@@ -87,15 +83,14 @@ To do, to test & to fix
 - transitions, not all the same.  1/2s too long
 - enabled inputs should be more visible
 - media query to diferentiate, hide via visibility (so dont jump) or via display (more free space)
-- vertical pad?  why not, flex column via class, just with
+- vertical pad?  why not, flex column via attr.
 - everything  uglyness 
 
 ** chalenge: ** 
 - touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
 
 ** tst app: ** 
-- Button naming: test the optional parameter
-- db cursor to test nav
+-
 
 party.
 
@@ -106,7 +101,11 @@ Done?  Philosophical issues
 ===========================
 - msg background to show mode... half coded, not implemented.  Maybe not, too obvious with the enabled buttons.  
 - Help button? Dev can use a custom button, so maybenot.
-- Button custom names: write -json file?- for innerhtml. // Custom labesl are needed. Not json. 
+- Button custom names: write -json file?- for innerhtml. // Custom labesl are needed. json is not. 
+- BOF EOF to disable related nav buttons?   
+    Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
+    Easy: methods for Dev to call: .navBof() .navEof(), after that, related nav buttons remain disabled until  new, del or mov. 
+    NOT important. When pressed past the last, it just put "not found" and keeps the last record. It more than ok.
 
 
 =====
@@ -129,3 +128,5 @@ Done.
 - msg hoover: msg as tip, useful if (ever) vertical
 - delegation. Unified onclick, switch-case.  Multiple _bt() stay. js should hide them, js fault.
 - Big this._dev.category.item  replace over 30  this._  related to dev implementation with ONE object
+- Button naming: test the optional parameter
+- db cursor to test nav

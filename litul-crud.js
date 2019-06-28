@@ -251,30 +251,24 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
   _btMoveFirst(){
-    this._setResultCaller('mvFrst', MODE_LIST.SHOW)
-    // this._funcNavMoveFrst()
+    this._setResultCaller('mvFrst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvFrst()
   }
   _btMovePrev(){
-    this._setResultCaller('mvPrev', MODE_LIST.SHOW)
-    // this._funcNavMovePrev()
-    this._dev.nav.funMvNext()
+    this._setResultCaller('mvPrev', this.MODE_LIST.SHOW)
+    this._dev.nav.funMvPrev()
   }
   _btMoveNext(){
-    this._setResultCaller('mvNxt', MODE_LIST.SHOW)
-    // this._funcNavMoveNext()
+    this._setResultCaller('mvNxt', this.MODE_LIST.SHOW)
     this._dev.nav.funMvNext()
   }  
   _btMoveLast(){
-    this._setResultCaller('mvLst', MODE_LIST.SHOW)
-    // this._funcNavMoveLast()
+    this._setResultCaller('mvLst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvLast()
   }
   
   _btExit(){
     this.confirm(
-      // this._txtConfirmExit,
-      // this._funcExit(),
       this._dev.exit.txtConfirm,
       this._dev.exit.funExit()
     )
@@ -285,8 +279,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this.confirm(
       this._dev.bored.txtConfirm,
       ()=>{                           //confirm yes ()
-        // stop any result wait 
-        this._setResultCaller('')
+        let lastcall = this._resultCall[0]
 
         //reset panel history.  That's dirty.   Tamper global here? If enablePanel were selected by class it would fail 
         this._panelLast = this._PANEL_LIST.CRUD
@@ -294,8 +287,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         // reset crudpad to idle
         this._changeMode(this.MODE_LIST.IDLE)
 
+        // stop any result wait 
+        this._setResultCaller('')        
+        this.hey('Wait from '+ lastcall + ' aborted.')
+
         // any other thing I should worry? 
         // ??
+
       },
       ()=>{}                           //confirm no () // go back  // thats it  // nothing to do  
     )
@@ -709,23 +707,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
       //main-div2-divNav-movFirst
       if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  ' &lt&lt ', 'Move First')// ()=>{this._btMoveFirst()}, 'Move first') 
-        // {let tt = this; this.btMoveFirst.onclick = function(){ tt._btMoveFirst()} } // me cago en el yavascrít
+        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<< ', 'Move First')// ()=>{this._btMoveFirst()}, 'Move first') 
       }
       //main-div2-divNav-movPrev
       if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' &lt ','Move previous' ) // ()=>{this._btMovePrev()},   ) 
-        // {let tt = this; this.btMovePrev.onclick = function(){ tt._btMovePrev()} } // me cago en el yavascrít
+        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' < ','Move previous' ) // ()=>{this._btMovePrev()},   ) 
       }
       //main-div2-divNav-movNext
       if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' &gt ', 'Move next' )// ()=>{this._btMoveNext()} ,'Move next' ) 
-        // {let tt = this; this.btMoveNext.onclick = function(){ tt._btMoveNext()} } // me cago en el yavascrít
+        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' > ', 'Move next' )// ()=>{this._btMoveNext()} ,'Move next' ) 
       }
       //main-div2-divNav-movLast
       if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' &gt&gt ', 'Move Last') // ()=>{this._btMoveLast()} , 
-        // {let tt = this; this.btMoveLast.onclick = function(){ tt._btMoveLast()} } // me cago en el yavascrít
+        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' >> ', 'Move Last') // ()=>{this._btMoveLast()} , 
       }
     }
     //main-div2-divMsg

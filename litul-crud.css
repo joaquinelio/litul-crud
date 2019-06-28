@@ -9,7 +9,7 @@
 * {
   /* not too pretty, not my goal yet*/
   transition-property: height , width , transform ,  ;
-  transition-duration: 200ms;  
+  transition-duration: 100ms;  
 }
 
 
@@ -61,30 +61,20 @@
   justify-content: space-between; 
   align-items: center;
 }
+.div_nav  {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between; 
+  align-items: center;
+}
 .div_confirm {
   border: solid 1px;
   width: 100%;
   flex-direction: column;
   justify-content: left;
 }
-/*
- Not sure.  They no longer replace divmain, they are inside it now.
-.div_confirm {
-  position: fixed;
-  bottom: 0;
-}
-.div_waiting {
-  position:fixed;
-  bottom:0;
-}
-*/
-
-
-/* mode & msgs.   mode via color, msg independent           deprecated?  */
-.div_msg-idle {background-color: rgb(204, 202, 202);}
-.div_msg-show {background-color: rgb(141, 255, 47);}
-.div_msg-modi ,
-.div_msg-crea {background-color: rgb(255, 80, 80);}
 
 .deactived-panel {
   height: 0%;
@@ -99,7 +89,7 @@
 }
 
 
-.svg_thing{             /*slower, smoother, still anoying */
+.svg_thing{             /*slower, smoother, still ANOYING */
   height: 100%;
   animation: movimiento  2s linear 1s infinite;
   transform-origin: center;
@@ -112,6 +102,7 @@
 }
 
 .div_msg {
+  width: 100%;
   margin: auto;
   flex: auto;
 }
@@ -185,3 +176,25 @@
   background-color: lightgreen;
   margin: 2px;
 }
+
+
+/*
+ Not sure.  They no longer replace divmain, they are inside it now.
+.div_confirm {
+  position: fixed;
+  bottom: 0;
+}
+.div_waiting {
+  position:fixed;
+  bottom:0;
+}
+*/
+
+
+/* mode & msgs.   mode via color, msg independent           deprecated?  */
+/*
+.div_msg-idle {background-color: rgb(204, 202, 202);}
+.div_msg-show {background-color: rgb(141, 255, 47);}
+.div_msg-modi ,
+.div_msg-crea {background-color: rgb(255, 80, 80);}
+*/

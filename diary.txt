@@ -4,6 +4,49 @@
 *** ----- ***
 
 
+190627
+
+I have to try this on test app.
+Let's see...
+...
+Thougt I could 
+test generators in the test app plus implementig the missing nav.
+But indexeddb  didn't let me.  Transanctions are short life.
+It's ok, smart decition for a db.
+...
+There were very few errors to fix! If I had a compiler or at least a preprocesor (ts?) it could be BUG FREE.  I hate js.
+...
+ESLint refuses to install
+Worth the try
+...
+crudpad mostly untouched
+anyway, not a lost day
+fixed some test app issues,
+indexeddb cursors learned (not that important),  
+implemented nav test. 
+nice.
+...
+CSS would take ages,
+but if I do, It'll be ready to ship.
+Not now.
+
+
+
+190626
+
+wifiwtf
+ok, node can wait. Tst App nav.
+Mmm. Not easy with no manual.
+ok, some debug.  
+mmm.
+wifis back.
+too late, et already Broken
+added some ideas too.
+FOCUS!!!!!
+ok, tomorrow.  Need to fix this first.
+
+
+
 190625
 
 Ok.  I need to understand js more.  But this is not the right project to do it, async by nature.
@@ -27,7 +70,6 @@ Maybe make it usable, not so far from it.
   start version number?
 Just jump to node, I'm very of track. 
 I'll be back.
-
 
 
 
