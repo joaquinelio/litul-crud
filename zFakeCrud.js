@@ -11,9 +11,9 @@
   crudpad abstraction
   You write functions that do the things, yo do not respond to onclicks nor take care of a crud menu 
 
-  crudpad.resultOk()
+  crudpad.sendResult()
   Inside every crudpad.form and crudpad.db operation, 
-  you have to send crudpad.resultOk(true/false) to let the pad know the requested operation finished well (or not)
+  you have to send crudpad.sendResult(true/false) to let the pad know the requested operation finished well (or not)
 
   First, set behaviour .setControl(),  optionals .setCreate(), .setUpdate(), .setDelete(), .setNav(), .setCustomButtons()
   then  .start()
@@ -44,7 +44,7 @@
 
 
 const DESPIOJANDO = true      //debugging
-const yawns = 1000            //test delay
+const yawns = 10000            //test delay msec
 
 
 // *********************************************** DB stuff *********************
@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.setDelete(zDbDelete, 'Del', 'Kill it?')     // D              ()=>{} db delete
   crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)     // nav << < > >>  ()=>{} db movecursor + show item,   *4
                                         
+  crudpad.dbTimeout = 5000 // msec
 
   // optional custom buttons, examples for different views
   //                       htmlElemname,  initial class,   innertext,  modes when is active,   title,           onclick        
@@ -133,7 +134,7 @@ function zFrmCreate(){
   // fields validation!
   // should put input restrictions, ranges, emptyness, etc.
 
-  crudpad.resultOk(true, 'Ready to edit NEW item')                    //should wait for dom ready? , better yet simulate a big delay to test boredness
+  crudpad.sendResult(true, 'Ready to edit NEW item')                    //should wait for dom ready? , better yet simulate a big delay to test boredness
   // function leaves form able to be edited 
 }
 //
@@ -145,8 +146,12 @@ function zDbCreate(){     // create: new item in db, the C of crud, like 'sql in
   
   // // check integrity here !!! 
   // if not valid 
-  //    x.resultOk(false, 'didnt pass because...') 
+  //    x.sendResult(false, 'didnt pass because...') 
   //    return 
+  if (item.id == '') {
+     crudpad.sendResult(false, 'Poné algo, che amarroco...') 
+     return 
+  } 
   
   // indexdb stuff
   let tx = db.transaction(myStoreName, transreadwrite)    
@@ -156,12 +161,12 @@ function zDbCreate(){     // create: new item in db, the C of crud, like 'sql in
   let request = store.add(item)  // item key id automatic    // idb add ~ sql insert  // 
   request.onerror = function(e){
     yawn(()=>{
-      crudpad.resultOk(false, 'err Creating: ' + e.srcElement.error   )
+      crudpad.sendResult(false, 'err Creating: ' + e.srcElement.error   )
     })    
   }
   request.onsuccess = function(){
     yawn(()=>{
-      crudpad.resultOk(true, 'saved new item: '+ item.id)
+      crudpad.sendResult(true, 'saved new item: '+ item.id)
     })
   }
 }
@@ -178,7 +183,7 @@ function zFrmUpdate(){
   // crudpad.hey('description too short ') <- something like this
   // then 
 
-  crudpad.resultOk(true, "ready to modify item (code field disabled)")
+  crudpad.sendResult(true, "ready to modify item (code field disabled)")
 }
 // DB - update
 function zDbUpdate(){
@@ -188,7 +193,7 @@ function zDbUpdate(){
 
   //should check before any attempt 
   // if not valid 
-  //    crudpad.resultOk(false, 'didnt pass') bla bla
+  //    crudpad.sendResult(false, 'didnt pass') bla bla
   //    return 
 
   let tx = db.transaction(myStoreName , transreadwrite)   
@@ -198,12 +203,12 @@ function zDbUpdate(){
   let request = store.put(item)                 // idb put ~ sql update 
   request.onerror = function(){
     yawn(()=>{
-      crudpad.resultOk(false, 'some error Updating')
+      crudpad.sendResult(false, 'some error Updating')
     })
   }
   request.onsuccess = function(){
     yawn(()=>{
-      crudpad.resultOk(true, 'overwritn')
+      crudpad.sendResult(true, 'overwritn')
     })
   }
 }
@@ -222,12 +227,12 @@ function zDbDelete(){
   let request = store.delete(item.id)
   request.onerror = function(){
     yawn(()=>{
-      crudpad.resultOk(false, 'couldnt delete who knows why')
+      crudpad.sendResult(false, 'couldnt delete who knows why')
     })
   }
   request.onsuccess = function(){
     yawn(()=>{
-      crudpad.resultOk(true, 'deleted'+ item.id)
+      crudpad.sendResult(true, 'deleted'+ item.id)
     })
   }
 }
@@ -243,16 +248,16 @@ function zSearchAndShow(what){
 
   let request = store.get(what) // odd
   request.onerror = function(){
-    crudpad.resultOk(false, ' error searching ')
+    crudpad.sendResult(false, ' error searching ')
   }
   request.onsuccess = function(){
     let item = request.result
     if (item == undefined){
-      crudpad.resultOk(false, 'not found')
+      crudpad.sendResult(false, 'not found')
     } else {
-      myFrmShow (item)
       yawn(()=>{
-        crudpad.resultOk(true, 'Ready') // wwooooaa!! DOM ready? Not here too simple, but...
+        myFrmShow (item)
+        crudpad.sendResult(true, 'Ready') // wwooooaa!! DOM ready? Not here too simple, but...
       })
     }
   }
@@ -313,14 +318,14 @@ function zDbMov(mov){
     if (cursor){
       item = cursor.value
       myFrmShow(item)
-      crudpad.resultOk(true, 'something found')
+      crudpad.sendResult(true, 'something found')
     } else {
-      crudpad.resultOk(true, ' Not found')  // why true? Cheat. Because it keeps the older data in form untouched. 
+      crudpad.sendResult(true, ' Not found')  // why true? Cheat. Because it keeps the older data in form untouched. 
     } 
   }
   req.onerror = (err)=>{
     wtf(err)
-    crudpad.resultOk(false, err)  
+    crudpad.sendResult(false, err)  
   }  
 }
 

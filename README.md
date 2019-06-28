@@ -10,14 +10,22 @@ My very first js LEARNING project
     indexedDb app for testing
     client side only (for now) 
 
-Thanks javascript.info. The site is great, it WILL help me do the needed rebuild.
+Thanks javascript.info.  The site is great, it helped a lot.
 
 
 Started on
-April 9, 1819       -- taking longer than I expected --
+April 9, 1719       -- taking longer than I expected --
 
 By
 Joaquin Elio 'Lito' Fernandez
+
+
+*Finished?*  
+Pretty usable html and js, 
+css is no longer a chaos but it is UGLY.  Then release. 
+I think I'll ask for css help so I do node server part of the project.
+Yes, VUE and maybe TS.
+
 
 ###
 
@@ -39,11 +47,10 @@ Pretty rigid. Not a tool for creating new stuff
 
 ***dev-user stories***
 
-First, abstractions.  I dont see good ones, this will be. 
+First, abstractions.  I dont see good ones, this hope is. 
 
-Second, I still see too many unresponsive buttons over there, 
+Second, Avoid unresponsive buttons, 
 when dev forgets the user while doing fancy server ops.
-Well, this should be responsive.  Both, appeareance AND commands behaviour. 
 
 Simple implementation, leaving dev to just write the
   **DB   (insert, select, update, delete...)** 
@@ -66,8 +73,8 @@ Dev has to manage the cb and inform the panel its result
 You have to inform me if it was a success:
 
     db.requestsomething()
-    db.onsuccess = (){ crudpad.resultOk(true) }
-    db.onerror =   (){ crudpad.resultOk(false, "I'm so, so sorry")}
+    db.onsuccess = (){ crudpad.sendResult(true) }
+    db.onerror =   (){ crudpad.sendResult(false, "I'm so, so sorry")}
 
 
 ###
@@ -86,31 +93,29 @@ Very good explanations, the what, the how and the why.
 AND it is up to date.   
 
 
-**JavaScript thoughts**
+***JavaScript thoughts***
 
 Learning...
 I learn to hate JS. 2 Months.
 So far 
-...  5 real bugs, real errors, real learning.
-... 63 from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
-The found spell bugs is a problem, exhausting and time consuming.
-The biggest problem is for those you didnt find. You NEVER know when it's finished, cause it never finishes. 
+...10 real bugs, real errors, real learning.
+...80+ from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
+The found spelling bugs is a problem, exhausting and time consuming.
+The biggest problem is for those you didn't find. You NEVER know when it's finished, cause it never finishes. 
 Any untested line is a treath, any mod you do you can reintroduce same bugs. It is crazy.
 Only bet is rely on frameworks and strong styling.
 Parameters inside quotes? What a source of problems.
 Freedom sucks.      
 
-  **JS, the freedom to step on the flowers.**
-
+    **JS, the freedom to step on the flowers.**
 
 
 Async.
-Trap for newbies usually said.  I fell down too.
-Because. The many training courses that don't have the word "ASYNC" in their very first sentence are wrong.
-Async is great, great.  No need to fork a thread and wait.
-You are the boss
+You are the boss.
 You dont tell your minions what to do then sit and wait until they finish.
 You send them to work with a list, 
 and go and do another boss thing.
 With sometimes the philosophical issue:
+
     **Now it is doing nothing, but nothing is wrong.**
+

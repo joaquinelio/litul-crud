@@ -19,14 +19,11 @@ To do, to test & to fix
 =======================
 
 ** js: **  Bugs
-- Dirty panel selection. The now spread code should be one place. Bug? Bug cryer. Better code allows expansion.
-- It seems too jumpy. Need to check excessive enable/disable divs. No much a bug, still is. Better app.
-- Other panels but crud: Buttons should be disabled inmediatly after pressed instead of expect the correct behaviour may not ocurr.  
-- ERROR handle.  Reckless work of mine.  throw new Error("something") everywhere.  Not a bug, close to. It has to be done.
+- ERROR handlers.  Reckless work of mine.  throw new Error("something") everywhere.  Not a bug, close to. It has to be done.
 
 
 
-** js: ** Improvement 
+** js: ** Improvement               Nice, but no extra learning with these...
 - addCustomInput() 
   like custom button.  useful for, example, range searchs. I can even replace customButton with
   addCustomElement() 
@@ -48,9 +45,7 @@ To do, to test & to fix
     Looks scary.  Shoudn't be.  
     var names would be more controlable
     all 'this.' would be erradicated.  onclick = _btTired  would work fine wo any hacks.
-- svg waiting ugly
 - some lint for vscode? 
-- Bored button should show after some timeout 
 - Button custom names: let svg icons
 - Button custom names:
     instead of padButtons[], a get/set(button) specific property innerHtml. CSS can still apply without it.
@@ -60,6 +55,8 @@ To do, to test & to fix
     Good taste rules require focus to be implemented. So, here it is again.  
     plus TAB navigation inside, buttons & inputs.
 - add Confirm Ok msg, default ""
+- add 2 small optional methods for dev:  crudpad.navBof() crudpad.navEof()  
+    some db are not easy to detect, maybe no worthy 
 
 
 
@@ -70,7 +67,8 @@ To do, to test & to fix
     Then the other elements instead of _createElement() then add properties:  
         .confirm.buttonYes = 'Yep!'    
         .crud.confirmCancelMsg = 'really?'
--Generators instead of _setReusltCaller()? 
+-Generators instead of _setReusltCaller()?
+  Is it possible?
   Would be big. Works well without, 
   if i understand it can be better code:
   fewer functions (can be good or not), lesser blind guess behaviour.
@@ -81,8 +79,8 @@ To do, to test & to fix
 - everything, flex arrangement the first!
 - hey() should flash. Wanted more discrete than alert, but it is too shy.
 - transitions, not all the same.  1/2s too long
-- enabled inputs should be more visible
-- media query to diferentiate, hide via visibility (so dont jump) or via display (more free space)
+- enabled inputs should be more visible, disabled too 'cause they can show readonly data
+- media query to diferentiate, hide via visibility (less jumpy) or via display (more free space)
 - vertical pad?  why not, flex column via attr.
 - everything  uglyness 
 
@@ -90,9 +88,10 @@ To do, to test & to fix
 - touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
 
 ** tst app: ** 
--
+- finished.  Some explanation maybe.
 
 party.
+
 
 
 
@@ -106,6 +105,18 @@ Done?  Philosophical issues
     Would need more info in result(), too specific to be a clean new param.  after error param ? Too dirty. 
     Easy: methods for Dev to call: .navBof() .navEof(), after that, related nav buttons remain disabled until  new, del or mov. 
     NOT important. When pressed past the last, it just put "not found" and keeps the last record. It more than ok.
+- confirm will reset if pad receibes a sendResult().   
+    Maybe... better set promise if pending, no worthy.   sendResult() is more important.
+- svg waiting ugly.  No worthy.  CSS problem is far more important.
+- _enableInNav(){
+   to implement this, i need more info than .result(true-false)
+  options:
+   // a) add a second .resultNav(resultNav-ok-bof-eof-fail ,msg)                    puaj
+   // b) change .result(truefalse, msg, optionalResulNav)                           puaj, 3rd param
+   // c) change .result(itDepends... ,msg) to acept both bool&enum, act acordlinly  maybe
+   // d) do nothing.  Just to disable one button? Come on.                          easy way.  Easier for dev too.
+   // e) add 2 small methods for dev:  crudpad.bof() crudpad.eof()                  Easiest. Clean either if and if NOT in use
+  If I do, it'll be option e). Added to Improvement 
 
 
 =====
@@ -130,3 +141,11 @@ Done.
 - Big this._dev.category.item  replace over 30  this._  related to dev implementation with ONE object
 - Button naming: test the optional parameter
 - db cursor to test nav
+- Other panels but crud: Buttons should be disabled inmediatly after pressed instead of expect the correct behaviour may not ocurr.  
+   confirm panel, now: first hide, then executes cb
+- Dirty panel selection. The now spread code should be one place. Bug? Bug cryer. Better code allows expansion.
+- .resultOk() re-renamed to sendResult() 
+- confirm() renamed to softConfirm(). 
+- Bored button shows after some timeout crudpad.dbTimeout
+- It seems too jumpy. Need to check excessive enable/disable divs. No much a bug, still is. Better app.
+  

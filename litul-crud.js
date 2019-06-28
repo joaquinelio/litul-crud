@@ -24,19 +24,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //this.padButtons = []       // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
     this.customButtons = []    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
-    this._dbTimeout = 1000     // Time before bored abort button appears       to-do 
+    //this._dbTimeout = 1000     // Time before bored abort button appears       to-do 
     this._mode = 0             // 0=invalid on purpose.  Dont '.IDLE' here so it SETS things to idle on first run   
 
-    //////////////////////////////////////////////////////// wanna fix this  /////////////////////////////////////////////
-    this._PANEL_LIST = {               // panels:  crudpad,  confirm replacement,  waitingserverresponse. 
-      CRUD: 1, CONFIRM: 2, WAITING: 3, LAST_PANEL: 99    //  I dont like last_panel at all.
-    }
-    this._panelCurrent = 0  // invalid on purpose   I miss nullable
-    this._panelLast = 1   // one level history only, will enable the last used panel:  example confirm Yes->crud No->Last 
-    // this._deactived_panel_class = 'deactived-panel'
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // resultOk() related:                            // What if..... GENERATOR???  
+    // sendResult() related:                            // What if..... GENERATOR???  
     //                 [caller, modeOnSuccess, modeOnFailure]
     this._resultCall = ['', null, null]
      
@@ -103,19 +95,27 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       bored:{
         txtButton : "I'm tired",
         txtConfirm : "Stop the waiting? It won't stop the request.",
+        dbTimeout : 1000,
       }, 
 
       
     }
 
+    // panels:
+    //
+    this._panel = {
+      PANELS : { NONE: 0, CRUD: 1, CONFIRM: 2, WAITING: 3, RESTORE: 4, },
+      current : 0,                                                      // NONE only first time
+      last : 1,
+    }
 
-    // allowed classes    Yeah, I'm a maniac.
+    // allowed classes    Yeah, I'm a maniac.  I would replace the entire library
     //
     this._classes = {
-      button_crud: 'button_crud',
-      deactived_panel: 'deactived-panel',
-
+      button_crud : 'button_crud',
+      deactived_panel : 'deactived-panel',
     }
+
     // dibujitos
     //
     this._svg = {
@@ -134,32 +134,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
             '</svg>',
       svgCloud : 
         '<svg height="100%" >'+
-          '<ellipse fill="#eeaaaa" cx="161" cy="72" rx="99" ry="36"/>'+
-          '<ellipse fill="#eeaaaa" cx="183" cy="55" rx="70" ry="40"/>'+
-          '<ellipse fill="#eeaaaa" cx="122" cy="61" rx="54" ry="30"/>'+
-          '</svg>',
-      svgCloud2 :  
-        '<svg height="100%" >'+
-        '<defs>'+
-        ' <linearGradient y1="0" x1="0" spreadMethod="reflect" y2="0.820313" x2="1" id="svg_10">'+
-        '  <stop offset="0" stop-color="#ff56ff"/>'+
-        '  <stop offset="1" stop-color="#33a533"/>'+
-        ' </linearGradient>'+
-        '</defs>'+
-        '<g display="inline">'+
-        ' <title>Layer 1</title>'+
-        ' <ellipse fill="url(#svg_10)" cx="100" cy="55.5" rx="100" ry="37.5" />'+
-        ' <ellipse fill="url(#svg_10)" cx="116" cy="34.5" rx="66" ry="34.5" />'+
-        ' <ellipse fill="url(#svg_10)" cx="73" cy="39" rx="54" ry="30"  />'+
-        '</g></svg>',   // not working
+        '<ellipse fill="#aa56aa" cx="161" cy="72" rx="99" ry="36"/>'+
+        '<ellipse fill="#bb56bb" cx="183" cy="55" rx="70" ry="40"/>'+
+        '<ellipse fill="#bb56bb" cx="122" cy="61" rx="54" ry="30"/>'+
+        '</svg>',
     }
  
-
-
-
-
-
-  } 
+  } // end constructor
 
 
   get mode(){              // Current mode.    readonly for dev. shouldn't need it.
@@ -167,23 +148,25 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   get MODE_LIST() {return {
     IDLE: 1, SHOW: 2, CREATE: 4, MODIFY: 8,
-    NONE: 0, EDIT: 12, ALL: 15               //added EDIT 8+4, ALL 1+2+4+8  // I never iterate so shouldn hurt   
+    NONE: 0, NOEDIT: 3, EDIT: 12, ALL: 15      //added EDIT 8+4, NOEDIT 1+2, ALL 1+2+4+8  // never iterate so shouldn hurt   
   }}
 
   get dbTimeout(){
-    return this._dbTimeout
+    return this._dev.bored.dbTimeout
   }
   set dbTimeout(milisecTimeout){
-    if (Number(milisecTimeout) > 0) {_dbTimeout = milisecTimeout }
+    if (Number(milisecTimeout) > 0)   this._dev.bored.dbTimeout = milisecTimeout
   }
 
 
-  /*  ---------- what if ------------------
-  setText_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
+  /*  ---------- what if ------------------ 
+  setInnerHTML_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
   }
-  setText_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete'){
+  setInnerHTML_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete'){
   }
-  setInner_crudpad(htmBtOk, htmBtRead, htmBtUpdate, htmBt........ etc etc etc ){
+  setInnerHTML_Bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
+  }
+  setInnerHTML_confirm(txtBtYes = 'Yes', txtBtNo = 'no'){
   }
   */
   
@@ -210,7 +193,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   
   _btDel(){
-    this.confirm(
+    this.softConfirm(
       // this._txtConfirmDelete,
       this._dev.delete.txtConfirm,
       ()=>{
@@ -236,7 +219,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     }
   }
   _btCancel(){
-    this.confirm(
+    this.softConfirm(
       // this._txtConfirmCancel,
       this._dev.crudOkCancel.txtConfirmCancel,
       ()=>{ 
@@ -268,21 +251,18 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   
   _btExit(){
-    this.confirm(
+    this.softConfirm(
       this._dev.exit.txtConfirm,
       this._dev.exit.funExit()
     )
   }
 
   _btTired(){
-    // this.confirm("Stop the waiting? It won't stop the request.", 
-    this.confirm(
+    // this.softConfirm("Stop the waiting? It won't stop the request.", 
+    this.softConfirm(
       this._dev.bored.txtConfirm,
       ()=>{                           //confirm yes ()
         let lastcall = this._resultCall[0]
-
-        //reset panel history.  That's dirty.   Tamper global here? If enablePanel were selected by class it would fail 
-        this._panelLast = this._PANEL_LIST.CRUD
 
         // reset crudpad to idle
         this._changeMode(this.MODE_LIST.IDLE)
@@ -290,6 +270,9 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         // stop any result wait 
         this._setResultCaller('')        
         this.hey('Wait from '+ lastcall + ' aborted.')
+
+        //set panel crud
+        this._enablePanel(this._panel.PANELS.CRUD)
 
         // any other thing I should worry? 
         // ??
@@ -300,88 +283,114 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
 
-  // to do: less jumpy  dont enable no needed
-  _enablePanel(panel){    // Select super operation: Crud, confirm(), waitingServerResult
+  _enablePanel(panelParam){    // Select super operation: Crud, softConfirm(), waitingServerResult
                           // It doesnt alter any status but the view,  and restricts user from interaction.
-    // const inactive = this._deactived_panel_class
+
     const inactive = this._classes.deactived_panel
+    let panelTo
 
-    if (panel == this._PANEL_LIST.LAST_PANEL){   //what???? Think again. Mmm... it looks ok...
-      panel = this._panelLast
-      this._panelCurrent = panel
-    } else{
-      this._panelLast = this._panelCurrent
-      this._panelCurrent = panel
+    if (panelParam === this._panel.PANELS.RESTORE){       // restore panel ?         
+      panelTo = this._panel.last                          //    go to = last panel 
+    } else{                                               // set panel 
+      panelTo = panelParam                                //    go to = panel parameter
     }
-    this.div1.classList.add(inactive)
-    this.div2.classList.add(inactive)
-    this.divConfirm.classList.add(inactive)
-    this.divWaiting.classList.add(inactive)
 
-    switch(panel){
-      case this._PANEL_LIST.CRUD: {
+    if (panelTo === this._panel.current)   return         // nothing to do
+
+    switch(this._panel.current){              // --------- fix: targeted disable, less jumpy --------- 
+    case this._panel.PANELS.NONE:                                   // first time disable all
+      this.div1.classList.add(inactive)
+      this.div2.classList.add(inactive)
+      this.divWaiting.classList.add(inactive)
+      this.divConfirm.classList.add(inactive)
+      break
+    case this._panel.PANELS.CRUD:             
+      this.div1.classList.add(inactive)
+      this.div2.classList.add(inactive)
+      break
+    case this._panel.PANELS.WAITING:
+      this.divWaiting.classList.add(inactive)
+      break
+    case this._panel.PANELS.CONFIRM:
+      this.divConfirm.classList.add(inactive)
+      break
+    default:
+      'no problem'
+    }
+     
+    switch(panelTo){                    // enable new panel
+      case this._panel.PANELS.CRUD: {
         this.div1.classList.remove(inactive)
         this.div2.classList.remove(inactive)
         break
       }
-      case this._PANEL_LIST.CONFIRM:{
+      case this._panel.PANELS.CONFIRM:{
         this.divConfirm.classList.remove(inactive)
         break
       }
-      case this._PANEL_LIST.WAITING:{
+      case this._panel.PANELS.WAITING:{            // extra code for bored button 
+        this.btTired.disabled = true
         this.divWaiting.classList.remove(inactive)
+        setTimeout(() => {this.btTired.disabled = false}, this._dev.bored.dbTimeout)
         break
       }
       default: {
         wtf('int err: Not a valid panel '+ panel )
       }
     }
+
+    this._panel.last = this._panel.current            //  remember leaving panel
+    this._panel.current = panelTo                     //  change complete   
   }
 
 
-  // ********************** .confirm() ********************
+  // ********************** .softConfirm() ********************
   //onclick
   _btConfirmYes(){
     if (isFun(this._dev.confirm.funYes)){
+      this._enablePanel(this._panel.PANELS.RESTORE)
       this._dev.confirm.funYes()
-    }
-    this._confirmHide()
+      this._dev.confirm.funYes = null
+      this._dev.confirm.funNo = null
+    } 
   }
   _btConfirmNo(){
     if(isFun(this._dev.confirm.funNo)){
+      this._enablePanel(this._panel.PANELS.RESTORE)
       this._dev.confirm.funNo()
-    }
-    this._confirmHide()
+      this._dev.confirm.funYes = null
+      this._dev.confirm.funNo = null  
+    } 
   }
   // panel
-  _confirmHide(){     // _confirmPanelHide
-    this._enablePanel(this._PANEL_LIST.LAST_PANEL)
-    this._dev.confirm.funYes = null
-    this._dev.confirm.funNo = null
-  }
-  _confirmShow(){     // _confirmPanelShow
-    this._enablePanel(this._PANEL_LIST.CONFIRM)
-  }
-  // 
-  confirm(textMsg, funcYes, funcNo){  // just cause I dont like browser confirm 
+  softConfirm(textMsg, funcYes, funcNo){  
+    //async, killable.  Just cause I dont like browser confirm
+    //CAREFUL: question is reset if crudpad receives sendResult() before the answer
+
     //check
     if (!isFun(funcYes) && !isFun(funcNo) ) {
-      wtf('int err: crudpad.confirm() empty functions')
-      return
+      if (textMsg > ''){                          // msg but empty functions, error
+        wtf('int err: crudpad.softConfirm() empty functions')
+        return
+      } else {                                    // all empty is a reset
+        this._dev.confirm.funYes = null
+        this._dev.confirm.funNo = null 
+        this._enablePanel(this._panel.PANELS.RESTORE)   
+        return
+      }
     } 
     if (isFun(this._dev.confirm.funYes) || isFun(this._dev.confirm.funNo)) {
-      wtf('int err: - crudpad.confirm() already waiting')  // It cannot happen.  Can it?
-      return
+      wtf('int err: - crudpad.softConfirm() already waiting')  
+      return                                       // Called while another softConfirm pending, error.  It cannot happen.  Can it? 
     } 
+    
+    if (textMsg == '') { funcYes() ; return }   // msg = '':  is a YES with no confirmation...  Why?  No clear reason.
 
-    // msg = '':  is a YES with no confirmation...  Why? To abstract its use.  I'll use it later.
-    if (textMsg == '') { funcYes() ; return }
-
-    //semimodal
+    //question, no modal
     this.pConfirmMsg.textContent = textMsg 
     this._dev.confirm.funYes = funcYes
     this._dev.confirm.funNo = funcNo
-    this._confirmShow()
+    this._enablePanel(this._panel.PANELS.CONFIRM)
   }
 
 
@@ -395,11 +404,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   start(){
     this._letsMakeCrudpadHTML()
     this._changeMode(this.MODE_LIST.IDLE)
-    this._enablePanel(this._PANEL_LIST.CRUD)
+    this._enablePanel(this._panel.PANELS.CRUD)
   }
 
   // *** implement behaviour ***
-  //set control mandatory.  
+  //set control, mandatory.  
   setFormControl(funcEraseFormContent, funcBlockForm, ){ // textOkButton = 'Ok', textCancelButton = 'Cancel', ){
     this._dev.control.funFrmErase = funcEraseFormContent
     this._dev.control.funFrmBlockAll = funcBlockForm
@@ -468,7 +477,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   // set/resets waiting,  displays waiting panel,   
   _setResultCaller(caller, modeSuccess = null, modeFail = null ){        
     // caller, just a name to show, or check for empty. 
-    // the 3 params stored in _resultCall[] for resultOk() to use. 
+    // the 3 params stored in _resultCall[] for sendResult() to use. 
 
     //check
     if (caller != '' && this._resultCall[0] != ''  ) {    // want to set but is already set
@@ -483,27 +492,32 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //reset
     if (caller=='') {
       this._resultCall = ['', null, null]
-      // this._changeMode(this.MODE_LIST.IDLE)
-      // this._enablePanel(this._PANEL_LIST.CRUD)      
       return
     }
 
     //set
     this._resultCall = [caller, modeSuccess, modeFail]
-    this._enablePanel(this._PANEL_LIST.WAITING)
+    this._enablePanel(this._panel.PANELS.WAITING)
   }
 
   // triggered by dev  
   // Change the crudpad status from waiting to some mode.  Results from db operations  true/false (ok/err)
-  resultOk(success, msg =''){    // success = true/false    msg = optional text msg <p>.
+  sendResult(success, msg =''){    // success = true/false    msg = optional text msg.
     //check
     if (this._resultCall[0] == '' ){
       this.hey( (success)?'Unexpected success from server':'Unexpected error from server' ) 
       return
     }
 
+    // panel softConfirm active?  WHAT TO DO...  AWAIT? 
+    //        If mine, it is timeout, it's ok if overwriten. 
+    //        If dev's...  sendResult is more important so kill anyway.
+    if (this._panel.current === this._panel.PANELS.CONFIRM){
+      this.softConfirm('')  //  reset
+    }
+
     //panel wait  off
-    this._enablePanel(this._PANEL_LIST.CRUD)
+    this._enablePanel(this._panel.PANELS.CRUD)
 
     // success [1] unsuccessful [2]
     this._changeMode(this._resultCall[ (success? 1 : 2) ])    
@@ -514,12 +528,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     if (msg > '' ) {this.hey(msg)}
   }
 
-
-  /*
-  setAllButtonsInnerHTML ( btOk, btCancel, btSearch, btCreate,  etcetcetcetc, ){   // I dont like it. At all. better expose dom array buttons ?  Or forget and Let dev query buttons? 
-      // this is horrible.  Let's dev do it by himself via query or whatever. I could help with a htm class 
-  }
-  */ 
   
   //  ------------------
   _changeMode(newMode){      // *** enable/disable buttons and div depending on MODE ***
@@ -586,17 +594,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //div exit
     this._enableElement(this.btExit, stNoEditing)  
 
-
     //user form
-    // if (stNoEditing)  this._funcDisableForm()
     if (stNoEditing)  this._dev.control.funFrmBlockAll()
     if (this._mode == this.MODE_LIST.IDLE )  this._dev.control.funFrmErase()
 
-    
-    // show mode with style...  Changes divmsg color.  Remove oldmode class and add newmode class
-    // --------PRETTY SURE IT DOESNT WORK.  No harm, No hard to replace.
-    // this.divMsg.classList.remove(this.MODE_CLASSES[oldMode]) 
-    // this.divMsg.classList.add(this.MODE_CLASSES[newMode])
   }
   
   
@@ -607,16 +608,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     }
     return false 
   }
-
-  // _enableInNav(){
-  //   // to implement this, i need more info than .result(true-false)
-  //   //options:
-  //   // a) add a second .resultNav(resultNav-ok-bof-eof-fail ,msg)                    puaj
-  //   // b) change .result(truefalse, msg, optionalResulNav)                           puaj, 3rd param
-  //   // c) change .result(itDepends... ,msg) to acept both bool&enum, act acordlinly  maybe
-  //   // d) do nothing.  Just to disable one button? Come on.                          easy way.  Easier for dev too.
-  //   // e) add 2 small methods for dev:  crudpad.bof() crudpad.eof()                  Easiest. Clean either if and if NOT in use
-  // }
 
   _enableDiv(div, yesOrNo){  
     //to do: delegate to css 
@@ -652,8 +643,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // MAIN-div1-divSearch
     if (this._dev.read.isOn){ //this._implementedRead ){  
       this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,)// ()=>{this._btSearch()} )
-    //      {let tt = this; this.btSearch.onclick = function(){ tt._btSearch()} } // me cago en el yavascrít
+      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
       if ( this._dev.read.inputBoxOn ){   // with input text? 
         this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
       }
@@ -666,20 +656,17 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       // if ( this._implementedCreate ) {  
       if ( this._dev.create.isOn ) {  
 
-        this.btNew = this._makeButton(this.divCrud, 'cmd_New', this._dev.create.txtBt,)// ()=>{this._btNew()}) 
-        // {let tt = this; this.btNew.onclick = function(){ tt._btNew()} } // me cago en el yavascrít
+        this.btNew = this._makeButton(this.divCrud, 'cmd_New', this._dev.create.txtBt,) 
       }
       //mod
       // if ( this._implementedUpdate  ) {  
       if (this._dev.update.isOn) {  
-          this.btModi = this._makeButton(this.divCrud,'cmd_modi', this._dev.update.txtBt,)// ()=>{this._btModi()}) 
-        // {let tt = this; this.btModi.onclick = function(){ tt._btModi()} } // me cago en el yavascrít
+          this.btModi = this._makeButton(this.divCrud,'cmd_modi', this._dev.update.txtBt,) 
       }
       //del
       // if ( this._implementedDelete ) {
       if ( this._dev.delete.isOn ) {
-          this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,)// ()=>{this._btDel()})   
-        // {let tt = this; this.btDel.onclick = function(){ tt._btDel()} } // me cago en el yavascrít
+          this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
       }
     }
     //main-div1-divCustom   
@@ -693,10 +680,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // if( this._implementedCreate || this._implementedUpdate){    
     if( this._dev.create.isOn || this._dev.update.isOn){    
       this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk) //  , ()=>{this._btOk()} ) 
-      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,)// ()=>{this._btCancel()} ) 
-      // {let tt = this; this.btOk.onclick = function(){ tt._btOk()} } // me cago en el yavascrít
-      // {let tt = this; this.btCancel.onclick = function(){ tt._btCancel()} } // me cago en el yavascrít
+      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
+      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
     }
 
     // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
@@ -707,19 +692,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
       //main-div2-divNav-movFirst
       if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<< ', 'Move First')// ()=>{this._btMoveFirst()}, 'Move first') 
+        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<< ', 'Move First') 
       }
       //main-div2-divNav-movPrev
       if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' < ','Move previous' ) // ()=>{this._btMovePrev()},   ) 
+        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' < ','Move previous' )  
       }
       //main-div2-divNav-movNext
       if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' > ', 'Move next' )// ()=>{this._btMoveNext()} ,'Move next' ) 
+        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' > ', 'Move next' )  
       }
       //main-div2-divNav-movLast
       if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' >> ', 'Move Last') // ()=>{this._btMoveLast()} , 
+        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' >> ', 'Move Last')   
       }
     }
     //main-div2-divMsg
@@ -730,30 +715,24 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //main-div2-divExit
     if (this._dev.exit.isOn) {
       this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-      this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt ) //, ()=>{this._btExit()}  ) 
-      // {let tt = this; this.btExit.onclick = function(){ tt._btExit()} } // me cago en el yavascrít
+      this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
     }
 
     //main-divYesNo               ----hides div1 & div2 when showing-----
     this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
     this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
-    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, ) // ()=>{this._btConfirmYes()})
-    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  ) // ()=>{this._btConfirmNo()})  // todavía me cago en el yavascrít
-    // {let tt = this; this.btConfirmYes.onclick = function(){ tt._btConfirmYes()} } // me cago en el yavascrít
-    // {let tt = this; this.btConfirmNo.onclick  = function(){ tt._btConfirmNo()} } // me cago en el yavascrít
+    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
+    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
  
     //main-divWaiting        
     this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
     this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
-    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) // ()=>{this._btTired()})
-    // {let tt = this; this.btTired.onclick = function(){ tt._btTired()} } // me cago en el yavascrít   
+    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
 
     //  need something else, something prettier
     this.svgThing.innerHTML = this._svg.svgCloud 
 
-
-    //delegation    ------------------------------------- TESTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    this.divMain.onclick = (event)=>{this._divMain_onclik(event)}    // me cago en el yavascrít
+    this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
 
   }
   _divMain_onclik(event){
@@ -769,7 +748,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       // I wont use an insanely long function!!!  (longer with switch-case)
       // JS should HIDE _bt() funtions, not me!!! The many _bt() stay.
 
-      this.btSearch,     ()=>{this._btSearch()},
+      this.btSearch,     ()=>{this._btSearch()},   // ()=>{()=>{}()} !!!???  me cago en el yavascrít
       this.btNew,        ()=>{this._btNew()},  
       this.btModi,       ()=>{this._btModi()}, 
       this.btDel,        ()=>{this._btDel()},
@@ -808,11 +787,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     bt.type = 'button' 
     bt.disabled = false 
     bt.className = 'button_crud'
-    // bt.onclick = onclick  //  testing DELEGATION   ----------------------------------------------------------------
+    // bt.onclick = onclick  //  testing DELEGATION   --------------------------------------------
     bt.title = title
     bt.textContent = text
-    // this.padButtons.push(bt)   // is it correct?********** Yes, but this way cant: "buttons.buttonRemove"
-    // this.padButton[bt]     // what about this.  I forgot the training
+
     context.appendChild(bt) 
     return bt
   }
@@ -826,12 +804,12 @@ function isFun(what){return typeof what == 'function' }
 // I hate switch case too.
 function onReturn(que, ...casePair){           // stolen from Wang2200 Basic,  easier to read
   //acts as: switch (what,  ...case, some+break,  case, some+break,  case, some+break...)
-  for (let i = 0; i < casePair.length;  i +=2 ){
+  for (let i = 0; i < casePair.length;  i += 2 ){
     if (que == casePair[i])  return casePair[i+1] 
   } 
   return null
 } 
-function wtf(what){
+function wtf(what){   // breakpoint
   if (_DESPIOJANDO) {
     console.log(what)
   }

@@ -4,6 +4,24 @@
 *** ----- ***
 
 
+190628
+
+Big changes, bugstat job
+Everything looks working.
+Ready to release?  
+Nah, CSS...
+And server part... 
+Need to see if it is usable with no modifications, 
+I know nothing about node separation client-server,  how to tell where the render is.
+...
+wtf, without web, why, where were wifi, where the wickery went wandering I wonder. 
+...
+backed up in phone.
+what a surprise, db dont open.  Chrome, firefox, opera. They all show the form and the delousing svg monkey.
+Node!!!!  then db cloud
+
+
+
 190627
 
 I have to try this on test app.
