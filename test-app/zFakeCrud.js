@@ -56,13 +56,13 @@ const yawns = 10000            //test delay msec
 const myDbName  = 'fakedb0' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'       
-
+//
 // indexedDB globals:    **THINGS**        db, store, transaction, index    
-// let tx       // transaction   short life 
-// let store    // store         dies with tx
+// let tx       // transaction   short life. 
+// let store    // store         dies with tx.
 let db          // global so I dont open every request.  Short life db request are intended Maybe I dont need db either.   
-
-// And just because I do HATE ' ' parameters.  Wherever they are. vulnerable. easily hidden typos. 
+//
+// And just because I do HATE ' ' parameters.  
 const transreadwrite = 'readwrite'
 const transreadonly = 'readonly'
 //
@@ -90,22 +90,29 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.setRead(zSearchAndShow,  true,         )   // R              ()=>{} db search(input) + show item, bool: show input text 
   crudpad.setUpdate(zFrmUpdate, zDbUpdate,        )  // U              ()=>{} frm to edit mod item,         ()=>{}db update
   crudpad.setDelete(zDbDelete,                 )     // D              ()=>{} db delete,                    optional confirm msg 
-  crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)    // nav << < > >>  ()=>{} db movecursor + show item,    *4
+  crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)    // nav << < > >>  ()=>{} db movecursor + show item,    * 4
   crudpad.setExit(zExit, "Exitoooo", "¿Te vas?")                                      
   crudpad.dbTimeout = 5000 // msec
 
   // optional custom buttons, examples for different views
-  //                       htmlElemname,  initial class,  innertext,  modes where active,     title,           onclick        
-  crudpad.addCustomButton('buttonXls',   'custom-button', 'custom1',  crudpad.MODE_LIST.SHOW, 'custom export', ()=>{crudpad.hey('Only on show: example "export xls " ')})
-  crudpad.addCustomButton('buttonCheck', 'custom-button', 'custom2',  crudpad.MODE_LIST.EDIT, 'custom some ',  ()=>{crudpad.hey('Only on edit: example "checking field')})
-  crudpad.addCustomButton('buttonWhat',  'custom-button', 'custom3',  crudpad.MODE_LIST.IDLE, 'custom srch',   ()=>{crudpad.hey('Only on Empty: example a special search ')})
+  //                       id= name=     dflt='button_crud'
+  //                       htmElemName,  initial class,  label,      modes where active,     title,           onclick        
+  crudpad.addCustomButton('buttonXls',   undefined,      'custom1',  crudpad.MODE_LIST.SHOW, 'custom export', ()=>{crudpad.hey('Only on show: example "export xls " ')})
+  crudpad.addCustomButton('buttonCheck', undefined,      'custom2',  crudpad.MODE_LIST.EDIT, 'custom some ',  ()=>{crudpad.hey('Only on edit: example "checking field')})
+  crudpad.addCustomButton('buttonWhat',  undefined,      'custom3',  crudpad.MODE_LIST.IDLE, 'custom srch',   ()=>{crudpad.hey('Only on Empty: example a special search ')})
 
-  //optional customization/translation/graph 
-  crudpad.setInnerHTML_crudpad(
-    'Nuovo',
-    '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
-  )
-  
+  //optional translation   
+  //crudpad.setText_...
+  crudpad.setText_crudpad('Add', undefined, undefined, 'Kill', 'Really wanna kill it?')
+
+   
+  //Furter customization
+  // crudpad.customButtons.buttonXls.classList.remove('button_crud')  
+  // crudpad.customButtons.buttonXls.innerHTML = '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
+  // crudpad.btSearch.classList.remove('button_crud')  
+  // crudpad.btSearch.innerHTML =  '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
+
+
   openMyDb()  // and stays open
 
   // START CRUDPAD

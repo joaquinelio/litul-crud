@@ -13,7 +13,7 @@
 }
 
 
-.div_main {      /*  inside:  1 div,  OR 2 divs in 2 rows */
+.div_main {      /*  inside: showing  1 div,  OR 2 divs in 2 rows */
 
   /* Position=  down, full width */
   position: fixed;
@@ -108,39 +108,39 @@
 }
 
 
-/* todos y solo mis botones */
-.div_main button {
+.div_main button {          /* ALL buttons, non L&F attr ONLY */
+/*  display:flex;          no aplicable, I think*/
+  flex-direction: row !important;   /* just test. !important "bad practice" seems good in crudpad behaviourlike disable*/
+  flex-wrap: nowrap !important;
+}
 
+.button_crud {            /*  L&F only class  */
   border-radius: 5px;
   color: white;
   /* background-color: #0F5897; */
   /* padding: 5px 10px 8px 10px;  */
-
-  display:flex;         /* no aplicable I think*/
-  flex-direction: row;
-  flex-wrap: nowrap;
-
   justify-content: center;
 
   padding: 5px;
   margin: 1px;
   outline: none;
   color: white;
-  background-color: blue;
+  background-color: darkblue;
   /*border: gray 2px   ;*/
   text-align: center;      
   box-shadow: 3px 3px grey;
-/*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
+  /*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
+
 }
 
 /* Sigo experimentando...      */
 /*.div_crud button:hover {background-color:rgb(0, 102, 255) ; }    hover doesnt look good on touch devices */
-.div_main button:disabled {
+.button_crud:disabled {
   color:lightslategray;
   background-color: grey; 
-  background: linear-gradient(75deg, darkblue, grey)
+  background: linear-gradient(75deg, lightblue, darkgrey)
 }
-.div_main button:active {
+.button_crud:active {
   background-color: lightblue;
   box-shadow: 1px 1px #666;
   transform: translate(5%,5% );
@@ -170,7 +170,6 @@
   justify-content: right;
   align-content: flex-end;
 }
-
 .div_search input {
   border: solid 1px black;
   background-color: lightgreen;
@@ -189,7 +188,6 @@
   bottom:0;
 }
 */
-
 
 /* mode & msgs.   mode via color, msg independent           deprecated?  */
 /*

@@ -3,9 +3,19 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
+|190714|
+Lot of structure, lots of commented code. zero bugs so far with the change. 
+Dev can translate easily, style with graphics.
+...
+Should I change names?  so, Crud
+btNew		  btCreate
+btSearch	btRead
+btModi		btUpdate
+btDel     btDelete
 
 
-190712
+
+|190712|
 Tired of node, so came here to play with svg.
 Some fixes too.
 Still hate js. More.

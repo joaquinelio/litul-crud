@@ -35,7 +35,7 @@ Maybe VUE, maybe TS.
 
 A panel with buttons. That's it.
 For 
-  CRUD operations (with Ok/Cancel buttons when needed)  and
+  CRUD operations  and
   DB search/show/navigation
 
 JUST the buttons. No form editions, No sql nor callback code here. That's on you, dev.
@@ -44,7 +44,7 @@ These buttons have a behaviour althougth.  They show up, hide, enable/disable th
   panel status (idle, showing, editing) and
   the functions actually implemented by dev (create, read, update, delete, nav)
 
-Can add custom buttons inside.
+Custom buttons can be added.
 Pretty rigid. Not a tool for creating new stuff
 
 

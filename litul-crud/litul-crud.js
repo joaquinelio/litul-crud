@@ -16,8 +16,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   constructor(){
     super()  
 
-    //this.padButtons = []       // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
-    this.customButtons = []    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
+    this.crudButtons = {}      // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
+    this.customButtons = {}    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
     this._mode = 0             // 0=invalid on purpose.  Dont '.IDLE' here so it SETS things to idle on first run   
     
@@ -53,14 +53,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         isOn : false,
         funForm : null,
         funDb:  null,
-        txtBt : 'New',
+        // txtBt : 'New',
         txtConfirm : '',
-        //innerHtmlBt : '',   //  svg ?  
       },
       read:{
         isOn : false,
         inputBoxOn : false,
-        txtBt : 'Search',
+        // txtBt : 'Search',
         funRead : null,
       },
       update: {
@@ -73,7 +72,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       delete:{
         isOn : false,
         funDb : null,
-        txtBt: 'Delete',
+        // txtBt: 'Delete',
         txtConfirm : 'Delete record?' 
       },
       nav:{
@@ -82,31 +81,31 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         funMvPrev : null,
         funMvNext : null,
         funMvLast : null,
-        txtBtFrst : '&lt;&lt;',
-        txtBtPrev : '&lt;',
-        txtBtNext : '&gt;',
-        txtBtLast : '&gt;&gt;',
+        txtBtFrst : '<<',
+        txtBtPrev : '<',
+        txtBtNext : '>',
+        txtBtLast : '>>',
       },
       exit:{
         isOn : false,
-        txtBt : 'Exit',
+        // txtBt : 'Exit',
         txtConfirm : 'Exit?',
         funExit : null,
       },
       crudOkCancel:{
-        txtBtOk : 'ok',
-        txtBtCancel : 'cancel',
+        // txtBtOk : 'ok',
+        // txtBtCancel : 'cancel',
         txtConfirmCancel : 'Cancel edition?',
         txtMsgCancelDone : 'Canceled',
       },
       confirm:{ 
-        txtBtYes : 'yes',
-        txtBtNo : 'no',
+        // txtBtYes : 'yes',
+        // txtBtNo : 'no',
         funYes : null,
         funNo : null,
       },
       bored:{
-        txtButton : "I'm tired",
+        // txtButton : "I'm tired",
         txtConfirm : "Stop the wait? It won't stop the request.",
         dbTimeout : 1000,
       }, 
@@ -139,6 +138,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         '</svg>',
     }
  
+    this._letsMakeCrudpadHTML()  // template? sepated html file?
+
   } // end constructor
 
 
@@ -161,38 +162,52 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
 
   /*  ---------- txt traslation svg,icon ------------------  */
-  setInnerHTML_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
-    this._dev.crudOkCancel.txtBtOk = txtBtOk
-    this._dev.crudOkCancel.txtBtCancel = txtBtCancel
+  setText_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
+    // this._dev.crudOkCancel.txtBtOk = txtBtOk
+    // this._dev.crudOkCancel.txtBtCancel = txtBtCancel
+    this.btOk.textContent = txtBtOk
+    this.btCancel.textContent = txtBtCancel
     this._dev.crudOkCancel.txtConfirmCancel = txtConfirmCancel
     this._dev.crudOkCancel.txtMsgCancelDone = txtMsgCanceled
   }
-  setInnerHTML_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete', txtConfirmDelete = 'Delete record?'){
-    this._dev.create.txtBt = txtBtCreate
+  setText_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete', txtConfirmDelete = 'Delete record?'){
+    // this._dev.create.txtBt = txtBtCreate
+    this.btNew.textContent = txtBtCreate
+    this.btSearch.textContent = txtBtRead
+    this.btModi.textContent = txtBtUpdate
+    this.btDel.textContent = txtBtDelete
     // //this._dev.create.txtConfirm = 
-    this._dev.read.txtBt = txtBtRead
-    this._dev.update.txtBt = txtBtUpdate
+    // this._dev.read.txtBt = txtBtRead
+    // this._dev.update.txtBt = txtBtUpdate
     // // this._dev.update.txtConfirm = 
-    this._dev.delete.txtBt = txtBtDelete
+    // this._dev.delete.txtBt = txtBtDelete
     this._dev.delete.txtConfirm = txtConfirmDelete
   }
-  setInnerHTML_bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
-    this._dev.bored.txtButton = txtBoredButton
+  setText_bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
+    // this._dev.bored.txtButton = txtBoredButton
+    this.btTired.textContent = txtBoredButton
     this._dev.bored.txtConfirm = txtBoredConfirm
   }
-  setInnerHTML_confirm(txtBtYes = 'Yes', txtBtNo = 'no'){
-    this._dev.confirm.txtBtYes = txtBtYes
-    this._dev.confirm.txtBtNo = txtBtNo
+  setText_confirm(txtBtYes = 'Yes', txtBtNo = 'no'){
+    // this._dev.confirm.txtBtYes = txtBtYes
+    // this._dev.confirm.txtBtNo = txtBtNo
+    this.btConfirmNo.textContent = txtBtNo
+    this.btConfirmYes.textContent = txtBtYes
   }
-  setInnerHTML_exit(txtBtExit = "Exit", txtConfirmExit = "Confirm exit?"){
+  setText_exit(txtBtExit = "Exit", txtConfirmExit = "Confirm exit?"){
     this._dev.exit.txtConfirm = txtConfirmExit
-    this._dev.exit.txtBt = txtBtExit 
+    // this._dev.exit.txtBt = txtBtExit 
+    this.btExit.textContent = txtBtExit
   }
-  setInnerHTML_nav(txtBtFrst = '&lt;&lt;', txtBtPrev = '&lt;', txtBtNext = '&gt;', txtBtLast = '&gt;&gt;'){
-    this._dev.nav.txtBtFrst = txtBtFrst
-    this._dev.nav.txtBtPrev = txtBtPrev
-    this._dev.nav.txtBtNext = txtBtNext
-    this._dev.nav.txtBtLast = txtBtLast
+  setText_nav(txtBtFrst = '<<', txtBtPrev = '<', txtBtNext = '>', txtBtLast = '>>'){
+    // this._dev.nav.txtBtFrst = txtBtFrst
+    // this._dev.nav.txtBtPrev = txtBtPrev
+    // this._dev.nav.txtBtNext = txtBtNext
+    // this._dev.nav.txtBtLast = txtBtLast
+    this.btMoveFirst.textContent = txtBtFrst
+    this.btMovePrev.textContent = txtBtPrev
+    this.btMoveNext.textContent = txtBtNext
+    this.btMoveLast.textContent = txtBtLast
   }
    
   
@@ -432,7 +447,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   
   // fires crudpad.  Use it when all settings are done.
   start(){
-    this._letsMakeCrudpadHTML()
+    // this._letsMakeCrudpadHTML()
+    this._letsDoCrud()
     this._changeMode(this.MODE_LIST.IDLE)
     this._enablePanel(this._panel.PANELS.CRUD)
   }
@@ -449,24 +465,28 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // if ! func throw err...   ??
     this._dev.create.funFrm = funcFormEditNew
     this._dev.create.funDb = funcDbInsert
-    this._dev.create.txtBt = textButton
+    // this._dev.create.txtBt = textButton
+    this.btNew.textContent = textButton
     this._dev.create.isOn = true
   }
   setUpdate(funcFormEditModify, funcDbUpdate, textButton = 'Modify',){
     this._dev.update.funFrm = funcFormEditModify
     this._dev.update.funDb = funcDbUpdate
-    this._dev.update.txtBt = textButton
+    // this._dev.update.txtBt = textButton
+    this.btModi.textContent = textButton
     this._dev.update.isOn = true
   }
   setDelete(funcDbDelete, textButton = 'Delete', textConfirm = 'Delete Record?' ){
     this._dev.delete.funDb = funcDbDelete
-    this._dev.delete.txtBt = textButton
+    // this._dev.delete.txtBt = textButton
+    this.btDel.textContent = textButton
     this._dev.delete.txtConfirm = textConfirm 
     this._dev.delete.isOn = true
   }
   setRead(funcSearchAndShow, boolShowInputBox, textButton = 'Search', ){   // , inputBox default?  ,txtHint?)
     this._dev.read.funRead = funcSearchAndShow
-    this._dev.read.txtBt = textButton
+    // this._dev.read.txtBt = textButton
+    this.btSearch.textContent = textButton
     this._dev.read.inputBoxOn = boolShowInputBox
     this._dev.read.isOn =true
   }
@@ -479,19 +499,20 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   setExit(funcExit, textButton = 'Exit', textConfirmExit = 'Exit?'){
     this._dev.exit.funExit = funcExit
-    this._dev.exit.txtBt = textButton
+    // this._dev.exit.txtBt = textButton
+    this.btExit.textContent = textButton
     this._dev.exit.txtConfirm = textConfirmExit
     this._dev.exit.isOn = true
   }
 
-  addCustomButton(name, className, text, activeModesBinarySum, title = '', onclick){
+  addCustomButton(name, className=this._classes.button_crud, text, activeModesBinarySum, title = '', onclick){
     let bt = document.createElement("button") 
 
     bt.name = name 
     bt.className = className 
     //bt.value = value 
-    bt.innerHTML = text     // CAREFUL NOW.  But can add icons
-    //bt.textContent = text
+    // bt.innerHTML = text     // CAREFUL NOW.  But can add icons
+    bt.textContent = text
     bt.id = name 
     bt.title = title
     bt.onclick = onclick   
@@ -499,7 +520,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     bt.dataset.modes = activeModesBinarySum  
     bt.disabled = true 
 
-    this.customButtons.push(bt) 
+    this.customButtons[bt.id] = bt 
     return bt 
   }
 
@@ -611,9 +632,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     }
     //div custom
     {let tstActive = 0 
-          for (let bo of this.customButtons){
-            tstActive +=  this._enableElement(bo,  Number( bo.dataset.modes ) & this.mode ) 
-          }
+          for (let bo in this.customButtons){
+            tstActive +=  this._enableElement(this.customButtons[bo],  Number( this.customButtons[bo].dataset.modes ) & this.mode ) 
+                // tstActive +=1 //debug
+           }
           this._enableDiv(this.divCustom, tstActive > 0) 
     }
     //div nav
@@ -667,108 +689,105 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
 
-  _letsMakeCrudpadHTML(){ 
+  // _letsMakeCrudpadHTML(){ 
 
-    // MAIN- 
-    this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
+  //   // MAIN- 
+  //   this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
 
-    //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
-    this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
-    // MAIN-div1-divSearch
-    if (this._dev.read.isOn){ //this._implementedRead ){  
-      this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
-      if ( this._dev.read.inputBoxOn ){   // with input text? 
-        this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
-      }
-    }
-    //MAIN-div1-divCrud
-      if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
-        this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
-      //create
-      if ( this._dev.create.isOn ) {  
-        this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
-      }
-      //mod
-      if (this._dev.update.isOn) {  
-          this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
-      }
-      //del
-      if ( this._dev.delete.isOn ) {
-          this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
-      }
-    }
-    //main-div1-divCustom   
-    if( this.customButtons.length > 0 ){
-      this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
-      for(let bo of this.customButtons){
-        this.divCustom.appendChild(bo)    
-      }
-    }
-    //main-div1-divOkCancel
-    if( this._dev.create.isOn || this._dev.update.isOn){    
-      this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
-      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
-    }
+  //   //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
+  //   this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
+  //   // MAIN-div1-divSearch
+  //   if (this._dev.read.isOn){ //this._implementedRead ){  
+  //     this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
+  //     this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
+  //     if ( this._dev.read.inputBoxOn ){   // with input text? 
+  //       this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
+  //     }
+  //   }
+  //   //MAIN-div1-divCrud
+  //     if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
+  //       this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
+  //     //create
+  //     if ( this._dev.create.isOn ) {  
+  //       this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
+  //     }
+  //     //mod
+  //     if (this._dev.update.isOn) {  
+  //         this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
+  //     }
+  //     //del
+  //     if ( this._dev.delete.isOn ) {
+  //         this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
+  //     }
+  //   }
+  //   //main-div1-divCustom   
+  //   if( Object.keys(this.customButtons).length > 0 ){
+  //     this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
+  //     for(let bo in this.customButtons){
+  //       this.divCustom.appendChild(this.customButtons[bo])    
+  //     }
+  //   }
+  //   //main-div1-divOkCancel
+  //   if( this._dev.create.isOn || this._dev.update.isOn){    
+  //     this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
+  //     this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
+  //     this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
+  //   }
 
-    // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
-    this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
-    //main-div2-divNav
-    if(this._dev.nav.isOn){
-        this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
-      //main-div2-divNav-movFirst
-      if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
-      }
-      //main-div2-divNav-movPrev
-      if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
-      }
-      //main-div2-divNav-movNext
-      if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
-      }
-      //main-div2-divNav-movLast
-      if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
-      }
-    }
-    //main-div2-divMsg
-    this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
-    this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
-    this.pMsg.textContent = ' '   
+  //   // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
+  //   this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
+  //   //main-div2-divNav
+  //   if(this._dev.nav.isOn){
+  //       this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
+  //     //main-div2-divNav-movFirst
+  //     if (isFun(this._dev.nav.funMvFrst)){
+  //       this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
+  //     }
+  //     //main-div2-divNav-movPrev
+  //     if (isFun(this._dev.nav.funMvPrev)){
+  //       this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
+  //     }
+  //     //main-div2-divNav-movNext
+  //     if (isFun(this._dev.nav.funMvNext)){
+  //       this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
+  //     }
+  //     //main-div2-divNav-movLast
+  //     if (isFun(this._dev.nav.funMvLast)){
+  //       this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
+  //     }
+  //   }
+  //   //main-div2-divMsg
+  //   this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
+  //   this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
+  //   this.pMsg.textContent = ' '   
 
-    //main-div2-divExit
-    if (this._dev.exit.isOn) {
-      this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-      this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
-    }
+  //   //main-div2-divExit
+  //   if (this._dev.exit.isOn) {
+  //     this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
+  //     this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
+  //   }
 
-    //main-divYesNo               ----hides div1 & div2 when showing-----
-    this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
-    this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
-    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
-    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
+  //   //main-divYesNo               ----hides div1 & div2 when showing-----
+  //   this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
+  //   this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
+  //   this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
+  //   this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
  
-    //main-divWaiting        
-    this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
-    this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
-    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
+  //   //main-divWaiting        
+  //   this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
+  //   this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
+  //   this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
 
-    //  need something else, something prettier
-    this.svgThing.innerHTML = this._svg.cloud 
+  //   //  needing something prettier...
+  //   this.svgThing.innerHTML = this._svg.cloud 
 
-    this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
+  //   this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
 
-  }
+  // }
 
   _divMain_onclik(event){
-    const classBtCrud = this._classes.button_crud 
-
     let target = event.target.closest('button')
     if (!target) return
-    if (!target.classList.contains(classBtCrud)) return 
     if (target.disabled) return   // to test!!! , I bet global onclick doesnt care about disabled
 
     let fun = onReturn(target,        // a just switch-case-break-return replacer
@@ -793,11 +812,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     ) 
     if (isFun(fun)){
       fun()
-      return
-    } else {
-      wtf("int err: not found button " + target)  // test this -string?--------------------------------------
-      return
-    }
+    } //else, not one of my buttons
   }
 
   _makeElement(context, elemtype, id, initialClass = '',   ) {    
@@ -817,18 +832,237 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     bt.className = 'button_crud'
     // bt.onclick = onclick  //  testing DELEGATION   ----------------------
     bt.title = title
-    // bt.textContent = text
-    bt.innerHTML = text
+    bt.textContent = text
+    // bt.innerHTML = text
     context.appendChild(bt) 
     return bt
   }
+
+  _letsMakeCrudpadHTML(){ 
+
+    // MAIN- 
+    this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
+
+    //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
+    this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
+    // MAIN-div1-divSearch
+    // if (this._dev.read.isOn){ //this._implementedRead ){  
+      this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
+      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', 'Search',) 
+      // if ( this._dev.read.inputBoxOn ){   // with input text? 
+        this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
+      // }
+    // }
+    //MAIN-div1-divCrud
+      // if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
+        this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
+      //create
+      // if ( this._dev.create.isOn ) {  
+        this.btNew = this._makeButton(this.divCrud, 'cmd_new', 'New',) 
+      // }
+      //mod
+      // if (this._dev.update.isOn) {  
+          this.btModi = this._makeButton(this.divCrud,'cmd_mod', 'Modify',) 
+      // }
+      //del
+      // if ( this._dev.delete.isOn ) {
+          this.btDel = this._makeButton(this.divCrud, 'cmd_del', 'Delete',) 
+      // }
+    // }
+    //main-div1-divCustom   
+    // if( Object.keys(this.customButtons).length > 0 ){
+    //   this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
+    //   for(let bo in this.customButtons){
+    //     this.divCustom.appendChild(this.customButtons[bo])    
+    //   }
+    // }
+    //main-div1-divOkCancel
+    // if( this._dev.create.isOn || this._dev.update.isOn){    
+      this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
+      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  'Ok')  
+      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', 'Cancel',) 
+    // }
+
+    // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
+    this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
+    //main-div2-divNav
+    // if(this._dev.nav.isOn){
+        this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
+      //main-div2-divNav-movFirst
+      // if (isFun(this._dev.nav.funMvFrst)){
+        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<<', 'Move First') 
+      // }
+      //main-div2-divNav-movPrev
+      // if (isFun(this._dev.nav.funMvPrev)){
+        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', '<', 'Move previous' )  
+      // }
+      //main-div2-divNav-movNext
+      // if (isFun(this._dev.nav.funMvNext)){
+        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', '>', 'Move next' )  
+      // }
+      //main-div2-divNav-movLast
+      // if (isFun(this._dev.nav.funMvLast)){
+        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast', '>>', 'Move Last')   
+      // }
+    // }
+    //main-div2-divMsg
+    this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
+    this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
+    this.pMsg.textContent = ' '   
+
+    //main-div2-divExit
+    // if (this._dev.exit.isOn) {
+      this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
+      this.btExit = this._makeButton(this.divExit, 'cmd_exit', 'Exit')   
+    // }
+
+    //main-divYesNo               ----hides div1 & div2 when showing-----
+    this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
+    this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
+    this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', 'Yes', )  
+    this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , 'No',  )  
+ 
+    //main-divWaiting        
+    this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
+    this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
+    this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', "I'm Bored", ) 
+
+    //  needing something prettier...
+    this.svgThing.innerHTML = this._svg.cloud 
+
+    // this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
+
+  }
+
+  _letsDoCrud(){ 
+
+    // MAIN- 
+    // this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
+
+    //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
+    // this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
+    // MAIN-div1-divSearch
+    // if (this._dev.read.isOn){ //this._implementedRead ){ 
+      this._enableDiv( this.divSearch, this._dev.read.isOn)
+      // this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
+      // this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
+      // if ( this._dev.read.inputBoxOn ){   // with input text? 
+        // this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
+      this._enableElement(this.inpSearch,this._dev.read.inputBoxOn )
+        // }
+    // }
+    //MAIN-div1-divCrud
+    let tst =(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn)
+    this._enableDiv( this.divCrud, tst)
+    // if(tst){
+        // this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
+      //create
+      // if ( this._dev.create.isOn ) {  
+      //   this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
+        this._enableElement(this.btNew,this._dev.create.isOn )
+      // }
+      //mod
+      // if (this._dev.update.isOn) {  
+      //     this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
+      // }
+      this._enableElement(this.btModi,this._dev.update.isOn )
+      //del
+      // if ( this._dev.delete.isOn ) {
+      //     this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
+      // }
+      this._enableElement(this.btDel,this._dev.delete.isOn )
+
+    // }
+    //main-div1-divCustom   
+    if( Object.keys(this.customButtons).length > 0 ){
+      this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
+      for(let bo in this.customButtons){
+        this.divCustom.appendChild(this.customButtons[bo])    
+      }
+    }
+    //main-div1-divOkCancel
+    // if( 
+    this._enableDiv(this.divOkCancel, (
+      this._dev.create.isOn || this._dev.update.isOn))  //{    
+      // this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
+      // this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
+      // this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
+    // }
+
+    // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
+//    this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
+    //main-div2-divNav
+    this._enableDiv(this.divNav,this._dev.nav.isOn )
+    // if(this._dev.nav.isOn){
+
+//        this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
+      //main-div2-divNav-movFirst
+      // if (isFun(this._dev.nav.funMvFrst)){
+      //   this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
+      // }
+      // //main-div2-divNav-movPrev
+      // if (isFun(this._dev.nav.funMvPrev)){
+      //   this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
+      // }
+      // //main-div2-divNav-movNext
+      // if (isFun(this._dev.nav.funMvNext)){
+      //   this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
+      // }
+      // //main-div2-divNav-movLast
+      // if (isFun(this._dev.nav.funMvLast)){
+      //   this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
+      // }
+      this._enableElement(this.btMoveFirst,(isFun(this._dev.nav.funMvFrst)) )
+      this._enableElement(this.btMovePrev,(isFun(this._dev.nav.funMvPrev)) )
+      this._enableElement(this.btMoveNext,(isFun(this._dev.nav.funMvNext)) )
+      this._enableElement(this.btMoveLast,(isFun(this._dev.nav.funMvLast)) )
+
+
+
+    // }
+    // //main-div2-divMsg
+    // this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
+    // this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
+    // this.pMsg.textContent = ' '   
+
+    //main-div2-divExit
+    this._enableDiv(this.divExit, this._dev.exit.isOn)
+    this._enableElement(this.btExit,this._dev.exit.isOn )
+
+    // if (this._dev.exit.isOn) {
+      // this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
+      // this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
+    // }
+
+    // //main-divYesNo               ----hides div1 & div2 when showing-----
+    // this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
+    // this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
+    // this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
+    // this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
+ 
+    // //main-divWaiting        
+    // this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
+    // this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
+    // this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
+
+    // //  needing something prettier...
+    // this.svgThing.innerHTML = this._svg.cloud 
+
+    this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
+
+  }
+
+
+
+
+
+
 })
 
 
 
 //** Modu-lito ******yeah, I should modulize **************************************************************** */
 // Li-brary   
-// can I do this, here? are they global now?    Update: No. They are not.   Update: YES THEY CAN BE, YOU CANT FORCE TO BE A MODULE!
 
 // Because I hate quoted parameters.
 function isObj(what){return typeof what == 'object'   }    

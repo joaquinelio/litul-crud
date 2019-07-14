@@ -10,7 +10,7 @@ fieldset no css flex                                    REAL BUG ---------------
 confirm noshow                                      REAL BUG-------------------------
 confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
 From to-do list...                                    REAL BUGS -----------------  1            !!!??? only one?
-Firefox era                                     Spell *********************** 7
+Firefox era                                       Spell *********************** 7
 Firefox era                                         REAL BUGS              2    plus the refactor needed, I dont consider it bugs
 
 
@@ -65,15 +65,17 @@ To do, to test & to fix
 - enabled inputs should be more visible, disabled too 'cause they can show readonly data
 - media query to diferentiate, hide via visibility (less jumpy) or via display (more free space)
 - vertical pad?  why not, flex column via attr.
+- check: separate crudpad bahaviour and l&f 
 - everything  uglyness 
 
 ** challenge: ** 
 - touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
+  or via "..." menu like FF dock console
 
 ** tst app: ** 
 - Port tst app to a server 
 - Make the DB cloud to test smartphone properly.  For proper EVERYTHIG test,  
--Test simultaneous crudpads.
+- Test simultaneous crudpads...  Same page? inside Tab element...
 
 ** party.
 
@@ -150,5 +152,6 @@ Done.
 - tst app localdb finished.   
 - input field elements should disable earlier after pressing OK. It means change mode BEFORE knowing cbResult...  
 - Button custom names: 
-    added a bunch of setInnerHTML_  to do translat/custom msg/ graph
+    added a bunch of setText_  to do translat/custom msg
     not troughly tested
+- enabled innerHtml of internal elements.  No so dangerous, you know what you are doing, dev. 
