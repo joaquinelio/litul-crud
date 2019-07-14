@@ -136,9 +136,9 @@
 /* Sigo experimentando...      */
 /*.div_crud button:hover {background-color:rgb(0, 102, 255) ; }    hover doesnt look good on touch devices */
 .div_main button:disabled {
-  color:grey;
+  color:lightslategray;
   background-color: grey; 
-  background: linear-gradient(75deg, rgb(143, 155, 206), grey)
+  background: linear-gradient(75deg, darkblue, grey)
 }
 .div_main button:active {
   background-color: lightblue;

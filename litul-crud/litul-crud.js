@@ -1,21 +1,16 @@
 ﻿
-/* 
-  Lituls
-  litul-crudpad  HTMLelement  
+/* Lituls
+    litul-crudpad  HTMLelement  
 
-  by
-  Joaquin Elio "Lito" Fernandez  
+    by
+    Joaquin Elio "Lito" Fernandez,  Elio de Buenos Aires...
 */
 
-"use strict"   //  strict? STRICT??? All let are GLOBAL! YOU CAN NOT FORCE AS TYPE MODULE  FY FYFYFYFYFY JS!!!
+"use strict"   //  strict? STRICT???  Kidding me.
 
 const _DESPIOJANDO = true    //  itchy
 
-/*
-//   **********************       
-//   HERE THE ELEMENT CLASS       
-//   **********************
-*/
+
 window.customElements.define('litul-crudpad', class extends HTMLElement {
 
   constructor(){
@@ -24,18 +19,30 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //this.padButtons = []       // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
     this.customButtons = []    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
 
-    //this._dbTimeout = 1000     // Time before bored abort button appears       to-do 
     this._mode = 0             // 0=invalid on purpose.  Dont '.IDLE' here so it SETS things to idle on first run   
+    
+    // cbResult() related:                              
+    this._resultCall = {                // ONLY ONE object of this kind, only ONE operation expected to complete.  
+      msgCaller:'',  
+      modeOk: null, 
+      modeFail:null,
+    }     
+    this._setResultCall = {           //carajo  I couldnt make a class. next time.
+      isEmpty: ()=>(this._resultCall.msgCaller === '') ,
+      set: (msg, modeOk = null, modeFail= null)=>{ 
+        if(! this._resultCall.msgCaller === '') {wtf(`int err:_resulCall ${msg} already set ${this.msgCaller}`); return }
+        this._resultCall.msgCaller = msg, this._resultCall.modeOk = modeOk, this._resultCall.modeFail = modeFail 
+        this._enablePanel(this._panel.PANELS.WAITING)
+      },
+      reset : ()=>{
+        if(this._resultCall.msgCaller === '') {wtf('int err:_resulCall already empty')}
+        this._resultCall.msgCaller = '', this._resultCall.modeOk = null, this._resultCall.modeFail = null
+        this._enablePanel(this._panel.PANELS.CRUD)
+      },
+    }
+ 
 
-
-    // sendResult() related:                            // What if..... GENERATOR???  
-    //                 [caller, modeOnSuccess, modeOnFailure]
-    this._resultCall = ['', null, null]
-     
-
-
-
-    // dev's set stuff.   These obj match dom obj. Should I extend shadow dom, add props there? NO WAY.  Only if I had my own dom.
+    // dev's set stuff.  Just a var repository. These obj match dom obj. Should I extend shadow dom, add props there? NO WAY.  Only if I had my own dom.
     //
     this._dev = {
       control:{   
@@ -47,6 +54,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         funForm : null,
         funDb:  null,
         txtBt : 'New',
+        txtConfirm : '',
         //innerHtmlBt : '',   //  svg ?  
       },
       read:{
@@ -65,6 +73,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       delete:{
         isOn : false,
         funDb : null,
+        txtBt: 'Delete',
         txtConfirm : 'Delete record?' 
       },
       nav:{
@@ -73,6 +82,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         funMvPrev : null,
         funMvNext : null,
         funMvLast : null,
+        txtBtFrst : '&lt;&lt;',
+        txtBtPrev : '&lt;',
+        txtBtNext : '&gt;',
+        txtBtLast : '&gt;&gt;',
       },
       exit:{
         isOn : false,
@@ -94,14 +107,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       },
       bored:{
         txtButton : "I'm tired",
-        txtConfirm : "Stop the waiting? It won't stop the request.",
+        txtConfirm : "Stop the wait? It won't stop the request.",
         dbTimeout : 1000,
       }, 
 
-      
     }
 
-    // panels:
+    // panels:   3 panels. Restore means recover last panel.
     //
     this._panel = {
       PANELS : { NONE: 0, CRUD: 1, CONFIRM: 2, WAITING: 3, RESTORE: 4, },
@@ -116,27 +128,14 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       deactived_panel : 'deactived-panel',
     }
 
-    // dibujitos
+    // dibujitos  // not a good place to put'em. 
     //
     this._svg = {
-      svgDebug : '<svg><g><title>Layer 1</title>'+
-            '<circle id="svg_1e" r="41.61798" cy="69" cx="122" stroke-width="0" stroke="#000000" fill="#ff7f00"/>'+
-            '<circle id="svg_2" r="20.41382" cy="50" cx="108" stroke-width="0" stroke="#000000" fill="#ffaaaa"/>'+
-            '<circle stroke="#000000" id="svg_3" r="21.41382" cy="88.5" cx="98" stroke-width="0" fill="#ffaaaa"/>'+
-            '<circle id="svg_4" r="12.91382" cy="51" cx="160.5" stroke-width="0" stroke="#000000" fill="#ffaaaa"/>'+
-            '<circle id="svg_5" r="6.93909" cy="60.5" cx="102.5" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="0" stroke="#000000" fill="#000000"/>'+
-            '<line stroke-width="3" id="svg_8" y2="103" x2="83" y1="85" x1="105" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke="#000000" fill="none"/>'+
-            '</g>'+
-            '<g>'+
-            '<title>Layer 2</title>'+
-            '<path fill-rule="evenodd" d="m76.5,121c-25.13875,0 -45.5,21.01512 -45.5,46.96116c0,20.78031 13.02438,38.33205 31.11063,44.5544c2.275,0.41091 3.12813,-0.99792 3.12813,-2.23066c0,-1.11533 -0.05688,-4.81352 -0.05688,-8.74652c-11.43188,2.17195 -14.38938,-2.87637 -15.29938,-5.51794c-0.51188,-1.35013 -2.73,-5.51794 -4.66375,-6.63326c-1.5925,-0.88052 -3.8675,-3.05248 -0.05688,-3.11118c3.58313,-0.0587 6.1425,3.40468 6.99563,4.81352c4.095,7.10288 10.63563,5.10703 13.25188,3.8743c0.39813,-3.05248 1.5925,-5.10703 2.90063,-6.28106c-10.12375,-1.17403 -20.7025,-5.22443 -20.7025,-23.18707c0,-5.10703 1.76313,-9.33353 4.66375,-12.62081c-0.455,-1.17403 -2.0475,-5.98755 0.455,-12.44471c0,0 3.81063,-1.23273 12.5125,4.81352c3.64,-1.05663 7.5075,-1.58494 11.375,-1.58494c3.8675,0 7.735,0.52831 11.375,1.58494c8.70188,-6.10495 12.5125,-4.81352 12.5125,-4.81352c2.5025,6.45716 0.91,11.27068 0.455,12.44471c2.90063,3.28728 4.66375,7.45508 4.66375,12.62081c0,18.02135 -10.63563,22.01305 -20.75938,23.18707c1.64938,1.46754 3.07125,4.28521 3.07125,8.68782c0,6.28106 -0.05688,11.32938 -0.05688,12.91432c0,1.23273 0.85313,2.70027 3.12813,2.23066a45.57394,47.03747 0 0 0 30.99688,-44.5544c0,-25.94604 -20.36125,-46.96116 -45.5,-46.96116l-0.00001,0z" id="svg_1" fill="black"/> '+
-            '</g>'+
-            '</svg>',
-      svgCloud : 
+      cloud : 
         '<svg height="100%" >'+
-        '<ellipse fill="#aa56aa" cx="161" cy="72" rx="99" ry="36"/>'+
-        '<ellipse fill="#bb56bb" cx="183" cy="55" rx="70" ry="40"/>'+
-        '<ellipse fill="#bb56bb" cx="122" cy="61" rx="54" ry="30"/>'+
+        '<ellipse fill="#aa55aa" cx="161" cy="72" rx="99" ry="36"/>'+
+        '<ellipse fill="#bb55bb" cx="183" cy="55" rx="70" ry="40"/>'+
+        '<ellipse fill="#bb55bb" cx="122" cy="61" rx="54" ry="30"/>'+
         '</svg>',
     }
  
@@ -147,7 +146,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     return this._mode
   }
   get MODE_LIST() {return {
-    IDLE: 1, SHOW: 2, CREATE: 4, MODIFY: 8,
+    IDLE: 1, SHOW: 2, CREATE: 4, MODIFY: 8,    // 4 real modes: 1 2 4 8
     NONE: 0, NOEDIT: 3, EDIT: 12, ALL: 15      //added EDIT 8+4, NOEDIT 1+2, ALL 1+2+4+8  // never iterate so shouldn hurt   
   }}
 
@@ -159,35 +158,63 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
 
-  /*  ---------- what if ------------------ 
+
+
+  /*  ---------- txt traslation svg,icon ------------------  */
   setInnerHTML_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
+    this._dev.crudOkCancel.txtBtOk = txtBtOk
+    this._dev.crudOkCancel.txtBtCancel = txtBtCancel
+    this._dev.crudOkCancel.txtConfirmCancel = txtConfirmCancel
+    this._dev.crudOkCancel.txtMsgCancelDone = txtMsgCanceled
   }
-  setInnerHTML_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete'){
+  setInnerHTML_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete', txtConfirmDelete = 'Delete record?'){
+    this._dev.create.txtBt = txtBtCreate
+    // //this._dev.create.txtConfirm = 
+    this._dev.read.txtBt = txtBtRead
+    this._dev.update.txtBt = txtBtUpdate
+    // // this._dev.update.txtConfirm = 
+    this._dev.delete.txtBt = txtBtDelete
+    this._dev.delete.txtConfirm = txtConfirmDelete
   }
-  setInnerHTML_Bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
+  setInnerHTML_bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
+    this._dev.bored.txtButton = txtBoredButton
+    this._dev.bored.txtConfirm = txtBoredConfirm
   }
   setInnerHTML_confirm(txtBtYes = 'Yes', txtBtNo = 'no'){
+    this._dev.confirm.txtBtYes = txtBtYes
+    this._dev.confirm.txtBtNo = txtBtNo
   }
-  */
+  setInnerHTML_exit(txtBtExit = "Exit", txtConfirmExit = "Confirm exit?"){
+    this._dev.exit.txtConfirm = txtConfirmExit
+    this._dev.exit.txtBt = txtBtExit 
+  }
+  setInnerHTML_nav(txtBtFrst = '&lt;&lt;', txtBtPrev = '&lt;', txtBtNext = '&gt;', txtBtLast = '&gt;&gt;'){
+    this._dev.nav.txtBtFrst = txtBtFrst
+    this._dev.nav.txtBtPrev = txtBtPrev
+    this._dev.nav.txtBtNext = txtBtNext
+    this._dev.nav.txtBtLast = txtBtLast
+  }
+   
   
 
 
-  //  crudpad *onclick* functions  hidden from Dev  (should be.  js...)
+  //  crudpad *onclick* functions  hidden from Dev  (SHOULD be hidden.  js...)
   //  they fire dev stuff, set the wait for result(), response to user interaction, change mode, en/disable buttons according that result()   
   //
+  
   _btSearch(){
-    this._setResultCaller('search', this.MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)? no. if it fails, nothing. User decition, not Dev's.
+    this._setResultCall.set('search', this.MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)? no. if it fails, nothing. User decides, not Dev's.
     this._dev.read.funRead(this.inpSearch.value)  // input param if any
   }
   
   _btNew(){
-    this._setResultCaller('frmNew', this.MODE_LIST.CREATE,  )     
+    this._setResultCall.set('frmNew', this.MODE_LIST.CREATE, this.MODE_LIST.IDLE )     
     //this._funcCreate_FormEditNew()
     this._dev.create.funFrm()
   }
 
   _btModi(){
-    this._setResultCaller('frmMod', this.MODE_LIST.MODIFY,  )  
+    this._setResultCall.set('frmMod', this.MODE_LIST.MODIFY, this.MODE_LIST.IDLE )  
     //this._funcUpdate_FormEditModify()
     this._dev.update.funFrm()
   }
@@ -197,7 +224,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       // this._txtConfirmDelete,
       this._dev.delete.txtConfirm,
       ()=>{
-        this._setResultCaller('dbDelete', this.MODE_LIST.IDLE,)   // err, keep showing 
+        this._setResultCall.set('dbDelete', this.MODE_LIST.IDLE,)   // if err keep showing 
         // this._funcDelete_DbDelete()
         this._dev.delete.funDb()
       },
@@ -207,12 +234,12 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   
   _btOk(){
     if(this.mode == this.MODE_LIST.CREATE){
-        this._setResultCaller('dbInsert', this.MODE_LIST.SHOW,)  
-        // this._funcCreate_DbInsert()
+        this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes
+        this._setResultCall.set('dbInsert', this.MODE_LIST.SHOW, this.MODE_LIST.CREATE)  
         this._dev.create.funDb()
     } else if(this.mode == this.MODE_LIST.MODIFY) {
-        this._setResultCaller('dbUpdate', this.MODE_LIST.SHOW,)  
-        // this._funcUpdate_DbUpdate()
+        this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes 
+        this._setResultCall.set('dbUpdate', this.MODE_LIST.SHOW, this.MODE_LIST.MODIFY)  
         this._dev.update.funDb()
     } else {
         this.hey ('int err: okbutton is neither create nor modify')
@@ -234,26 +261,27 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
   _btMoveFirst(){
-    this._setResultCaller('mvFrst', this.MODE_LIST.SHOW)
+    this._setResultCall.set('mvFrst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvFrst()
   }
   _btMovePrev(){
-    this._setResultCaller('mvPrev', this.MODE_LIST.SHOW)
+    this._setResultCall.set('mvPrev', this.MODE_LIST.SHOW)
     this._dev.nav.funMvPrev()
   }
   _btMoveNext(){
-    this._setResultCaller('mvNxt', this.MODE_LIST.SHOW)
+    this._setResultCall.set('mvNxt', this.MODE_LIST.SHOW)
     this._dev.nav.funMvNext()
   }  
   _btMoveLast(){
-    this._setResultCaller('mvLst', this.MODE_LIST.SHOW)
+    this._setResultCall.set('mvLst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvLast()
   }
   
   _btExit(){
     this.softConfirm(
-      this._dev.exit.txtConfirm,
-      this._dev.exit.funExit()
+      this._dev.exit.txtConfirm, 
+      this._dev.exit.funExit,
+      ()=>{}  
     )
   }
 
@@ -262,17 +290,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this.softConfirm(
       this._dev.bored.txtConfirm,
       ()=>{                           //confirm yes ()
-        let lastcall = this._resultCall[0]
+        let lastcall = this._resultCall.msgCaller
 
         // reset crudpad to idle
         this._changeMode(this.MODE_LIST.IDLE)
 
         // stop any result wait 
-        this._setResultCaller('')        
+        //this._setResultCaller('')  
+        // this._resultCall.reset()
+        this._setResultCall.reset()
         this.hey('Wait from '+ lastcall + ' aborted.')
 
         //set panel crud
-        this._enablePanel(this._panel.PANELS.CRUD)
+        // this._enablePanel(this._panel.PANELS.CRUD)
 
         // any other thing I should worry? 
         // ??
@@ -365,7 +395,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   // panel
   softConfirm(textMsg, funcYes, funcNo){  
     //async, killable.  Just cause I dont like browser confirm
-    //CAREFUL: question is reset if crudpad receives sendResult() before the answer
+    //CAREFUL: question is reset if crudpad receives cbResult() before the answer
 
     //check
     if (!isFun(funcYes) && !isFun(funcNo) ) {
@@ -460,8 +490,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     bt.name = name 
     bt.className = className 
     //bt.value = value 
-    //bt.innerHTML = text
-    bt.textContent = text
+    bt.innerHTML = text     // CAREFUL NOW.  But can add icons
+    //bt.textContent = text
     bt.id = name 
     bt.title = title
     bt.onclick = onclick   
@@ -475,36 +505,38 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
   // setWait or setWaitForResult, should rename to.
   // set/resets waiting,  displays waiting panel,   
-  _setResultCaller(caller, modeSuccess = null, modeFail = null ){        
-    // caller, just a name to show, or check for empty. 
-    // the 3 params stored in _resultCall[] for sendResult() to use. 
+  // _setResultCaller(caller, modeOk = null, modeFail = null ){        
+  //   // caller, just a name to show, or check for empty. 
+  //   // the 3 params stored in _resultCall[] for cbResult() to use. 
 
-    //check
-    if (caller != '' && this._resultCall[0] != ''  ) {    // want to set but is already set
-      this.hey('Int err: Unexpected req *' + caller + '* Already waiting result from *' + this._resultCall[0] + '*' )
-      return
-    }
-    if (caller == '' && this._resultCall[0] == ''  ) {    // want to reset but is already reset
-      this.hey('Int err: No result to reset' )
-      return
-    }
+  //   // //check
+  //   // let tCaller = this._resultCall.msgCaller
+  //   // if (caller != '' && tCaller != ''  ) {    // want to set but is already set
+  //   //   this.hey('Int err: Unexpected req *' + caller + '* Already waiting result from *' + tCaller + '*' )
+  //   //   return
+  //   // }
+  //   // if (caller == '' && tCaller == ''  ) {    // want to reset but is already reset
+  //   //   this.hey('Int err: No result to reset' )
+  //   //   return
+  //   // }
 
-    //reset
-    if (caller=='') {
-      this._resultCall = ['', null, null]
-      return
-    }
+  //   // //reset
+  //   // if (caller=='') {
+  //   //   this._resultCall.reset()
+  //   //   return
+  //   // }
 
-    //set
-    this._resultCall = [caller, modeSuccess, modeFail]
-    this._enablePanel(this._panel.PANELS.WAITING)
-  }
+  //   //set
+  //   this._resultCall.set(caller, modeSuccess, modeFail)
+  //   this._resultCall.set(caller, modeOk, modeFail)
+  //   this._enablePanel(this._panel.PANELS.WAITING)
+  // }
 
   // triggered by dev  
   // Change the crudpad status from waiting to some mode.  Results from db operations  true/false (ok/err)
-  sendResult(success, msg =''){    // success = true/false    msg = optional text msg.
+  cbResult(success, msg =''){    // success = true/false    msg = optional text msg.
     //check
-    if (this._resultCall[0] == '' ){
+    if (this._setResultCall.isEmpty() ){
       this.hey( (success)?'Unexpected success from server':'Unexpected error from server' ) 
       return
     }
@@ -517,13 +549,15 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     }
 
     //panel wait  off
-    this._enablePanel(this._panel.PANELS.CRUD)
+    // this._enablePanel(this._panel.PANELS.CRUD)
 
     // success [1] unsuccessful [2]
-    this._changeMode(this._resultCall[ (success? 1 : 2) ])    
+    // this._changeMode(this._resultCall[ (success? 1 : 2) ])    
+    this._changeMode( success? this._resultCall.modeOk: this._resultCall.modeFail   )
 
     //reset result wait 
-    this._setResultCaller('')
+    // this._setResultCaller('')
+    this._setResultCall.reset()
 
     if (msg > '' ) {this.hey(msg)}
   }
@@ -649,22 +683,17 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       }
     }
     //MAIN-div1-divCrud
-    // if(this._implementedCreate || this._implementedUpdate || this._implementedDelete  ){
       if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
         this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
       //create
-      // if ( this._implementedCreate ) {  
       if ( this._dev.create.isOn ) {  
-
-        this.btNew = this._makeButton(this.divCrud, 'cmd_New', this._dev.create.txtBt,) 
+        this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
       }
       //mod
-      // if ( this._implementedUpdate  ) {  
       if (this._dev.update.isOn) {  
-          this.btModi = this._makeButton(this.divCrud,'cmd_modi', this._dev.update.txtBt,) 
+          this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
       }
       //del
-      // if ( this._implementedDelete ) {
       if ( this._dev.delete.isOn ) {
           this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
       }
@@ -677,7 +706,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       }
     }
     //main-div1-divOkCancel
-    // if( this._implementedCreate || this._implementedUpdate){    
     if( this._dev.create.isOn || this._dev.update.isOn){    
       this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
       this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
@@ -687,24 +715,23 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
     this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
     //main-div2-divNav
-    // if(this._implementedNav){
     if(this._dev.nav.isOn){
         this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
       //main-div2-divNav-movFirst
       if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<< ', 'Move First') 
+        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
       }
       //main-div2-divNav-movPrev
       if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', ' < ','Move previous' )  
+        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
       }
       //main-div2-divNav-movNext
       if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', ' > ', 'Move next' )  
+        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
       }
       //main-div2-divNav-movLast
       if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  ' >> ', 'Move Last')   
+        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
       }
     }
     //main-div2-divMsg
@@ -730,20 +757,21 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
 
     //  need something else, something prettier
-    this.svgThing.innerHTML = this._svg.svgCloud 
+    this.svgThing.innerHTML = this._svg.cloud 
 
     this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
 
   }
+
   _divMain_onclik(event){
     const classBtCrud = this._classes.button_crud 
 
     let target = event.target.closest('button')
     if (!target) return
     if (!target.classList.contains(classBtCrud)) return 
-    if (target.disabled) return
+    if (target.disabled) return   // to test!!! , I bet global onclick doesnt care about disabled
 
-    let fun = onReturn(target,        
+    let fun = onReturn(target,        // a just switch-case-break-return replacer
  
       // I wont use an insanely long function!!!  (longer with switch-case)
       // JS should HIDE _bt() funtions, not me!!! The many _bt() stay.
@@ -767,7 +795,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       fun()
       return
     } else {
-      wtf("int err: not found button " + target)
+      wtf("int err: not found button " + target)  // test this -string?--------------------------------------
       return
     }
   }
@@ -787,18 +815,23 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     bt.type = 'button' 
     bt.disabled = false 
     bt.className = 'button_crud'
-    // bt.onclick = onclick  //  testing DELEGATION   --------------------------------------------
+    // bt.onclick = onclick  //  testing DELEGATION   ----------------------
     bt.title = title
-    bt.textContent = text
-
+    // bt.textContent = text
+    bt.innerHTML = text
     context.appendChild(bt) 
     return bt
   }
 })
-//** ******************************************************************************************************************** */
-// Li-brary
+
+
+
+//** Modu-lito ******yeah, I should modulize **************************************************************** */
+// Li-brary   
 // can I do this, here? are they global now?    Update: No. They are not.   Update: YES THEY CAN BE, YOU CANT FORCE TO BE A MODULE!
-function isObj(what){return typeof what == 'object'   }   // NEVER the f. parameters inside ' ' !!! Hate you js.  
+
+// Because I hate quoted parameters.
+function isObj(what){return typeof what == 'object'   }    
 function isFun(what){return typeof what == 'function' }
 
 // I hate switch case too.
@@ -809,9 +842,14 @@ function onReturn(que, ...casePair){           // stolen from Wang2200 Basic,  e
   } 
   return null
 } 
-function wtf(what){   // breakpoint
+
+// well?
+function wtf(whatNow){   // breakpoint    wtf(msg user, msg dev, err  
   if (_DESPIOJANDO) {
-    console.log(what)
+    console.log(whatNow)
+
+
+
   }
-  throw new Error(what) 
+  throw new Error(whatNow) 
 }

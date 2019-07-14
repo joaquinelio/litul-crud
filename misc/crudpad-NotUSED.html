@@ -1,0 +1,84 @@
+
+<!--  
+
+  not in use  
+  test, 
+  is it better replacement of 
+    lots of dom.addelements() in _letsMakeCrudpadHTML() ? 
+
+  static inside node maybe 
+
+  --------------------------------------------
+
+  I dont see any advantage!!!
+  
+  I have to map every single control anyway
+  and make custom / enviroment dependable elements
+
+  frameworks can give some help 
+  with the bonding and the changing stuff, but still... 
+
+  ------------------
+
+  + layout is more clear here
+  - half lines: 100 js, 50 htm... BUT I still need the bonding
+  
+  I create dom + objects same place,
+  here I will need getHTMLElementById(),
+
+-->
+
+<form id="div_main">  <!-- I should hide/disable all elements  -->
+
+    <!--panel crud    (2 rows)-->
+    <div id="div_1">
+        <div id="div_search">
+          <button id="cmd_search">Buscar</button>
+          <input id="inp_search">
+        </div>
+        <div id="div_crud">
+          <button id="cmd_new">Alta</button>
+          <button id="cmd_mod">Modificar</button>
+          <button id="cmd_del">Borrar</button>
+        </div>
+        <div id="div_custom">
+          <!-- custom buttons via js-->
+        </div>
+        <div id="div_okcancel">
+          <button id="cmd_ok">Ok</button>
+          <button id="cmd_cancel">Cancela</button>
+        </div>
+    </div>
+    <div id="div_2">
+        <div id="div_nav">
+            <button id="cmd_movfrst">&lt;&lt;</button>
+            <button id="cmd_movprev">&lt;</button>
+            <button id="cmd_movnext">&gt;</button>
+            <button id="cmd_movlast">&gt;&gt;</button>            
+        </div>
+        <div id="div_msg">
+          <p id="p_msg"></p>
+        </div>
+        <div id="div_exit">
+          <button id="cmd_exit">Salir</button>
+        </div>
+    </div>
+
+    <!--panel confirm-->
+    <div id="div_confirm">
+        <p id="p_confirmmsg"></p>
+        <button id="cmd_yes">Si</button>
+        <button id="cmd_no">No</button>
+    </div>
+
+    <!--panel waiting-->
+    <div id="div_waiting">
+        <svg height="100%" >
+            <ellipse fill="#aa55aa" cx="161" cy="72" rx="99" ry="36"/>
+            <ellipse fill="#bb55bb" cx="183" cy="55" rx="70" ry="40"/>
+            <ellipse fill="#bb55bb" cx="122" cy="61" rx="54" ry="30"/>
+        </svg>          
+        <button id="cmd_bored">Me cans&eacute;</button>
+    </div>
+
+</form>

@@ -1,7 +1,43 @@
 
-*** ----- ***
-*** Diary ***   
-*** ----- ***
+*** ----------- ***
+*** Dear Diary: ***   
+*** ----------- ***
+
+
+
+190712
+Tired of node, so came here to play with svg.
+Some fixes too.
+Still hate js. More.
+
+
+
+190629
+wow
+I was ashamed I couldnt use promises properly
+But I invented it.  _resultCall, setResultCaller( msg, modeOk, modeFail)
+they set the wait for specific user response like a promise
+I cant use promise because there are no functions with callback, if I implement it
+it would be the other side of the promise plus it would lead to duplicated code, it doesnt fit well.
+But still... Hard time trying to use the concepts, they keep escaping me.  They seem always elusive.
+IndexedDB for example... 
+People did hard work making the wraper to promises, google & mozzile put their examples with that wraper,
+but I chose to ignore it 'cause I felt so comfortable doing the entire crud database with plain callbacks. 
+...
+I wanted to jump to node
+But I am still programming the old way.  
+CRUDPAD, a 3 months project for what I thought a week, I assaulted it the old way.
+Didnt use my own classes and events. Hardly some objects.
+freecodecamp didnt help after 400+ challenges, most exercises were old fashion algoritms, 
+not a word about asyncs way until frameworks training, frameworks you DONT need.
+(really good un htm & css, plus the projects and the community, plus the big source of articles you can feed from)
+It'll be long, but I'll take javascript.info seriously, not just as a reference.
+AND
+If my brain lets me.  
+Some easy free cloud db as test app... it would be a good seller. No need of my beloved sql.
+Start studing node same time to do REAL work like this petty project.
+Sorry pad pal, didnt mean it.  Im pretty proud of you.  You just need a few touches and youll be ready for the REAL fight.   
+
 
 
 190628
@@ -17,7 +53,8 @@ I know nothing about node separation client-server,  how to tell where the rende
 wtf, without web, why, where were wifi, where the wickery went wandering I wonder. 
 ...
 backed up in phone.
-what a surprise, db dont open.  Chrome, firefox, opera. They all show the form and the delousing svg monkey.
+what a surprise, db dont open.  Chrome useless. Firefox, Opera, 
+they both show the form and the delousing svg monkey. 
 Node!!!!  then db cloud
 
 
