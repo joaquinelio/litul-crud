@@ -24,6 +24,12 @@ To do, to test & to fix
 - confirm() still needs the 2 handlers implemented yes and no, altought it can be empty ()=>{}
 
 ** js: ** Improvement               Nice, but no extra learning with these...
+- permissions. To let certain buttons stay disabled. Can do: 
+      Nothing, Read only not write, create only not read, create but not delete, etc... 
+  any comb!!! so it has to be a method that set individual permissions for C R U D, no so hard.
+     setPermissions(create, read, update, delete) true/false param
+  Can fire in any moment.  Changemode has to consider same mode diferent permissions. 
+  Could add button enabled/disabled/prohibited
 - addCustomInput() 
   like custom button.  useful for, example, range searchs. I can even replace customButton with
   addCustomElement() 
@@ -47,7 +53,10 @@ To do, to test & to fix
     plus TAB navigation inside, buttons & inputs.
 - add Confirm Ok msg, default "" ?
 - start real versioning
-
+- VIRTUAL crudpad: 
+  Nothing but the class.
+  fire & listen events: to receive clicks, to inform dev elems to enable/disable
+  Advantages:  FREEDOM. real freedom, not shitty like js.
 
 ** js ** Structure  Improvement
 -PANEL!!!! finish class.  Works well without, but I wanna fix it.
@@ -56,7 +65,6 @@ To do, to test & to fix
   Would be big. Works well without, 
   if i understand it can be better code:
   fewer functions (can be good or not), lesser blind guess behaviour.
-
 
 ** css: **
 - everything, flex arrangement the first!
@@ -154,4 +162,6 @@ Done.
 - Button custom names: 
     added a bunch of setText_  to do translat/custom msg
     not troughly tested
-- enabled innerHtml of internal elements.  No so dangerous, you know what you are doing, dev. 
+- enabled innerHtml of internal elements. 
+- map instead of for...  dont have any array to map.  I do loop in buttons objects.
+

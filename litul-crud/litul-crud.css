@@ -48,7 +48,7 @@
   width: 100%;
 
   /* L&F */
-  background-color: blueviolet;           /*  UGLY4  DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/ 
+  /* background-color: blueviolet;            UGLY4  DEBUG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  */
 } 
 
 .div_search,  .div_crud, .div_custom, .div_okcancel, .div_waiting {
@@ -105,8 +105,19 @@
   width: 100%;
   margin: auto;
   flex: auto;
+  
+  transition: 1s;
+  transition-property: color;
+  color: black;
+  background-color: white;  
 }
 
+.msg_flash {
+  transition: 1s;
+  transition-property: color;
+  color: white;
+  background-color: black;  
+}
 
 .div_main button {          /* ALL buttons, non L&F attr ONLY */
 /*  display:flex;          no aplicable, I think*/
@@ -153,7 +164,7 @@
   align-content: stretch;
   justify-content: center;
 }
-.div_msg p::after {/*careful*/
+.div_msg p::after { 
   opacity: 0;
   transition: all 0.8s;
 }

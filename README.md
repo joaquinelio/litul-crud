@@ -15,7 +15,7 @@ Thanks javascript.info   That site is great, it helped a lot.
 
 
 Started on
-April 9, 1719       -- taking longer than I expected --
+April 9, 1419       -- taking longer than I expected --
 
 By
 Joaquin Elio 'Lito' Fernandez, Elio de Buenos Aires...
@@ -74,7 +74,7 @@ Example for CREATE:
 
 NO onclick listening, no taking care of buttons status.
 
-Dev has to manage the DOM and DB callbacks then inform to crudpad its result.
+Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 
     db.requestsomething()
     db.onsuccess = (){ crudpad.cbResult(true) }

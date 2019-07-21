@@ -1,10 +1,12 @@
 ﻿
-/* Lituls
-    litul-crudpad  HTMLelement  
+  /* Lituls
+      litul-crudpad  HTMLelement  
 
-    by
-    Joaquin Elio "Lito" Fernandez,  Elio de Buenos Aires...
-*/
+      started on april 1419           before Cristoforo Colombo
+
+      by
+      Joaquin Elio "Lito" Fernandez,  Elio de Buenos Aires...
+  */
 
 "use strict"   //  strict? STRICT???  Kidding me.
 
@@ -17,31 +19,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     super()  
 
     this.crudButtons = {}      // internal, exposed for easy apeareance tuning. Dev, DONT change behaviour (onclick, enable)
-    this.customButtons = {}    // custom, created by .createCustomButton.  Everything else is on you, Dev.   
+    this.customButtons = {}    // custom, created by .setCustomButton.  Everything else is on you, Dev.   
 
     this._mode = 0             // 0=invalid on purpose.  Dont '.IDLE' here so it SETS things to idle on first run   
     
-    // cbResult() related:                              
-    this._resultCall = {                // ONLY ONE object of this kind, only ONE operation expected to complete.  
-      msgCaller:'',  
-      modeOk: null, 
-      modeFail:null,
-    }     
-    this._setResultCall = {           //carajo  I couldnt make a class. next time.
-      isEmpty: ()=>(this._resultCall.msgCaller === '') ,
-      set: (msg, modeOk = null, modeFail= null)=>{ 
-        if(! this._resultCall.msgCaller === '') {wtf(`int err:_resulCall ${msg} already set ${this.msgCaller}`); return }
-        this._resultCall.msgCaller = msg, this._resultCall.modeOk = modeOk, this._resultCall.modeFail = modeFail 
-        this._enablePanel(this._panel.PANELS.WAITING)
-      },
-      reset : ()=>{
-        if(this._resultCall.msgCaller === '') {wtf('int err:_resulCall already empty')}
-        this._resultCall.msgCaller = '', this._resultCall.modeOk = null, this._resultCall.modeFail = null
-        this._enablePanel(this._panel.PANELS.CRUD)
-      },
-    }
- 
-
     // dev's set stuff.  Just a var repository. These obj match dom obj. Should I extend shadow dom, add props there? NO WAY.  Only if I had my own dom.
     //
     this._dev = {
@@ -53,13 +34,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         isOn : false,
         funForm : null,
         funDb:  null,
-        // txtBt : 'New',
         txtConfirm : '',
       },
       read:{
         isOn : false,
         inputBoxOn : false,
-        // txtBt : 'Search',
         funRead : null,
       },
       update: {
@@ -72,7 +51,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       delete:{
         isOn : false,
         funDb : null,
-        // txtBt: 'Delete',
         txtConfirm : 'Delete record?' 
       },
       nav:{
@@ -81,35 +59,25 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         funMvPrev : null,
         funMvNext : null,
         funMvLast : null,
-        txtBtFrst : '<<',
-        txtBtPrev : '<',
-        txtBtNext : '>',
-        txtBtLast : '>>',
       },
       exit:{
         isOn : false,
-        // txtBt : 'Exit',
         txtConfirm : 'Exit?',
         funExit : null,
       },
       crudOkCancel:{
-        // txtBtOk : 'ok',
-        // txtBtCancel : 'cancel',
         txtConfirmCancel : 'Cancel edition?',
         txtMsgCancelDone : 'Canceled',
       },
       confirm:{ 
-        // txtBtYes : 'yes',
-        // txtBtNo : 'no',
         funYes : null,
         funNo : null,
       },
       bored:{
-        // txtButton : "I'm tired",
         txtConfirm : "Stop the wait? It won't stop the request.",
         dbTimeout : 1000,
+        timer : null,
       }, 
-
     }
 
     // panels:   3 panels. Restore means recover last panel.
@@ -125,6 +93,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this._classes = {
       button_crud : 'button_crud',
       deactived_panel : 'deactived-panel',
+      msg_flash : 'msg_flash',
     }
 
     // dibujitos  // not a good place to put'em. 
@@ -136,14 +105,36 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         '<ellipse fill="#bb55bb" cx="183" cy="55" rx="70" ry="40"/>'+
         '<ellipse fill="#bb55bb" cx="122" cy="61" rx="54" ry="30"/>'+
         '</svg>',
+
     }
+
+    // only one in the project.    Sets the wait for cbResult(), changes panels /crud/wait/
+    this._resultCaller = {        
+      caller : '',     // anything, msg for debug/ usrmsg/   
+      modeOk : null, 
+      modeFail : null,
+      t: this,        // this, this is crazy.
+      isEmpty(){
+        return this.caller === ''
+      },
+      set(mcaller, mOk = null, mFail= null) { 
+        if( !this.caller === '') {wtf(`int err:_resulCall ${this.caller} already set ${mcaller}`); return null }
+        this.caller = mcaller; this.modeOk = mOk; this.modeFail = mFail 
+        this.t._enablePanel(this.t._panel.PANELS.WAITING)  
+      },
+      reset(){
+        if(this.caller === '') {wtf('int err:_resulCall already empty')}
+        this.caller = ''; this.modeOk = null; this.modeFail = null
+        this.t._enablePanel(this.t._panel.PANELS.CRUD)
+      }
+    } 
  
-    this._letsMakeCrudpadHTML()  // template? sepated html file?
+    this._letsDoHTML_gen()  // template? separated html file?
 
   } // end constructor
 
 
-  get mode(){              // Current mode.    readonly for dev. shouldn't need it.
+  get mode(){              // Current mode.    readonly for dev. 
     return this._mode
   }
   get MODE_LIST() {return {
@@ -158,89 +149,61 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     if (Number(milisecTimeout) > 0)   this._dev.bored.dbTimeout = milisecTimeout
   }
 
-
-
-
-  /*  ---------- txt traslation svg,icon ------------------  */
-  setText_OkCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
-    // this._dev.crudOkCancel.txtBtOk = txtBtOk
-    // this._dev.crudOkCancel.txtBtCancel = txtBtCancel
+  /*  ---------- txt translation ------------------  */
+  setText_okCancel(txtBtOk = 'Ok', txtBtCancel = 'Cancel', txtConfirmCancel = 'Cancel edit?', txtMsgCanceled = 'Canceled'){
     this.btOk.textContent = txtBtOk
     this.btCancel.textContent = txtBtCancel
     this._dev.crudOkCancel.txtConfirmCancel = txtConfirmCancel
     this._dev.crudOkCancel.txtMsgCancelDone = txtMsgCanceled
   }
-  setText_crudpad(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete', txtConfirmDelete = 'Delete record?'){
-    // this._dev.create.txtBt = txtBtCreate
-    this.btNew.textContent = txtBtCreate
-    this.btSearch.textContent = txtBtRead
-    this.btModi.textContent = txtBtUpdate
-    this.btDel.textContent = txtBtDelete
-    // //this._dev.create.txtConfirm = 
-    // this._dev.read.txtBt = txtBtRead
-    // this._dev.update.txtBt = txtBtUpdate
-    // // this._dev.update.txtConfirm = 
-    // this._dev.delete.txtBt = txtBtDelete
+  setText_crud(txtBtCreate = 'New', txtBtRead = 'Search', txtBtUpdate = 'Modify', txtBtDelete = 'Delete', txtConfirmDelete = 'Delete record?'){
+    this.btCreate.textContent = txtBtCreate
+    this.btRead.textContent = txtBtRead
+    this.btUpdate.textContent = txtBtUpdate
+    this.btDelete.textContent = txtBtDelete
     this._dev.delete.txtConfirm = txtConfirmDelete
   }
   setText_bored(txtBoredButton = "I'm bored", txtBoredConfirm = "Stop the waiting? It won't stop the request."){
-    // this._dev.bored.txtButton = txtBoredButton
     this.btTired.textContent = txtBoredButton
     this._dev.bored.txtConfirm = txtBoredConfirm
   }
   setText_confirm(txtBtYes = 'Yes', txtBtNo = 'no'){
-    // this._dev.confirm.txtBtYes = txtBtYes
-    // this._dev.confirm.txtBtNo = txtBtNo
     this.btConfirmNo.textContent = txtBtNo
     this.btConfirmYes.textContent = txtBtYes
   }
   setText_exit(txtBtExit = "Exit", txtConfirmExit = "Confirm exit?"){
     this._dev.exit.txtConfirm = txtConfirmExit
-    // this._dev.exit.txtBt = txtBtExit 
     this.btExit.textContent = txtBtExit
   }
   setText_nav(txtBtFrst = '<<', txtBtPrev = '<', txtBtNext = '>', txtBtLast = '>>'){
-    // this._dev.nav.txtBtFrst = txtBtFrst
-    // this._dev.nav.txtBtPrev = txtBtPrev
-    // this._dev.nav.txtBtNext = txtBtNext
-    // this._dev.nav.txtBtLast = txtBtLast
     this.btMoveFirst.textContent = txtBtFrst
-    this.btMovePrev.textContent = txtBtPrev
-    this.btMoveNext.textContent = txtBtNext
-    this.btMoveLast.textContent = txtBtLast
+    this.btMovePrev.textContent  = txtBtPrev
+    this.btMoveNext.textContent  = txtBtNext
+    this.btMoveLast.textContent  = txtBtLast
   }
    
-  
-
 
   //  crudpad *onclick* functions  hidden from Dev  (SHOULD be hidden.  js...)
   //  they fire dev stuff, set the wait for result(), response to user interaction, change mode, en/disable buttons according that result()   
   //
   
-  _btSearch(){
-    this._setResultCall.set('search', this.MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)? no. if it fails, nothing. User decides, not Dev's.
-    this._dev.read.funRead(this.inpSearch.value)  // input param if any
-  }
-  
-  _btNew(){
-    this._setResultCall.set('frmNew', this.MODE_LIST.CREATE, this.MODE_LIST.IDLE )     
-    //this._funcCreate_FormEditNew()
+  _btCreate(){
+    this._resultCaller.set('frmNew', this.MODE_LIST.CREATE, this.MODE_LIST.IDLE )     
     this._dev.create.funFrm()
   }
-
-  _btModi(){
-    this._setResultCall.set('frmMod', this.MODE_LIST.MODIFY, this.MODE_LIST.IDLE )  
-    //this._funcUpdate_FormEditModify()
+  _btRead(){
+    this._resultCaller.set('search', this.MODE_LIST.SHOW,)   //  ,MODE_LIST.IDLE)? no. if it fails, nothing. User decides, not Dev's.
+    this._dev.read.funRead(this.inpRead.value)  // input param if any
+  }  
+  _btUpdate(){
+    this._resultCaller.set('frmMod', this.MODE_LIST.MODIFY, this.MODE_LIST.IDLE )  
     this._dev.update.funFrm()
-  }
-  
-  _btDel(){
+  }  
+  _btDelete(){
     this.softConfirm(
-      // this._txtConfirmDelete,
       this._dev.delete.txtConfirm,
       ()=>{
-        this._setResultCall.set('dbDelete', this.MODE_LIST.IDLE,)   // if err keep showing 
-        // this._funcDelete_DbDelete()
+        this._resultCaller.set('dbDelete', this.MODE_LIST.IDLE,)   // if err keeps showing 
         this._dev.delete.funDb()
       },
       ()=>{}       // no, stays the same
@@ -250,11 +213,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   _btOk(){
     if(this.mode == this.MODE_LIST.CREATE){
         this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes
-        this._setResultCall.set('dbInsert', this.MODE_LIST.SHOW, this.MODE_LIST.CREATE)  
+        this._resultCaller.set('dbInsert', this.MODE_LIST.SHOW, this.MODE_LIST.CREATE)  
         this._dev.create.funDb()
     } else if(this.mode == this.MODE_LIST.MODIFY) {
         this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes 
-        this._setResultCall.set('dbUpdate', this.MODE_LIST.SHOW, this.MODE_LIST.MODIFY)  
+        this._resultCaller.set('dbUpdate', this.MODE_LIST.SHOW, this.MODE_LIST.MODIFY)  
         this._dev.update.funDb()
     } else {
         this.hey ('int err: okbutton is neither create nor modify')
@@ -262,11 +225,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   _btCancel(){
     this.softConfirm(
-      // this._txtConfirmCancel,
       this._dev.crudOkCancel.txtConfirmCancel,
       ()=>{ 
-        // this.hey(this._txtCancelDone)
-        // this._funcEraseForm()
         this.hey(this._dev.crudOkCancel.txtMsgCancelDone)
         this._dev.control.funFrmErase()
         this._changeMode(this.MODE_LIST.IDLE)
@@ -276,19 +236,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
   _btMoveFirst(){
-    this._setResultCall.set('mvFrst', this.MODE_LIST.SHOW)
+    this._resultCaller.set('mvFrst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvFrst()
   }
   _btMovePrev(){
-    this._setResultCall.set('mvPrev', this.MODE_LIST.SHOW)
+    this._resultCaller.set('mvPrev', this.MODE_LIST.SHOW)
     this._dev.nav.funMvPrev()
   }
   _btMoveNext(){
-    this._setResultCall.set('mvNxt', this.MODE_LIST.SHOW)
+    this._resultCaller.set('mvNxt', this.MODE_LIST.SHOW)
     this._dev.nav.funMvNext()
   }  
   _btMoveLast(){
-    this._setResultCall.set('mvLst', this.MODE_LIST.SHOW)
+    this._resultCaller.set('mvLst', this.MODE_LIST.SHOW)
     this._dev.nav.funMvLast()
   }
   
@@ -301,19 +261,16 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
   _btTired(){
-    // this.softConfirm("Stop the waiting? It won't stop the request.", 
     this.softConfirm(
       this._dev.bored.txtConfirm,
-      ()=>{                           //confirm yes ()
-        let lastcall = this._resultCall.msgCaller
+      ()=>{ 
+        let lastcall = this._resultCaller.caller
 
         // reset crudpad to idle
         this._changeMode(this.MODE_LIST.IDLE)
 
-        // stop any result wait 
-        //this._setResultCaller('')  
-        // this._resultCall.reset()
-        this._setResultCall.reset()
+        // stop any result waiting 
+        this._resultCaller.reset()
         this.hey('Wait from '+ lastcall + ' aborted.')
 
         //set panel crud
@@ -321,9 +278,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
         // any other thing I should worry? 
         // ??
-
       },
-      ()=>{}                           //confirm no () // go back  // thats it  // nothing to do  
+      ()=>{}   // nothing to do  
     )
   }
 
@@ -340,7 +296,9 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       panelTo = panelParam                                //    go to = panel parameter
     }
 
-    if (panelTo === this._panel.current)   return         // nothing to do
+    if (panelTo === this._panel.current)   return          
+
+    clearTimeout(this._dev.bored.timer)                   
 
     switch(this._panel.current){              // --------- fix: targeted disable, less jumpy --------- 
     case this._panel.PANELS.NONE:                                   // first time disable all
@@ -376,7 +334,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       case this._panel.PANELS.WAITING:{            // extra code for bored button 
         this.btTired.disabled = true
         this.divWaiting.classList.remove(inactive)
-        setTimeout(() => {this.btTired.disabled = false}, this._dev.bored.dbTimeout)
+        this._dev.bored.timer = setTimeout(() => {this.btTired.disabled = false}, this._dev.bored.dbTimeout)
         break
       }
       default: {
@@ -443,19 +401,22 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   hey(what){
     this.pMsg.textContent = what
     this.pMsg.title = what
+    this.pMsg.classList.add(this._classes.msg_flash )
+    setTimeout(() => {
+      this.pMsg.classList.remove(this._classes.msg_flash )      
+    }, 1000);
   }
   
-  // fires crudpad.  Use it when all settings are done.
+  // fires crudpad.  Dev uses it when all settings are done.
   start(){
-    // this._letsMakeCrudpadHTML()
-    this._letsDoCrud()
+    this._letsDoHTML_enable()
     this._changeMode(this.MODE_LIST.IDLE)
     this._enablePanel(this._panel.PANELS.CRUD)
   }
 
   // *** implement behaviour ***
   //set control, mandatory.  
-  setFormControl(funcEraseFormContent, funcBlockForm, ){ // textOkButton = 'Ok', textCancelButton = 'Cancel', ){
+  setFormControl(funcEraseFormContent, funcBlockForm, ){ 
     this._dev.control.funFrmErase = funcEraseFormContent
     this._dev.control.funFrmBlockAll = funcBlockForm
   }
@@ -465,28 +426,24 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // if ! func throw err...   ??
     this._dev.create.funFrm = funcFormEditNew
     this._dev.create.funDb = funcDbInsert
-    // this._dev.create.txtBt = textButton
-    this.btNew.textContent = textButton
+    this.btCreate.textContent = textButton
     this._dev.create.isOn = true
   }
   setUpdate(funcFormEditModify, funcDbUpdate, textButton = 'Modify',){
     this._dev.update.funFrm = funcFormEditModify
     this._dev.update.funDb = funcDbUpdate
-    // this._dev.update.txtBt = textButton
-    this.btModi.textContent = textButton
+    this.btUpdate.textContent = textButton
     this._dev.update.isOn = true
   }
   setDelete(funcDbDelete, textButton = 'Delete', textConfirm = 'Delete Record?' ){
     this._dev.delete.funDb = funcDbDelete
-    // this._dev.delete.txtBt = textButton
-    this.btDel.textContent = textButton
+    this.btDelete.textContent = textButton
     this._dev.delete.txtConfirm = textConfirm 
     this._dev.delete.isOn = true
   }
   setRead(funcSearchAndShow, boolShowInputBox, textButton = 'Search', ){   // , inputBox default?  ,txtHint?)
     this._dev.read.funRead = funcSearchAndShow
-    // this._dev.read.txtBt = textButton
-    this.btSearch.textContent = textButton
+    this.btRead.textContent = textButton
     this._dev.read.inputBoxOn = boolShowInputBox
     this._dev.read.isOn =true
   }
@@ -499,7 +456,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   setExit(funcExit, textButton = 'Exit', textConfirmExit = 'Exit?'){
     this._dev.exit.funExit = funcExit
-    // this._dev.exit.txtBt = textButton
     this.btExit.textContent = textButton
     this._dev.exit.txtConfirm = textConfirmExit
     this._dev.exit.isOn = true
@@ -510,8 +466,6 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
     bt.name = name 
     bt.className = className 
-    //bt.value = value 
-    // bt.innerHTML = text     // CAREFUL NOW.  But can add icons
     bt.textContent = text
     bt.id = name 
     bt.title = title
@@ -524,40 +478,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     return bt 
   }
 
-  // setWait or setWaitForResult, should rename to.
-  // set/resets waiting,  displays waiting panel,   
-  // _setResultCaller(caller, modeOk = null, modeFail = null ){        
-  //   // caller, just a name to show, or check for empty. 
-  //   // the 3 params stored in _resultCall[] for cbResult() to use. 
-
-  //   // //check
-  //   // let tCaller = this._resultCall.msgCaller
-  //   // if (caller != '' && tCaller != ''  ) {    // want to set but is already set
-  //   //   this.hey('Int err: Unexpected req *' + caller + '* Already waiting result from *' + tCaller + '*' )
-  //   //   return
-  //   // }
-  //   // if (caller == '' && tCaller == ''  ) {    // want to reset but is already reset
-  //   //   this.hey('Int err: No result to reset' )
-  //   //   return
-  //   // }
-
-  //   // //reset
-  //   // if (caller=='') {
-  //   //   this._resultCall.reset()
-  //   //   return
-  //   // }
-
-  //   //set
-  //   this._resultCall.set(caller, modeSuccess, modeFail)
-  //   this._resultCall.set(caller, modeOk, modeFail)
-  //   this._enablePanel(this._panel.PANELS.WAITING)
-  // }
-
-  // triggered by dev  
-  // Change the crudpad status from waiting to some mode.  Results from db operations  true/false (ok/err)
+  // triggered by dev,  mandatory on every handler.  Result from db cb operation.
+  // Change the crudpad status from 'waiting' to some mode.   
   cbResult(success, msg =''){    // success = true/false    msg = optional text msg.
     //check
-    if (this._setResultCall.isEmpty() ){
+    if (this._resultCaller.isEmpty() ){
       this.hey( (success)?'Unexpected success from server':'Unexpected error from server' ) 
       return
     }
@@ -574,11 +499,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
     // success [1] unsuccessful [2]
     // this._changeMode(this._resultCall[ (success? 1 : 2) ])    
-    this._changeMode( success? this._resultCall.modeOk: this._resultCall.modeFail   )
+    this._changeMode( success? this._resultCaller.modeOk: this._resultCaller.modeFail)
 
     //reset result wait 
     // this._setResultCaller('')
-    this._setResultCall.reset()
+    this._resultCaller.reset()
 
     if (msg > '' ) {this.hey(msg)}
   }
@@ -588,7 +513,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   _changeMode(newMode){      // *** enable/disable buttons and div depending on MODE ***
 
     // buttons use disabled attr, divs use css class
-    // Tests are masks of bynary flags. Dont be tempted to put "||" (logical OR) instead of bynary sum, it WILL fail.
+
+    // DON'T "FIX":
+    //    Tests are masks of bynary flags.  Trying "||" (logical OR) would fail.
+    //    Why tstActive?  Checks if at least one.  If none, div CAN hide (dep on media, css to-do )  
 
     //check
     const oldMode = this._mode
@@ -597,30 +525,24 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
     this._mode = newMode 
 
-    // for easy             // logical ADD and AND.   dont try to fix doing OR ||
-    const stEditing =  
-        this._mode & (this.MODE_LIST.CREATE + this.MODE_LIST.MODIFY) 
-    const stNoEditing = 
-        this._mode & (this.MODE_LIST.IDLE + this.MODE_LIST.SHOW) 
-    const stShowing = 
-        this._mode & this.MODE_LIST.SHOW 
+    // for easy         // logical AND, ( & )   
+    const stEditing =   this._mode & this.MODE_LIST.EDIT    // mode new + mod
+    const stNoEditing = this._mode & this.MODE_LIST.NOEDIT  //      show + iddle
+    const stShowing =   this._mode & this.MODE_LIST.SHOW 
 
-    //check buttons/divs to enable depending on mode
-    //tstActive check if at least one.  If none, div disabled. (useful to hide div in small screens... css to do )  
-    //
     //div search
     {let tstActive = 0 
-        tstActive = 
-            this._enableElement(this.btSearch, stNoEditing) +
-            this._enableElement(this.inpSearch, stNoEditing) 
-        this._enableDiv(this.divSearch, tstActive > 0)  
+      tstActive = 
+        this._enableElement(this.btRead, stNoEditing) +
+        this._enableElement(this.inpRead, stNoEditing) 
+      this._enableDiv(this.divSearch, tstActive > 0)  
     }
     //div crud
     {let tstActive = 0 
         tstActive = 
-            this._enableElement(this.btNew, stNoEditing) +
-            this._enableElement(this.btModi, stShowing) +
-            this._enableElement(this.btDel, stShowing) 
+            this._enableElement(this.btCreate, stNoEditing) +
+            this._enableElement(this.btUpdate, stShowing) +
+            this._enableElement(this.btDelete, stShowing) 
         this._enableDiv(this.divCrud, tstActive > 0) 
     }
     //div okcancel
@@ -630,40 +552,42 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
             this._enableElement(this.btCancel, stEditing) 
         this._enableDiv(this.divOkCancel, tstActive > 0)    // > 0 no haria falta
     }
-    //div custom
-    {let tstActive = 0 
-          for (let bo in this.customButtons){
-            tstActive +=  this._enableElement(this.customButtons[bo],  Number( this.customButtons[bo].dataset.modes ) & this.mode ) 
-                // tstActive +=1 //debug
-           }
-          this._enableDiv(this.divCustom, tstActive > 0) 
+    // div custom 
+    {let tstActive = 0                         //  pfffffff  for()  was easier.   Can I .reduce instead of tstActive+= ?  
+      Object.keys(this.customButtons).map( (k)=>{
+        tstActive += this._enableElement(
+          this.customButtons[k],
+          Number( this.customButtons[k].dataset.modes ) & this.mode 
+        )
+      }) 
+      this._enableDiv(this.divCustom, tstActive > 0) 
     }
+
     //div nav
     {let tstActive = 0
-        tstActive =
-          this._enableElement(this.btMoveFirst, stNoEditing) +
-          this._enableElement(this.btMovePrev, stNoEditing) +
-          this._enableElement(this.btMoveNext, stNoEditing) +
-          this._enableElement(this.btMoveLast, stNoEditing)   // no sense here, but still... 
-        this._enableDiv(this.divNav, tstActive > 0)         
+      tstActive =
+        this._enableElement(this.btMoveFirst, stNoEditing) +
+        this._enableElement(this.btMovePrev,  stNoEditing) +
+        this._enableElement(this.btMoveNext,  stNoEditing) +
+        this._enableElement(this.btMoveLast,  stNoEditing)
+      this._enableDiv(this.divNav, tstActive > 0)         
     }
+
     //div exit
     this._enableElement(this.btExit, stNoEditing)  
 
-    //user form
+    //user form control
     if (stNoEditing)  this._dev.control.funFrmBlockAll()
     if (this._mode == this.MODE_LIST.IDLE )  this._dev.control.funFrmErase()
-
   }
   
   
   _enableElement(element, conditionToEnable){  // buttons and fieldsets,  enable or disable
-    if (isObj(element)){
-      element.disabled = !conditionToEnable
-      return conditionToEnable 
-    }
-    return false 
-  }
+    if (!isObj(element)) return false
+
+    element.disabled = !conditionToEnable
+    return conditionToEnable 
+  } 
 
   _enableDiv(div, yesOrNo){  
     //to do: delegate to css 
@@ -671,7 +595,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //    big:    via visibility so buttons dont jump, 
     //    small:  via display none to save space    in my 5'' it MAKES difference
     
-    if ( !isObj(div) ) return
+    if ( !isObj(div) ) return false
 
     //div.style.display = yesOrNo? 'flex':'none'   
 
@@ -686,104 +610,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
             div.style.visibility = 'hidden'    
         //}
     }
+    return yesOrNo
   }
-
-
-  // _letsMakeCrudpadHTML(){ 
-
-  //   // MAIN- 
-  //   this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
-
-  //   //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
-  //   this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
-  //   // MAIN-div1-divSearch
-  //   if (this._dev.read.isOn){ //this._implementedRead ){  
-  //     this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-  //     this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
-  //     if ( this._dev.read.inputBoxOn ){   // with input text? 
-  //       this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
-  //     }
-  //   }
-  //   //MAIN-div1-divCrud
-  //     if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
-  //       this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
-  //     //create
-  //     if ( this._dev.create.isOn ) {  
-  //       this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
-  //     }
-  //     //mod
-  //     if (this._dev.update.isOn) {  
-  //         this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
-  //     }
-  //     //del
-  //     if ( this._dev.delete.isOn ) {
-  //         this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
-  //     }
-  //   }
-  //   //main-div1-divCustom   
-  //   if( Object.keys(this.customButtons).length > 0 ){
-  //     this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
-  //     for(let bo in this.customButtons){
-  //       this.divCustom.appendChild(this.customButtons[bo])    
-  //     }
-  //   }
-  //   //main-div1-divOkCancel
-  //   if( this._dev.create.isOn || this._dev.update.isOn){    
-  //     this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-  //     this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
-  //     this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
-  //   }
-
-  //   // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
-  //   this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
-  //   //main-div2-divNav
-  //   if(this._dev.nav.isOn){
-  //       this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
-  //     //main-div2-divNav-movFirst
-  //     if (isFun(this._dev.nav.funMvFrst)){
-  //       this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
-  //     }
-  //     //main-div2-divNav-movPrev
-  //     if (isFun(this._dev.nav.funMvPrev)){
-  //       this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
-  //     }
-  //     //main-div2-divNav-movNext
-  //     if (isFun(this._dev.nav.funMvNext)){
-  //       this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
-  //     }
-  //     //main-div2-divNav-movLast
-  //     if (isFun(this._dev.nav.funMvLast)){
-  //       this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
-  //     }
-  //   }
-  //   //main-div2-divMsg
-  //   this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
-  //   this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
-  //   this.pMsg.textContent = ' '   
-
-  //   //main-div2-divExit
-  //   if (this._dev.exit.isOn) {
-  //     this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-  //     this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
-  //   }
-
-  //   //main-divYesNo               ----hides div1 & div2 when showing-----
-  //   this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
-  //   this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
-  //   this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
-  //   this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
- 
-  //   //main-divWaiting        
-  //   this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
-  //   this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
-  //   this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
-
-  //   //  needing something prettier...
-  //   this.svgThing.innerHTML = this._svg.cloud 
-
-  //   this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
-
-  // }
 
   _divMain_onclik(event){
     let target = event.target.closest('button')
@@ -795,24 +623,23 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       // I wont use an insanely long function!!!  (longer with switch-case)
       // JS should HIDE _bt() funtions, not me!!! The many _bt() stay.
 
-      this.btSearch,     ()=>{this._btSearch()},   // ()=>{()=>{}()} !!!???  me cago en el yavascrít
-      this.btNew,        ()=>{this._btNew()},  
-      this.btModi,       ()=>{this._btModi()}, 
-      this.btDel,        ()=>{this._btDel()},
-      this.btOk,         ()=>{this._btOk()}, 
-      this.btCancel,     ()=>{this._btCancel()},
-      this.btMoveFirst,  ()=>{this._btMoveFirst()},
-      this.btMovePrev,   ()=>{this._btMovePrev()},
-      this.btMoveNext,   ()=>{this._btMoveNext()},
-      this.btMoveLast,   ()=>{this._btMoveLast()},
-      this.btExit,       ()=>{this._btExit()},
-      this.btConfirmYes, ()=>{this._btConfirmYes()}, 
-      this.btConfirmNo,  ()=>{this._btConfirmNo()},  
-      this.btTired,      ()=>{this._btTired()},    
+      this.btRead,        ()=>{this._btRead()},   // ()=>{()=>{}()} !!!???  me cago en el yavascrít
+      this.btCreate,      ()=>{this._btCreate()},  
+      this.btUpdate,      ()=>{this._btUpdate()}, 
+      this.btDelete,      ()=>{this._btDelete()},
+      this.btOk,          ()=>{this._btOk()}, 
+      this.btCancel,      ()=>{this._btCancel()},
+      this.btMoveFirst,   ()=>{this._btMoveFirst()},
+      this.btMovePrev,    ()=>{this._btMovePrev()},
+      this.btMoveNext,    ()=>{this._btMoveNext()},
+      this.btMoveLast,    ()=>{this._btMoveLast()},
+      this.btExit,        ()=>{this._btExit()},
+      this.btConfirmYes,  ()=>{this._btConfirmYes()}, 
+      this.btConfirmNo,   ()=>{this._btConfirmNo()},  
+      this.btTired,       ()=>{this._btTired()},    
     ) 
-    if (isFun(fun)){
-      fun()
-    } //else, not one of my buttons
+  
+    ;(isFun(fun))? fun(): 'no fun' // Not my but.
   }
 
   _makeElement(context, elemtype, id, initialClass = '',   ) {    
@@ -833,230 +660,92 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // bt.onclick = onclick  //  testing DELEGATION   ----------------------
     bt.title = title
     bt.textContent = text
-    // bt.innerHTML = text
     context.appendChild(bt) 
     return bt
   }
 
-  _letsMakeCrudpadHTML(){ 
-
+  _letsDoHTML_gen(){
     // MAIN- 
-    this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
+    this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )  
 
-    //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
+    //panel crud  -> div1 div2  
+    //  MAIN-div1  
     this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
     // MAIN-div1-divSearch
-    // if (this._dev.read.isOn){ //this._implementedRead ){  
-      this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-      this.btSearch = this._makeButton(this.divSearch, 'cmd_search', 'Search',) 
-      // if ( this._dev.read.inputBoxOn ){   // with input text? 
-        this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
-      // }
-    // }
+    this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
+    this.btRead = this._makeButton(this.divSearch, 'cmd_read', 'Search',) 
+    this.inpRead = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
     //MAIN-div1-divCrud
-      // if(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn){
-        this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
-      //create
-      // if ( this._dev.create.isOn ) {  
-        this.btNew = this._makeButton(this.divCrud, 'cmd_new', 'New',) 
-      // }
-      //mod
-      // if (this._dev.update.isOn) {  
-          this.btModi = this._makeButton(this.divCrud,'cmd_mod', 'Modify',) 
-      // }
-      //del
-      // if ( this._dev.delete.isOn ) {
-          this.btDel = this._makeButton(this.divCrud, 'cmd_del', 'Delete',) 
-      // }
-    // }
+    this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
+    this.btCreate = this._makeButton(this.divCrud, 'cmd_create', 'New',) 
+    this.btUpdate = this._makeButton(this.divCrud,'cmd_update', 'Modify',) 
+    this.btDelete = this._makeButton(this.divCrud, 'cmd_delete', 'Delete',) 
     //main-div1-divCustom   
-    // if( Object.keys(this.customButtons).length > 0 ){
-    //   this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
-    //   for(let bo in this.customButtons){
-    //     this.divCustom.appendChild(this.customButtons[bo])    
-    //   }
-    // }
     //main-div1-divOkCancel
-    // if( this._dev.create.isOn || this._dev.update.isOn){    
-      this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-      this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  'Ok')  
-      this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', 'Cancel',) 
-    // }
-
-    // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
+    this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
+    this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  'Ok')  
+    this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', 'Cancel',) 
+    // main-div2   
     this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
     //main-div2-divNav
-    // if(this._dev.nav.isOn){
-        this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
-      //main-div2-divNav-movFirst
-      // if (isFun(this._dev.nav.funMvFrst)){
-        this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<<', 'Move First') 
-      // }
-      //main-div2-divNav-movPrev
-      // if (isFun(this._dev.nav.funMvPrev)){
-        this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', '<', 'Move previous' )  
-      // }
-      //main-div2-divNav-movNext
-      // if (isFun(this._dev.nav.funMvNext)){
-        this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', '>', 'Move next' )  
-      // }
-      //main-div2-divNav-movLast
-      // if (isFun(this._dev.nav.funMvLast)){
-        this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast', '>>', 'Move Last')   
-      // }
-    // }
+    this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
+    this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  '<<', 'Move First') 
+    this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', '<', 'Move previous' )  
+    this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', '>', 'Move next' )  
+    this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast', '>>', 'Move Last')   
     //main-div2-divMsg
     this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
     this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
     this.pMsg.textContent = ' '   
-
     //main-div2-divExit
-    // if (this._dev.exit.isOn) {
-      this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-      this.btExit = this._makeButton(this.divExit, 'cmd_exit', 'Exit')   
-    // }
+    this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
+    this.btExit = this._makeButton(this.divExit, 'cmd_exit', 'Exit')   
 
+    //panel confirm
     //main-divYesNo               ----hides div1 & div2 when showing-----
     this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
     this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
     this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', 'Yes', )  
     this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , 'No',  )  
  
+    //panel waiting
     //main-divWaiting        
     this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
     this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
     this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', "I'm Bored", ) 
-
-    //  needing something prettier...
-    this.svgThing.innerHTML = this._svg.cloud 
-
-    // this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
-
+    this.svgThing.innerHTML = this._svg.cloud     // needing something prettier...
   }
 
-  _letsDoCrud(){ 
-
-    // MAIN- 
-    // this.divMain = this._makeElement(this, 'form', 'div_main', 'div_main', )   /// what is -this- 
-
-    //  MAIN-div1  ----------- 1st line:  search, crudbut, usrbut, ok/cancel --------------
-    // this.div1 = this._makeElement(this.divMain, 'div', 'div_1', 'div_1' )
+  _letsDoHTML_enable(){        
     // MAIN-div1-divSearch
-    // if (this._dev.read.isOn){ //this._implementedRead ){ 
-      this._enableDiv( this.divSearch, this._dev.read.isOn)
-      // this.divSearch = this._makeElement(this.div1, 'div', 'div_search', 'div_search')
-      // this.btSearch = this._makeButton(this.divSearch, 'cmd_search', this._dev.read.txtBt,) 
-      // if ( this._dev.read.inputBoxOn ){   // with input text? 
-        // this.inpSearch = this._makeElement(this.divSearch, 'input', 'inp_search' ) 
-      this._enableElement(this.inpSearch,this._dev.read.inputBoxOn )
-        // }
-    // }
+    this._enableDiv( this.divSearch, this._dev.read.isOn)
+    this._enableElement(this.btRead, this._dev.read.isOn ) 
+    this._enableElement(this.inpRead,this._dev.read.inputBoxOn )
     //MAIN-div1-divCrud
     let tst =(this._dev.create.isOn || this._dev.update.isOn || this._dev.delete.isOn)
     this._enableDiv( this.divCrud, tst)
-    // if(tst){
-        // this.divCrud = this._makeElement(this.div1, 'div', 'div_crud', 'div_crud' )
-      //create
-      // if ( this._dev.create.isOn ) {  
-      //   this.btNew = this._makeButton(this.divCrud, 'cmd_new', this._dev.create.txtBt,) 
-        this._enableElement(this.btNew,this._dev.create.isOn )
-      // }
-      //mod
-      // if (this._dev.update.isOn) {  
-      //     this.btModi = this._makeButton(this.divCrud,'cmd_mod', this._dev.update.txtBt,) 
-      // }
-      this._enableElement(this.btModi,this._dev.update.isOn )
-      //del
-      // if ( this._dev.delete.isOn ) {
-      //     this.btDel = this._makeButton(this.divCrud, 'cmd_del', this._dev.delete.txtBt,) 
-      // }
-      this._enableElement(this.btDel,this._dev.delete.isOn )
-
-    // }
-    //main-div1-divCustom   
+    this._enableElement(this.btCreate,this._dev.create.isOn )
+    this._enableElement(this.btUpdate,this._dev.update.isOn )
+    this._enableElement(this.btDelete,this._dev.delete.isOn )
+    //main-div1-divCustom     CREATE dev buttoms  
     if( Object.keys(this.customButtons).length > 0 ){
       this.divCustom = this._makeElement(this.div1, 'div', 'div_custom', 'div_custom')
-      for(let bo in this.customButtons){
-        this.divCustom.appendChild(this.customButtons[bo])    
-      }
+      Object.keys(this.customButtons).map((k)=>this.divCustom.appendChild(this.customButtons[k]))
     }
     //main-div1-divOkCancel
-    // if( 
-    this._enableDiv(this.divOkCancel, (
-      this._dev.create.isOn || this._dev.update.isOn))  //{    
-      // this.divOkCancel = this._makeElement(this.div1, 'div', 'div_okcancel', 'div_okcancel')    
-      // this.btOk = this._makeButton(this.divOkCancel, 'cmd_ok',  this._dev.crudOkCancel.txtBtOk)  
-      // this.btCancel = this._makeButton(this.divOkCancel, 'cmd_cancel', this._dev.crudOkCancel.txtBtCancel,) 
-    // }
-
-    // main-div2     group 2 -------  2d line,  nav, msg, exit ------------
-//    this.div2 = this._makeElement(this.divMain, 'div', 'div_2', 'div_2')
+    this._enableDiv(this.divOkCancel, (this._dev.create.isOn || this._dev.update.isOn)) 
     //main-div2-divNav
     this._enableDiv(this.divNav,this._dev.nav.isOn )
-    // if(this._dev.nav.isOn){
-
-//        this.divNav = this._makeElement(this.div2, 'div', 'div_nav', 'div_nav',)    
-      //main-div2-divNav-movFirst
-      // if (isFun(this._dev.nav.funMvFrst)){
-      //   this.btMoveFirst = this._makeButton(this.divNav, 'cmd_movfrst',  this._dev.nav.txtBtFrst, 'Move First') 
-      // }
-      // //main-div2-divNav-movPrev
-      // if (isFun(this._dev.nav.funMvPrev)){
-      //   this.btMovePrev = this._makeButton(this.divNav, 'cmd_movprev', this._dev.nav.txtBtPrev, 'Move previous' )  
-      // }
-      // //main-div2-divNav-movNext
-      // if (isFun(this._dev.nav.funMvNext)){
-      //   this.btMoveNext = this._makeButton(this.divNav, 'cmd_movnext', this._dev.nav.txtBtNext, 'Move next' )  
-      // }
-      // //main-div2-divNav-movLast
-      // if (isFun(this._dev.nav.funMvLast)){
-      //   this.btMoveLast = this._makeButton(this.divNav, 'cmd_movlast',  this._dev.nav.txtBtLast, 'Move Last')   
-      // }
-      this._enableElement(this.btMoveFirst,(isFun(this._dev.nav.funMvFrst)) )
-      this._enableElement(this.btMovePrev,(isFun(this._dev.nav.funMvPrev)) )
-      this._enableElement(this.btMoveNext,(isFun(this._dev.nav.funMvNext)) )
-      this._enableElement(this.btMoveLast,(isFun(this._dev.nav.funMvLast)) )
-
-
-
-    // }
-    // //main-div2-divMsg
-    // this.divMsg = this._makeElement(this.div2, 'div', 'div_msg', 'div_msg',) 
-    // this.pMsg = this._makeElement(this.divMsg, 'p', 'p_msg')  
-    // this.pMsg.textContent = ' '   
-
+    this._enableElement(this.btMoveFirst,(isFun(this._dev.nav.funMvFrst)) )
+    this._enableElement(this.btMovePrev,(isFun(this._dev.nav.funMvPrev)) )
+    this._enableElement(this.btMoveNext,(isFun(this._dev.nav.funMvNext)) )
+    this._enableElement(this.btMoveLast,(isFun(this._dev.nav.funMvLast)) )
     //main-div2-divExit
     this._enableDiv(this.divExit, this._dev.exit.isOn)
     this._enableElement(this.btExit,this._dev.exit.isOn )
-
-    // if (this._dev.exit.isOn) {
-      // this.divExit = this._makeElement(this.div2, 'div', 'div_exit', 'div_exit',)    
-      // this.btExit = this._makeButton(this.divExit, 'cmd_exit', this._dev.exit.txtBt )   
-    // }
-
-    // //main-divYesNo               ----hides div1 & div2 when showing-----
-    // this.divConfirm = this._makeElement(this.divMain, 'div', 'div_confirm', 'div_confirm', )
-    // this.pConfirmMsg = this._makeElement(this.divConfirm,'p','p_confirmmsg', 'p_confirmmsg')
-    // this.btConfirmYes = this._makeButton(this.divConfirm, 'cmd_yes', this._dev.confirm.txtBtYes, )  
-    // this.btConfirmNo  = this._makeButton(this.divConfirm, 'cmd_no' , this._dev.confirm.txtBtNo,  )  
- 
-    // //main-divWaiting        
-    // this.divWaiting = this._makeElement(this.divMain, 'div', 'div_waiting', 'div_waiting')
-    // this.svgThing = this._makeElement(this.divWaiting, 'svg','svg_thing', 'svg_thing')
-    // this.btTired = this._makeButton(this.divWaiting, 'cmd_tired', this._dev.bored.txtButton, ) 
-
-    // //  needing something prettier...
-    // this.svgThing.innerHTML = this._svg.cloud 
-
+    //listen to me!
     this.divMain.onclick = (event)=>{this._divMain_onclik(event)}     
-
   }
-
-
-
-
-
-
 })
 
 
@@ -1078,12 +767,11 @@ function onReturn(que, ...casePair){           // stolen from Wang2200 Basic,  e
 } 
 
 // well?
-function wtf(whatNow){   // breakpoint    wtf(msg user, msg dev, err  
+function wtf(whatNow){   // breakpoint    wtf(msg user, msg dev, err)  
   if (_DESPIOJANDO) {
     console.log(whatNow)
 
 
-
   }
-  throw new Error(whatNow) 
+//  throw new Error(whatNow) 
 }

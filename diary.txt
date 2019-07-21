@@ -3,6 +3,39 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
+
+|190721|
+git "curl 18 transfer closed with outstanding read data remaining"
+ah, ok.
+Some code then. 
+map instead of for, enclose setresult, clear timeout, silly things.
+Didnt try the ideas.
+Ah, delousing svg.  Fun.
+
+
+
+|190719|
+No code.
+Added some ideas...
+--setPermissions(create, read, update, delete).  
+    buttons could have status enabled /disabled / forbiden  
+    Just for viewing, NOT a replace for server side auth. 
+--Can abstract MORE.  virtualcrudpad, nothing but a class
+    dev draws his own buttons (or no buttons at all, can be tabs, menu items, test app, simulation,)
+    Still: 
+      * send cbResult(),                          report success/fail      
+      * setXXXX()  fill frm & db  callbacks,      pure draw and db handlers.
+      * custom buttons (because of the active modes )   
+    Plus:
+      * sendClickOn()   wich (virtual or real) bt event he /has/pretend to have/ received.  
+      * listen changemode event, get array bt with state changed  enabled/disabled/hidden(/forbiden)
+    Sound complicated to use, it shouldnt be.  
+      Just do the drawing and the method to change bt status, (classlist.remove/add !!)   
+      then the connections (send bt, listen event),  no more.
+    REAL FREEDOM
+
+
+
 |190714|
 Lot of structure, lots of commented code. zero bugs so far with the change. 
 Dev can translate easily, style with graphics.

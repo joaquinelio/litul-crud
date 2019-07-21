@@ -14,9 +14,12 @@
 
   crudpad.cbResult()
   Inside every crudpad.form and crudpad.db operation, 
-  you have to send crudpad.cbResult(true/false) to let the pad know the requested operation finished well (or not)
+  you have to send crudpad.cbResult(true/false) to let the pad know the requested operation finished well or not.
 
-  First, set behaviour .setControl(),  optional .setCreate(), .setUpdate(), .setDelete(), .setNav(), .setCustomButtons()
+  First, set behaviour 
+      .setControl(),  
+      optional 
+      .setCreate(), .setRead() .setUpdate(), .setDelete(), .setNav(), .setCustomButtons()
   then  .start()
   then  go to sleep.
 
@@ -41,7 +44,7 @@
   here I use same form to show and edit for ease.
   You can show a grid instead (maybe a keyrange) 
   and let the user move without the crudpad nav buttons, 
-  but only ONE (and only one) must be always selected, the one to be modified when frmEditMod fires. 
+  but ONE (and only one) must be always selected, the one to be modified when frmEditMod fires. 
 
 */
 
@@ -53,7 +56,7 @@ const yawns = 10000            //test delay msec
 // *********************************************** DB stuff *********************
 //
 // indexedDB globals:    **NAMES**         db,store, index
-const myDbName  = 'fakedb0' 
+const myDbName  = 'fakedb1' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'       
 //
@@ -83,7 +86,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // CB Construction. ------- some with optional params innerHTML: button label, confirm msg text           
   //                                                                   parameters----------------            
   // mandatory  set
-  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                      ()=>{} form erase inputs,           ()=>{} form block all inputs   
+  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                      ()=>{} form erase inputs,            ()=>{} form block all inputs   
   
   // optional set                                                          
   crudpad.setCreate(zFrmCreate, zDbCreate,     )     // C              ()=>{} frm to edit new item,         ()=>{}db insert
@@ -92,7 +95,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.setDelete(zDbDelete,                 )     // D              ()=>{} db delete,                    optional confirm msg 
   crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)    // nav << < > >>  ()=>{} db movecursor + show item,    * 4
   crudpad.setExit(zExit, "Exitoooo", "¿Te vas?")                                      
-  crudpad.dbTimeout = 5000 // msec
+  crudpad.dbTimeout = 5000 // msec       time before bored abort button appears
 
   // optional custom buttons, examples for different views
   //                       id= name=     dflt='button_crud'
@@ -101,29 +104,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.addCustomButton('buttonCheck', undefined,      'custom2',  crudpad.MODE_LIST.EDIT, 'custom some ',  ()=>{crudpad.hey('Only on edit: example "checking field')})
   crudpad.addCustomButton('buttonWhat',  undefined,      'custom3',  crudpad.MODE_LIST.IDLE, 'custom srch',   ()=>{crudpad.hey('Only on Empty: example a special search ')})
 
-  //optional translation   
-  //crudpad.setText_...
-  crudpad.setText_crudpad('Add', undefined, undefined, 'Kill', 'Really wanna kill it?')
-
+  //Optional translation   
+  // crudpad.setText_bored()
+  // crudpad.setText_confirm()
+  crudpad.setText_crud('Add', undefined, undefined, 'Kill', 'Really wanna kill it?')
+  // crudpad.setText_exit()
+  crudpad.setText_nav('◄◄','◄','►','►►')  //  textContent.  Careful: check font 
+  // crudpad.setText_okCanel()
    
   //Furter customization
   // crudpad.customButtons.buttonXls.classList.remove('button_crud')  
   // crudpad.customButtons.buttonXls.innerHTML = '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
-  // crudpad.btSearch.classList.remove('button_crud')  
-  // crudpad.btSearch.innerHTML =  '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
+  // crudpad.btRead.classList.remove('button_crud')  
+  // crudpad.btRead.innerHTML =  '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
 
 
   openMyDb()  // and stays open
 
   // START CRUDPAD
   crudpad.start()   // I could start() without the db ready, but maybe it is nice to check/create before showing the buttons
-
 })
 
 
 /*
 ************************************
-** z Dev functions for CRUD & NAV **  used as crud panel parameters. 
+** z Dev functions for CRUD & NAV **   HANDLERS !!   dev has to make them anyway, crudpad or not.
 ************************************
 */
 
@@ -131,7 +136,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 // ----------- implement FormControl ---mandatory--- -------- parameters: erase inputs, block inputs
 //
 // form - empty
-function zFrmEmpty(){             // erase all input elements. 
+function zFrmEmpty(){            //  erase all input elements. 
   myFrmShow(makeItem('','',''))  //  or you can hide them.  Fired when user cancels edition so it doesn't show dirty fields 
 }
 // form - block
@@ -147,7 +152,7 @@ function zFrmCreate(){
   myFrmShow(makeItem('','',''))            // clear all inputs...  may put some default... may autocalculate/fill id
   myFrmBlock([false,false,false])                 // enable all inputs
 
-  // fields validation!
+  // fields auto validation here
   // should put input restrictions, ranges, emptyness, etc.
 
   //should wait for dom ready then
@@ -289,7 +294,7 @@ function zSearchAndShow(what){
 // --------------implement Exit -------------------------- optional --------------
 //
 function zExit(){
-  alert ("some stuff like closing db or hide form... ")
+  alert ("Here some stuff like closing db or hide form... ")
 }
 
 // ----------------------------------------------------------------------------
