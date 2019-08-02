@@ -78,10 +78,17 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         dbTimeout : 1000,
         timer : null,
       }, 
+      perm: {     // not in use yet
+        bCreate: true,
+        bRead: true,
+        bUpdate: true,
+        bDelete: true,
+      },
+
     }
 
     // panels:   3 panels. Restore means recover last panel.
-    //
+    //                                          (I should unify all panel stuff)
     this._panel = {
       PANELS : { NONE: 0, CRUD: 1, CONFIRM: 2, WAITING: 3, RESTORE: 4, },
       current : 0,                                                      // NONE only first time
@@ -107,13 +114,13 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         '</svg>',
 
     }
-
-    // only one in the project.    Sets the wait for cbResult(), changes panels /crud/wait/
+    //  object 
+    //  only one in the project.    Sets the wait for cbResult(), switches panels /crud/wait/
     this._resultCaller = {        
       caller : '',     // anything, msg for debug/ usrmsg/   
       modeOk : null, 
       modeFail : null,
-      t: this,        // this, this is crazy.
+      t: this,        // this, this is crazy. But it works.
       isEmpty(){
         return this.caller === ''
       },
@@ -129,9 +136,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       }
     } 
  
-    this._letsDoHTML_gen()  // template? separated html file?
+    this._letsDoHTML_gen()  // template? separated html file?  I didnt like the test .
 
   } // end constructor
+
 
 
   get mode(){              // Current mode.    readonly for dev. 
@@ -508,6 +516,15 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     if (msg > '' ) {this.hey(msg)}
   }
 
+  // Intended for showing "prohibited status" buttons.     //  not in use yet , remove __
+  // Just ornamental, not a replace for server auth.
+  __setPermissions(bCreate= true, bRead = true, bUpdate = true, bDelete = true){
+    this._dev.perm.bCreate = bCreate
+    this._dev.perm.bRead = bRead
+    this._dev.perm.bUpdate = bUpdate
+    this._dev.perm.bDelete = bDelete
+  }
+
   
   //  ------------------
   _changeMode(newMode){      // *** enable/disable buttons and div depending on MODE ***
@@ -639,7 +656,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       this.btTired,       ()=>{this._btTired()},    
     ) 
   
-    ;(isFun(fun))? fun(): 'no fun' // Not my but.
+    ;(isFun(fun))? fun(): 'nofun' // Not my but.
   }
 
   _makeElement(context, elemtype, id, initialClass = '',   ) {    

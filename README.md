@@ -36,13 +36,13 @@ Maybe VUE, maybe TS.
 A panel with buttons. That's it.
 For 
   CRUD operations  and
-  DB search/show/navigation
+  DB search/navigation
 
 JUST the buttons. No form editions, No sql nor callback code here. That's on you, dev.
 
 These buttons have a behaviour althougth.  They show up, hide, enable/disable themselves automatically depending on: 
-  panel status (idle, showing, editing) and
-  the functions actually implemented by dev (create, read, update, delete, nav)
+  +panel status (idle, showing, editing) and
+  +the functions actually implemented by dev (create, read, update, delete, nav)
 
 Custom buttons can be added.
 Pretty rigid. Not a tool for creating new stuff
@@ -52,7 +52,7 @@ Pretty rigid. Not a tool for creating new stuff
 
 Real abstraction.  I dont see good ones, this hope is. 
 
-Avoid unresponsiveness, 
+Avoid then unresponsiveness 
 when dev forgets the user while doing fancy server ops.
 
 Leaves dev to just write handlers for the real job.
@@ -60,7 +60,7 @@ Leaves dev to just write handlers for the real job.
 
 ***How to***
 
-Each CRUD and the NAV operations has to be implemented by its method
+CRUD and NAV operations have to be implemented by their methods
   setCreate(handlers...)
   setRead(...)
   setUpdate(...)
@@ -69,10 +69,10 @@ Example for CREATE:
 
   crudpad.setCreate(formEdit_Handler, DBInsert_Handler);   
 
- Param 1: Draws a form with the input controls,  
- Param 2: Checks data and does the DB add (or SQL insert)
+ Param 1: Draws a form with the input controls.      ONLY the form. Leaves it enabled for edit.  
+ Param 2: Extract and Checks data from the form, then does the DB add (SQL insert)
 
-NO onclick listening, no taking care of buttons status.
+NO onclick listening, no taking care of buttons status, 
 
 Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 

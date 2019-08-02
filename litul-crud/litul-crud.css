@@ -40,7 +40,7 @@
   /* Behaviour as a container*/
   display: flex;
   flex-direction: row;
-  flex-wrap:  nowrap;
+  flex-wrap: nowrap;
   justify-content: space-between; 
   align-items: center;
 
@@ -57,7 +57,7 @@
   height: 100%;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap:nowrap;
   justify-content: space-between; 
   align-items: center;
 }
@@ -163,10 +163,6 @@
   text-align: left;
   align-content: stretch;
   justify-content: center;
-}
-.div_msg p::after { 
-  opacity: 0;
-  transition: all 0.8s;
 }
 
 .div_pconfirmmsg {

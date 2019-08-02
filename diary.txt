@@ -3,6 +3,31 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
+||
+
+
+
+|190726|
+Need a partner.
+From time to time I come here to see if something dissapeared... No losses so far.
+I May think about implenting some new art... 
+The truth is I am overwelmed.  Its no longer the 80's,  I cant do all by myself.  
+Lie: I can.  Discipline... and droping the shitty js in favor of something strongly typed 
+would keep bugs to minimun. but I cannot learn, code front, code server, code middle, 
+maintain it forever, being state of the art, 
+AND 
+to listen and to keep the customers happy.   
+Too tired even to see if my English is barely understable.  
+Who cares the English, this diary is not intended to be part of the project.  
+Mix of complains deposit / encourage server 
+Mmm.
+I need to know if...  No, i know. 
+I need someone to share the vision. Sharing the work could be nice to...
+Sharing the profit is not an issue at all unless he/SHE turns greedy and starts to undermine the job
+Paranoic? Nah.  Lies, hidden incomings, emptied accounts, stolen code, stolen profits, checks whitout funds, 
+not my first time. 
+
+
 
 |190721|
 git "curl 18 transfer closed with outstanding read data remaining"
