@@ -117,7 +117,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     //  object 
     //  only one in the project.    Sets the wait for cbResult(), switches panels /crud/wait/
     this._resultCaller = {        
-      caller : '',     // anything, msg for debug/ usrmsg/   
+      caller : '',     // any text, msg for debug/ usrmsg/   
       modeOk : null, 
       modeFail : null,
       t: this,        // this, this is crazy. But it works.

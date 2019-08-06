@@ -3,7 +3,37 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
-||
+
+
+|190806|
+Nothing new in the pad.
+Async consideration when user aborts, fixed the test app 
+so unexpected search success after user abort dont overwrite eventual edit user input. 
+here:
+  Advance consideration.  How bad is it?
+  Who owns the form?  
+  When data needs to be shown, (from READ or NAV)
+  the drawing is inside the "user waiting" status and CAN be aborted by boring him (user dependent bored timeout). 
+  So, 
+  (a) the form should be drawn all at once after all the data is collected
+  and after checking if it wont be overwriting user input (edit mode)   
+    if (crudpad.mode & crudpad.MODE_LIST.EDIT)
+  Note: Do the check on READ or NAV, dont do the check when form write is called from crudpad as form-erase()
+  (b) set insane see-abort-button timeout so user never sees bored button
+  (c) Do nothing. 
+  So if: 
+  user does a search.
+  then user aborts the search too early 
+  then user starts to edit new data, 
+  AND THEN the search finally arrives, 
+  the user will loose the edited data and get "unexpected search success" msg from cbresult().  Do you care? 
+...
+After more nodejs training I WILL replace shitty indexedDb by cloud atlas mongodb. 
+mmm...
+What if I try it before nodejs?  
+I know, It would be CRAZY to put that code in client side in production,
+but still... it can be fun.  And something to show...  And test everywhere... even poor smartphones.
+Ah, the app server.  Can glitch.com hold this?
 
 
 
@@ -22,7 +52,7 @@ Who cares the English, this diary is not intended to be part of the project.
 Mix of complains deposit / encourage server 
 Mmm.
 I need to know if...  No, i know. 
-I need someone to share the vision. Sharing the work could be nice to...
+I need someone to share the vision. Sharing the work could be nice too...
 Sharing the profit is not an issue at all unless he/SHE turns greedy and starts to undermine the job
 Paranoic? Nah.  Lies, hidden incomings, emptied accounts, stolen code, stolen profits, checks whitout funds, 
 not my first time. 

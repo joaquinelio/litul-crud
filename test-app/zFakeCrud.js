@@ -46,6 +46,22 @@
   and let the user move without the crudpad nav buttons, 
   but ONE (and only one) must be always selected, the one to be modified when frmEditMod fires. 
 
+  Advance consideration.  How bad is it?
+  Who owns the form?  
+  When data needs to be shown, (from READ or NAV)
+  the drawing is inside the "user waiting" status and CAN be aborted by boring him (user dependent bored timeout). 
+  So, 
+  (a) the form should be drawn all at once after all the data is collected
+  and after checking if it wont be overwriting user input (edit mode)   
+    if (crudpad.mode & crudpad.MODE_LIST.EDIT)
+  Do the check on READ or NAV, dont do the check when it is called from crudpad as form-erase()
+  (b) set insane timeout so user never see bored button
+  (c) Do nothing, if: 
+  user aborts the search too early 
+  then starts to edit new data, 
+  AND THEN the search finally arrives, 
+  the user will loose the edited data, and get "unexpected search success" msg from cbresult().  Do you care? 
+
 */
 
 
@@ -86,7 +102,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // CB Construction. ------- some with optional params innerHTML: button label, confirm msg text           
   //                                                                   parameters----------------            
   // mandatory  set
-  crudpad.setFormControl(zFrmEmpty, zFrmBlock) //                      ()=>{} form erase inputs,            ()=>{} form block all inputs   
+  crudpad.setFormControl(zFrmErase, zFrmBlock) //                      ()=>{} form erase inputs,            ()=>{} form block all inputs   
   
   // optional set                                                          
   crudpad.setCreate(zFrmCreate, zDbCreate,     )     // C              ()=>{} frm to edit new item,         ()=>{}db insert
@@ -136,7 +152,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 // ----------- implement FormControl ---mandatory--- -------- parameters: erase inputs, block inputs
 //
 // form - empty
-function zFrmEmpty(){            //  erase all input elements. 
+function zFrmErase(){            //  erase all input elements. 
   myFrmShow(makeItem('','',''))  //  or you can hide them.  Fired when user cancels edition so it doesn't show dirty fields 
 }
 // form - block
@@ -149,7 +165,7 @@ function zFrmBlock(){           // disble all input elements.  Prevents user fur
 //
 // Form - edit new item
 function zFrmCreate(){
-  myFrmShow(makeItem('','',''))            // clear all inputs...  may put some default... may autocalculate/fill id
+  myFrmShow(makeItem('','','somedefault'))            // clear all inputs...  may put some default... may autocalculate/fill id
   myFrmBlock([false,false,false])                 // enable all inputs
 
   // fields auto validation here
@@ -284,6 +300,14 @@ function zSearchAndShow(what){
       crudpad.cbResult(false, 'not found')
     } else {
       yawn(()=>{
+
+        //check if edit: user aborted waiting and started to edit...
+        if (crudpad.mode & crudpad.MODE_LIST.EDIT) {
+          crudpad.hey( " I got data from search to show you but you are already editing...")
+          return
+        }
+
+
         myFrmShow (item)
         crudpad.cbResult(true, 'Ready') // wwooooaa!! DOM ready? Not here too simple, but...
       })
@@ -351,6 +375,13 @@ function zDbMov(mov){
     cursor = req.result 
     if (cursor){
       item = cursor.value
+
+      //check if edit: user aborted waiting and started to edit...
+      if (crudpad.mode & crudpad.MODE_LIST.EDIT) {
+        crudpad.hey( " I got data from search (nav) to show you but you are already editing...")
+        return
+      }
+
       myFrmShow(item)
       crudpad.cbResult(true, 'something found')
     } else {
