@@ -85,7 +85,7 @@ Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 
 ***Warning: Still in the LEARNING process.***
 
-Learning...
+Learning...     ?
 
 I learn to hate JS. 2 Months.
 So far 
