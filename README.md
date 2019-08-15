@@ -15,7 +15,7 @@ Thanks javascript.info   That site is great, it helped a lot.
 
 
 Started on
-April 9, 1419       -- taking longer than I expected --
+April 9, 1019       -- taking longer than I expected --
 
 By
 Joaquin Elio 'Lito' Fernandez, Elio de Buenos Aires...
@@ -40,11 +40,12 @@ For
 
 JUST the buttons. No form editions, No sql nor callback code here. That's on you, dev.
 
-These buttons have a behaviour althougth.  They show up, hide, enable/disable themselves automatically depending on: 
-  +panel status (idle, showing, editing) and
-  +the functions actually implemented by dev (create, read, update, delete, nav)
+These buttons have a behaviour althougth.  They show up, hide, enable/disable themselves automatically depending on:
+    panel status (idle, showing, editing) and
+    the functions actually implemented by dev (create, read, update, delete, nav)
 
 Custom buttons can be added.
+
 Pretty rigid. Not a tool for creating new stuff
 
 
@@ -52,10 +53,10 @@ Pretty rigid. Not a tool for creating new stuff
 
 Real abstraction.  I dont see good ones, this hope is. 
 
-Avoid then unresponsiveness 
+To avoid the unresponsiveness 
 when dev forgets the user while doing fancy server ops.
 
-Leaves dev to just write handlers for the real job.
+To leave dev to just write the handlers for the real job.
  
 
 ***How to***
@@ -85,9 +86,11 @@ Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 
 ***Warning: Still in the LEARNING process.***
 
-Learning...
 
-I learn to hate JS. 2 Months.
+Learning...
+Some thoughts
+
+I learned to hate JS. 2 Months.
 So far 
 ...10 real bugs, real errors, real learning.
 ...80+ from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
