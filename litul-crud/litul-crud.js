@@ -120,7 +120,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       caller : '',     // any text, msg for debug/ usrmsg/   
       modeOk : null, 
       modeFail : null,
-      t: this,        // this, this is crazy. But it works.
+      t: this,        // this, this is crazy. But it works.  Folks, I hate js.
       isEmpty(){
         return this.caller === ''
       },
@@ -219,12 +219,30 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
   
   _btOk(){
+    /*
+          without this line, user can modify 
+          after hiting OK and before the db result.  Wait gap can be long, being an async db operation service. 
+          The PROBLEM: if user changes data after OK, when db result finally blocks edition the showed data is corrupt.
+          CRUDPAD fault, not dev's. 
+
+      // this._changeMode(this.MODE_LIST.SHOW)   // prevents furter changes
+
+          with it, blocks edition inmediatly.
+          The PROBLEM:  if cbresult fails, inputs keep disabled even if mode keeps as CREATE.
+          I want to let the user decide if cancels or retry, so I cannot resend form_create() because it would erase the input fields 
+          The VB6 version had another function in the interfase:   editformEnable( treu/false) I drop it because I thought it was redundant 
+          my bad
+
+          Possible fix 1:  .hey( "hands off")
+          Possible fix 2:  add  devuser enableform() callback inside .setFormControl(), two flavors create/modify.  Too dirty, if understable.    
+
+          KISS: No fix. User should see the issue. 
+    */
+
     if(this.mode == this.MODE_LIST.CREATE){
-        this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes
         this._resultCaller.set('dbInsert', this.MODE_LIST.SHOW, this.MODE_LIST.CREATE)  
         this._dev.create.funDb()
     } else if(this.mode == this.MODE_LIST.MODIFY) {
-        this._changeMode(this.MODE_LIST.SHOW)   // prevent furter changes 
         this._resultCaller.set('dbUpdate', this.MODE_LIST.SHOW, this.MODE_LIST.MODIFY)  
         this._dev.update.funDb()
     } else {

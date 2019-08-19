@@ -4,6 +4,40 @@
 *** ----------- ***
 
 
+|190819|
+OK button onclick issue.
+Update2:
+setFormControl can be ALL optional!!!!
+a big RECOMENDED instead mandatory.  The cb inside were made to the app look profesional. 
+blockinputs so user sees further edition is unusable, eraseinputs so user dont see his dirt after he cancels, 
+user CAN SEE that without them, but the more responsive app will be more comfortable,
+because those controls make him feels the app has his back. 
+Maybe later.  to-do.
+still node and mongo.
+
+
+
+|190817|
+OK button onclick issue.
+without this line, user can modify after hiting OK and before the db result.  
+Wait gap can be long, being an async db operation service. 
+The PROBLEM: if user changes data after hitting OK, when db result finally blocks edition the showed data is corrupt.
+    // this._changeMode(this.MODE_LIST.SHOW)   // prevents furter changes
+with it, it blocks edition inmediatly. Nice!
+The PROBLEM:  if cbresult fails, inputs keep disabled even when mode stays as CREATE.
+I want to let the user decide if he cancels or retries, so I cannot resend form_create() because it would erase the input fields 
+The VB6 version had another function in the interfase:   editformEnable( treu/false) I drop it because I thought it was redundant 
+my bad
+Possible fix 1:  .hey( "hands off")    enough to avoid user tampering I guess.
+Possible fix 2:  add  devuser enableform() callback inside .setFormControl(), two flavors create/modify.  Too dirty, if understable.    
+Possible fix 3:  reread after save? Mmmm...
+KISS: No fix. ItS eaSy to See, letS Say uSer Should See Such iSSue. 
+Update:
+Should go by Fix 2.  but unlike formBlockAllInputs, OPTIONAL.  
+If implemented, Ok sends blockinputs callback and if later enters in create mode again changemode sends unlock-inputs(create/modify)
+If not, ok doesnt block, the block comes from db save result.  
+
+
 
 |190806|
 Nothing new in the pad.
@@ -1331,8 +1365,8 @@ Another rock in the way, back to javascript.info
 I just realized I hate JS. It's not me, it is something else. 
 How can I protect the code from idiots like me?
 Too much debug.  
-I now understand the frameworks and tools, they are proliferating because of bad languajes.
-stiling to easy test, debug and control. why? Because the languaje failure.
+I now understand the frameworks and tools, they are proliferating because of bad languages.
+stiling to ease test, debug and control. why? Because the languaje failure.
 Too much debug.  Long ago, a project lider told me "your code doesnt have bugs!" No, never.
 I have to focus on customer needs, not code. 
 Of course I have mistakes, but when the code COMPILES OK, I KNOW there are no more bugs. 

@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // crudpad.setText_confirm()
   crudpad.setText_crud('Add', undefined, undefined, 'Kill', 'Really wanna kill it?')
   // crudpad.setText_exit()
-  crudpad.setText_nav('◄◄','◄','►','►►')  //  textContent.  Careful: check font 
+  crudpad.setText_nav('◄◄','◄','►','►►')   //  textContent.  Careful: check proper font ◄ ►
   // crudpad.setText_okCanel()
    
   //Furter customization
