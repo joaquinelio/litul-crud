@@ -17,9 +17,9 @@
   you have to send crudpad.cbResult(true/false) to let the pad know the requested operation finished well or not.
 
   First, set behaviour 
-      .setControl(),  
-      optional 
-      .setCreate(), .setRead() .setUpdate(), .setDelete(), .setNav(), .setCustomButtons()
+      .setControl(),   
+      .setCreate(), .setRead() .setUpdate(), .setDelete(), 
+      .setNav(), .setCustomButtons()
   then  .start()
   then  go to sleep.
 
@@ -38,7 +38,7 @@
   composite modes   EDIT  (mod or create)  NOEDIT (idle or show) and  ALL 
 
   here I use search with .setRead( , true) to show the search input box   
-  You can use .setRead(..., false) and show an Advanced Search Form  instead,
+  You can use .setRead(..., false) and show your own search Form  instead,
   crudpad stays inmutable until you send  .cbResult() 
 
   here I use same form to show and edit for ease.
@@ -66,12 +66,12 @@
 
 
 const DESPIOJANDO = true      //debugging
-const yawns = 10000            //test delay msec
+const YAWNS = 10000            //test delay msec
 
 
 // *********************************************** DB stuff *********************
 //
-// indexedDB globals:    **NAMES**         db,store, index
+// indexedDB globals:    **NAMES**         db, store, index
 const myDbName  = 'fakedb1' 
 const myStoreName = 'fakestore'
 const myKeyName = 'id'       
@@ -79,7 +79,7 @@ const myKeyName = 'id'
 // indexedDB globals:    **THINGS**        db, store, transaction, index    
 // let tx       // transaction   short life. 
 // let store    // store         dies with tx.
-let db          // global so I dont open every request.  Short life db request are intended Maybe I dont need db either.   
+let db          // global so I dont open every request.  Short life db request are intended. so maybe I dont need db either.   
 //
 // And just because I do HATE ' ' parameters.  
 const transreadwrite = 'readwrite'
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.setUpdate(zFrmUpdate, zDbUpdate,        )  // U              ()=>{} frm to edit mod item,         ()=>{}db update
   crudpad.setDelete(zDbDelete,                 )     // D              ()=>{} db delete,                    optional confirm msg 
   crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)    // nav << < > >>  ()=>{} db movecursor + show item,    * 4
-  crudpad.setExit(zExit, "Exitoooo", "¿Te vas?")                                      
+  crudpad.setExit(zExit, "Exitoooo", "Ppffff  wanna quit?")                                      
   crudpad.dbTimeout = 5000 // msec       time before bored abort button appears
 
   // optional custom buttons, examples for different views
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   crudpad.setText_nav('◄◄','◄','►','►►')   //  textContent.  Careful: check proper font ◄ ►
   // crudpad.setText_okCanel()
    
-  //Furter customization
+  //Further customization
   // crudpad.customButtons.buttonXls.classList.remove('button_crud')  
   // crudpad.customButtons.buttonXls.innerHTML = '<svg height="20px" width="80px"><ellipse fill="red" cx="40px" cy="10px" rx="40px" ry="9px"/></svg>',  
   // crudpad.btRead.classList.remove('button_crud')  
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 /*
 ************************************
-** z Dev functions for CRUD & NAV **   HANDLERS !!   dev has to make them anyway, crudpad or not.
+** z Dev functions for CRUD & NAV **   HANDLERS !!   those that dev has to make them anyway, crudpad or not.
 ************************************
 */
 
@@ -445,7 +445,7 @@ function openMyDb(){
 
 // debug ---------------------------------------------------------------------
 function yawn(whatdoyouwant){  
-  ;(DESPIOJANDO)? setTimeout(whatdoyouwant, yawns):  whatdoyouwant()
+  ;(DESPIOJANDO)? setTimeout(whatdoyouwant, YAWNS):  whatdoyouwant()
 }
 function wtf(what){
  if  (DESPIOJANDO){

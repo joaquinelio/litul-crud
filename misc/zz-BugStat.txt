@@ -65,6 +65,15 @@ To do, to test & to fix
   Nothing but the class.
   fire & listen events: to receive clicks, to inform dev elems to enable/disable
   Advantages:  FREEDOM. real freedom, not shitty like js.
+- HEA! I forgot: How do I force a Read being dev?  The pad doesnt give the option. 
+  For example, If I want a custom button "Import" from a file or a from locally saved record.
+  This is IMPORTANT. 
+  Has to be a method.  
+      forceReadDone() -names, names- 
+      err if pad is in edit mode, 
+      enters in show mode 
+- cloud img in separated svg file? Easy to do.   Not sure, just 3 ellipsses.  
+
 
 ** js ** Structure  Improvement
 -PANEL!!!! finish class.  Works well without, but I wanna fix it.
@@ -181,4 +190,4 @@ Done.
     not a crudpad bug.  It comes from test app delay simulation. 
     You wont do (nor cb for later) an op after abort it.  
 - test app: checks if is in edit mode before drawing the search result (only happens if user searchs->aborts->edit)
-
+- delousing monkey in separated svg file.

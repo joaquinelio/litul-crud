@@ -15,10 +15,11 @@ Thanks javascript.info   That site is great, it helped a lot.
 
 
 Started on
-April 9, 1019       -- taking longer than I expected --
+April 9, 1619     -- taking longer than I expected --           Note: Look for Ming art will became rare.
 
 By
 Joaquin Elio 'Lito' Fernandez, Elio de Buenos Aires...
+
 
 
 *Finished?*  Not quite.
@@ -40,7 +41,7 @@ For
 
 JUST the buttons. No form editions, No sql nor callback code here. That's on you, dev.
 
-These buttons have a behaviour althougth.  They show up, hide, enable/disable themselves automatically depending on:
+These buttons have a behaviour though.  They show up, hide, enable/disable themselves automatically depending on:
     panel status (idle, showing, editing) and
     the functions actually implemented by dev (create, read, update, delete, nav)
 
@@ -87,8 +88,7 @@ Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 ***Warning: Still in the LEARNING process.***
 
 
-Learning...
-Some thoughts
+Learning...  personal thoughts
 
 I learned to hate JS. 2 Months.
 So far 

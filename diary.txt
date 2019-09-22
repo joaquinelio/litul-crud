@@ -4,14 +4,79 @@
 *** ----------- ***
 
 
-|190819|
+|190922|
+Too sick to play with azure functions.  Local looks easier... if I remember anything of this.
+Delousing the cat?
+Implement the new ideas?
+Read diary old entries for grammar & spelling errors?  Not that I made that improvement in my English
+Read me the read me and change it with no purpose, again?
+play with css effects
+better fix css 
+Or just write some <p> here to keep the cat awake, stage commit push should I use terminal instead ofmenu,
+it wouldbe vanilla git, I would learn more that way.  Stage? nonsense.
+what a headache.  No ffrom code.
+Too many tinittus, the old and the new.
+Old from the internal, polifonic, unfixable, will stay with me forever until I die maybe a little longer.  iiiiiiiiiiiii 
+the new from the medium ear, blop blop or mpfum mpfum the hearthbeats may my vascular system trying to warn me
+its hard to take the complete round with so much fat in your veins, its not a lubricant you fool
+if I hit the wall with my head would it hurt more or less?  More if I dont hit hard enough.
+No, I dont want to play silly games.  Silly ccomments are more appealing to me.
+I could write a 2200 basic program...  I miss my Othello game, AI, four levels deep
+or the chess graphics -no AI possible for me- or the 3d tictactoe, nobody wanted to play with -too hard- 
+or just the sine wave 
+10 DIM S, X  
+20 S = 180 / 24    
+30 PRINT TAB(40 + SIN(X)*38);"*" : X = X + S: GOTO 30
+Lets see
+pff I failed
+Why? 180/24, half cicle / one screen large 
+should be slower pace
+jumps too much I see multiple sinusitis I mean sinewaves 
+who cares
+mmm
+lets be pragmatic how many peaks? a lot. Mmm try
+22 S = S / 10
+four peaks yet
+so
+23 S = S/4
+much better
+Oh, I see. Its a math bug. What a fool. 
+20 S = 24 / 180
+22 23  -delete-
+Just like its intended, pretty.  Hipnotichal sine wave.  
+Done. My first 2200 '70s basic program in VS CODE!!!
+Half century later.
+I can add some nice touching, more waves same line SUBSTR(A$... more symbols... * % $... 
+nah 
+I wanna sleep
+sine wave is relaxing
+if only the headache dissapears... 
+True silence would be perfect, far from become reality. iiiiiiiiiii uuuuuuuuuuu eeeeeeeeeee ear, glugluglu sinus, mpbm! mpbm! mpbm! hart stop please
+No, not you bum bum I would die, can you do it without me earing it as the last 60 years?  
+
+
+
+|190821| To-Do
+Important funnctionality I forgot:
+Method to show a record without pad request, e.g. a custom button that read or import data from a local file
+...maybe...?
+placeRead() forceRead() or putRead()  ( cannot reuse setRead()!! set methods implement behaviour rather than inmediate response ) 
+Dev draws data and then makes pad to enter in show mode.  It can fire ERR if pad is in edit mode, but it would be too late. 
+...or...?
+askForRead()
+The crudpad checks if not in edit mode, then reacts with read() callback and awaits for cbResult()... but it would be async 
+and dev has to be prepared to do the local search instead of the standard read()  Too much complexity added,  No way.
+
+
+
+|190819| To-Do
 OK button onclick issue.
 Update2:
-setFormControl can be ALL optional!!!!
-a big RECOMENDED instead mandatory.  The cb inside were made to the app look profesional. 
+setFormControl can ALL be optional!!!!
+a big RECOMENDED instead mandatory.  The cb inside were made to the app look professional. 
 blockinputs so user sees further edition is unusable, eraseinputs so user dont see his dirt after he cancels, 
-user CAN SEE that without them, but the more responsive app will be more comfortable,
-because those controls make him feels the app has his back. 
+user CAN SEE that without them, but the more responsive app will be more appealing,
+because those controls make him feel the app has his back. 
 Maybe later.  to-do.
 still node and mongo.
 
