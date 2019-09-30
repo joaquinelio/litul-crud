@@ -3,6 +3,28 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
+|190930|
+Collaborating with myself, not a way to learn git
+I finally got what is stage for... real collaborative you dont want to commit everything
+here with no version only master branch
+---
+Well... still needs BIG CSS improvement
+Start versioning
+Separate parts,  project, tst app, diary...
+test-app better stays.  Better cheatsheet than any manual. 
+ALL of this AFTER I'V done some SERVER part work
+focus!
+---
+I felt too lazy  to go back nod I mean node learning...
+But keeping studing here forever is useless
+I feel much, much better now
+I can continue node
+mixed with translations
+Azure? What was that? I barely remember anything.
+I'll come back here after node, TS, azure, maybe VUE.  It'll be a while.
+Unless I get sick again, this is better than a Sudoku.
+
+
 
 |190925|
 Some breathing. Two fresh fixes.
