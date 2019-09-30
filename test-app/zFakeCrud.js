@@ -10,7 +10,7 @@
 /*
 
   crudpad, callback based crud abstraction
-  You write functions that do the things, yo do not respond to onclicks nor take care of a crud menu 
+  You write functions that do the things, you do not respond to onclicks nor take care of a crud menu 
 
   crudpad.cbResult()
   Inside every crudpad.form and crudpad.db operation, 
@@ -100,25 +100,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
   // CB Construction. ------- some with optional params innerHTML: button label, confirm msg text           
-  //                                                                   parameters----------------            
-  // mandatory  set
-  crudpad.setFormControl(zFrmErase, zFrmBlock) //                      ()=>{} form erase inputs,            ()=>{} form block all inputs   
-  
-  // optional set                                                          
+  //                                                                   parameters----------------              
   crudpad.setCreate(zFrmCreate, zDbCreate,     )     // C              ()=>{} frm to edit new item,         ()=>{}db insert
   crudpad.setRead(zSearchAndShow,  true,         )   // R              ()=>{} db search(input) + show item, bool: show input text 
   crudpad.setUpdate(zFrmUpdate, zDbUpdate,        )  // U              ()=>{} frm to edit mod item,         ()=>{}db update
   crudpad.setDelete(zDbDelete,                 )     // D              ()=>{} db delete,                    optional confirm msg 
   crudpad.setNav(zDbFrst,zDbPrev,zDbNext,zDbLast)    // nav << < > >>  ()=>{} db movecursor + show item,    * 4
   crudpad.setExit(zExit, "Exitoooo", "Ppffff  wanna quit?")                                      
+  crudpad.setFormControl( zFrmErase, zFrmBlock, zFrmEnableCreate, zFrmEnableUpdate )  // HIGHLY recomended, enhances behaviour
+ 
   crudpad.dbTimeout = 5000 // msec       time before bored abort button appears
 
   // optional custom buttons, examples for different views
-  //                       id= name=     dflt='button_crud'
-  //                       htmElemName,  initial class,  label,      modes where active,     title,           onclick        
-  crudpad.addCustomButton('buttonXls',   undefined,      'custom1',  crudpad.MODE_LIST.SHOW, 'custom export', ()=>{crudpad.hey('Only on show: example "export xls " ')})
-  crudpad.addCustomButton('buttonCheck', undefined,      'custom2',  crudpad.MODE_LIST.EDIT, 'custom some ',  ()=>{crudpad.hey('Only on edit: example "checking field')})
-  crudpad.addCustomButton('buttonWhat',  undefined,      'custom3',  crudpad.MODE_LIST.IDLE, 'custom srch',   ()=>{crudpad.hey('Only on Empty: example a special search ')})
+  //                       id= name=      dflt='button_crud'
+  //                       htmElemName,   initial class,  label,      modes where active,       title,               onclick        
+  crudpad.addCustomButton('buttonXls',    undefined,      'custom1',  crudpad.MODE_LIST.SHOW,   'custom export',     ()=>{crudpad.hey('Only on show: example "export xls " ')})
+  crudpad.addCustomButton('buttonCheck',  undefined,      'custom2',  crudpad.MODE_LIST.EDIT,   'custom some ',      ()=>{crudpad.hey('Only on edit: example "checking field')})
+  crudpad.addCustomButton('buttonWhat',   undefined,      'custom3',  crudpad.MODE_LIST.IDLE,   'custom srch',       ()=>{crudpad.hey('Only on Empty: example "import from somewhere" ')   })
+  crudpad.addCustomButton('buttonimport', undefined,      'custom4',  crudpad.MODE_LIST.NOEDIT, 'custom import&mod', ()=>{crudpad.hey('only on Empty or Show: example "import & modify" '); ; myFrmShow(makeItem('xlsCod','xlsDesc','xlssomething')); crudpad.pushCreate()  })
+
 
   //Optional translation   
   // crudpad.setText_bored()
@@ -159,6 +159,13 @@ function zFrmErase(){            //  erase all input elements.
 function zFrmBlock(){           // disble all input elements.  Prevents user further input edition.
   myFrmBlock([true,true,true])  // disable the entire form would work too.  Intended to see inputs as readonly  
 }
+function zFrmEnableCreate(){
+  myFrmBlock([false,false,false])
+}
+function zFrmEnableUpdate(){
+  myFrmBlock([true,false,false])
+}
+
 
 // ----------------------------------------------------------------------------
 // ---------------- implement CREATE ----------- optional ---------- new item to db
@@ -306,7 +313,6 @@ function zSearchAndShow(what){
           crudpad.hey( " I got data from search to show you but you are already editing...")
           return
         }
-
 
         myFrmShow (item)
         crudpad.cbResult(true, 'Ready') // wwooooaa!! DOM ready? Not here too simple, but...

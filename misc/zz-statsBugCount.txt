@@ -1,0 +1,16 @@
+
+
+this.  missing                                     ***************   30+
+spelling                                          spell  **********  47
+[]  init array                                      REAL BUG  -----------------------
+this.divCrud.appendChild(this.div1)   divMain       real BUG  ----------------------
+this.mode = newMode                   _mode         real BUG -----------------------
+divCrud - divMain                                       REAL BUG  --------------------------
+fieldset no css flex                                    REAL BUG -------------------------
+confirm noshow                                      REAL BUG-------------------------
+confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
+From to-do list...                                    REAL BUGS -----------------  1            !!!??? only one?
+Firefox era                                       Spell *********************** 7
+Firefox era                                         REAL BUGS              2    plus the refactor needed, I dont consider it bugs
+...
+ugh. I stopped counting.  More real bugs, fewer spelling ones.  Still, too much spelling issues.

@@ -26,9 +26,15 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // dev's set stuff.  Just a var repository. These obj match dom obj. Should I extend shadow dom, add props there? NO WAY.  Only if I had my own dom.
     //
     this._dev = {
-      control:{   
-        funFrmErase : null,
-        funFrmBlockAll : null,
+      // control:{                      // old naming       
+      //   funFrmErase : null,                
+      //   funFrmBlockAll : null,                     
+      // },
+      control:{
+        funcClearInputs : null,
+        funcBlockInputs : null,
+        funcEnableInputs_Create : null,
+        funcEnableInputs_Update : null,
       },
       create: {
         isOn : false,
@@ -79,10 +85,10 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         timer : null,
       }, 
       perm: {     // not in use yet
-        bCreate: true,
-        bRead: true,
-        bUpdate: true,
-        bDelete: true,
+        allowCreate: true,
+        allowRead: true,
+        allowUpdate: true,
+        allowDelete: true,
       },
 
     }
@@ -114,6 +120,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
         '</svg>',
 
     }
+    
     //  object 
     //  only one in the project.    Sets the wait for cbResult(), switches panels /crud/wait/
     this._resultCaller = {        
@@ -189,7 +196,20 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this.btMoveNext.textContent  = txtBtNext
     this.btMoveLast.textContent  = txtBtLast
   }
-   
+  pushRead(){     // forces READ mode.  Dev has to fill elements first
+    if (this.mode & this.MODE_LIST.EDIT){
+      wtf("Err: Cannot push read mode while editing mode")
+      return
+    }
+    this._changeMode(this.MODE_LIST.SHOW)
+  }
+  pushCreate(){   // forces CREATE mode.  Dev can prefill input elements first.
+    if (this.mode & this.MODE_LIST.EDIT){
+      wtf("Err: Cannot push CREATE  while already in editing mode")
+      return
+    }
+    this._changeMode(this.MODE_LIST.CREATE)
+  }   
 
   //  crudpad *onclick* functions  hidden from Dev  (SHOULD be hidden.  js...)
   //  they fire dev stuff, set the wait for result(), response to user interaction, change mode, en/disable buttons according that result()   
@@ -222,7 +242,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     /*
           without this line, user can modify 
           after hiting OK and before the db result.  Wait gap can be long, being an async db operation service. 
-          The PROBLEM: if user changes data after OK, when db result finally blocks edition the showed data is corrupt.
+          The PROBLEM: if user changes data after OK, when db result finally blocks edition the showed data is altered and it doesnt match the saved data.
           CRUDPAD fault, not dev's. 
 
       // this._changeMode(this.MODE_LIST.SHOW)   // prevents furter changes
@@ -233,28 +253,33 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
           The VB6 version had another function in the interfase:   editformEnable( treu/false) I drop it because I thought it was redundant 
           my bad
 
-          Possible fix 1:  .hey( "hands off")
+          Possible fix 1:  .hey( "hands off")    Lazy programmer "solution".
           Possible fix 2:  add  devuser enableform() callback inside .setFormControl(), two flavors create/modify.  Too dirty, if understable.    
-
-          KISS: No fix. User should see the issue. 
+          Possible fix 3:  KISS: No fix. User should have seen this coming. 
     */
+    let tmpMode = this.mode 
 
-    if(this.mode == this.MODE_LIST.CREATE){
+    this._changeMode(this.MODE_LIST.SHOW)   // prevents furter changes
+
+    //  WORKING !!!   CHECK IF MODE SHOW afects THESE LINES ********************************************************* 
+    if(tmpMode == this.MODE_LIST.CREATE){
         this._resultCaller.set('dbInsert', this.MODE_LIST.SHOW, this.MODE_LIST.CREATE)  
         this._dev.create.funDb()
-    } else if(this.mode == this.MODE_LIST.MODIFY) {
+    } else if(tmpMode == this.MODE_LIST.MODIFY) {
         this._resultCaller.set('dbUpdate', this.MODE_LIST.SHOW, this.MODE_LIST.MODIFY)  
         this._dev.update.funDb()
     } else {
         this.hey ('int err: okbutton is neither create nor modify')
     }
+    //  WORKING !!!   CHECK IF MODE SHOW afects THESE LINES ************so far so good  if it were functional I wouldnt be afraid *********************************** 
   }
   _btCancel(){
     this.softConfirm(
       this._dev.crudOkCancel.txtConfirmCancel,
       ()=>{ 
         this.hey(this._dev.crudOkCancel.txtMsgCancelDone)
-        this._dev.control.funFrmErase()
+        // this._dev.control.funFrmErase()
+        this._dev.control.funcClearInputs()
         this._changeMode(this.MODE_LIST.IDLE)
       },
       ()=>{}  //do nothing
@@ -441,11 +466,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
   }
 
   // *** implement behaviour ***
-  //set control, mandatory.  
-  setFormControl(funcEraseFormContent, funcBlockForm, ){ 
-    this._dev.control.funFrmErase = funcEraseFormContent
-    this._dev.control.funFrmBlockAll = funcBlockForm
-  }
+
 
   // These 5 methods implement bahaviour and they all are optional.
   setCreate(funcFormEditNew, funcDbInsert, textButton = 'New', ){
@@ -486,6 +507,30 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this._dev.exit.txtConfirm = textConfirmExit
     this._dev.exit.isOn = true
   }
+  //
+          //set control, mandatory.                                   DEPRECATED
+          // setFormControl(funcEraseFormContent, funcBlockForm, ){ 
+          //   this._dev.control.funFrmErase = funcEraseFormContent
+          //   this._dev.control.funFrmBlockAll = funcBlockForm
+          // }
+          
+  // set control, HIGHLY recomended.
+  //
+  //  ???????????  move these help comments to HELP file  ------------------
+  //-----------------------
+  //  Why:  Avoids odd behaviour.   
+  //  funcClearInputs is fired if user cancels, so the inputs are emptied
+  //  funcBlockInputs is fired inmediatly after OK button is preessed, so user cant modify inputs while data is send to server. 
+  //  funcEnableImputs is fired if server rejects data,  to let user to try again without redrawing entire form 
+  //-----------------------
+  setFormControl(funcClearInputs, funcBlockInputs, funcEnableInputs_Create, funcEnableInputs_Update){
+    this._dev.control.funcClearInputs = funcClearInputs
+    this._dev.control.funcBlockInputs = funcBlockInputs
+    this._dev.control.funcEnableInputs_Create = funcEnableInputs_Create
+    this._dev.control.funcEnableInputs_Update = funcEnableInputs_Update
+  }
+  //
+
 
   addCustomButton(name, className=this._classes.button_crud, text, activeModesBinarySum, title = '', onclick){
     let bt = document.createElement("button") 
@@ -504,12 +549,12 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     return bt 
   }
 
-  // triggered by dev,  mandatory on every handler.  Result from db cb operation.
-  // Change the crudpad status from 'waiting' to some mode.   
-  cbResult(success, msg =''){    // success = true/false    msg = optional text msg.
+  // triggered by dev,  mandatory on every handler.  
+  // Changes the crudpad status from 'waiting' to some mode.   
+  cbResult(isOk, msg =''){    // isOk = true/false    msg = optional text msg.
     //check
     if (this._resultCaller.isEmpty() ){
-      this.hey( (success)?'Unexpected success from server':'Unexpected error from server' ) 
+      this.hey( (isOk)?'Unexpected success from server':'Unexpected error from server' ) 
       return
     }
 
@@ -525,7 +570,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
     // success [1] unsuccessful [2]
     // this._changeMode(this._resultCall[ (success? 1 : 2) ])    
-    this._changeMode( success? this._resultCaller.modeOk: this._resultCaller.modeFail)
+    this._changeMode( isOk? this._resultCaller.modeOk: this._resultCaller.modeFail)
 
     //reset result wait 
     // this._setResultCaller('')
@@ -536,11 +581,11 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
 
   // Intended for showing "prohibited status" buttons.     //  not in use yet , remove __
   // Just ornamental, not a replace for server auth.
-  __setPermissions(bCreate= true, bRead = true, bUpdate = true, bDelete = true){
-    this._dev.perm.bCreate = bCreate
-    this._dev.perm.bRead = bRead
-    this._dev.perm.bUpdate = bUpdate
-    this._dev.perm.bDelete = bDelete
+  __setPermissions(allowCreate= true, allowRead = true, allowUpdate = true, allowDelete = true){
+    this._dev.perm.allowCreate = allowCreate
+    this._dev.perm.allowRead =   allowRead
+    this._dev.perm.allowUpdate = allowUpdate
+    this._dev.perm.allowDelete = allowDelete
   }
 
   
@@ -550,8 +595,8 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     // buttons use disabled attr, divs use css class
 
     // DON'T "FIX":
-    //    Tests are masks of bynary flags.  Trying "||" (logical OR) would fail.
-    //    Why tstActive?  Checks if at least one.  If none, div CAN hide (dep on media, css to-do )  
+    //  1  Tests are masks of bynary flags.  Trying "||" (logical OR) would fail.
+    //  2  Why tstActive:  active controls count. Then checks if at least one, If none, div CAN hide (dep on media, css to-do ) 
 
     //check
     const oldMode = this._mode
@@ -612,8 +657,19 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
     this._enableElement(this.btExit, stNoEditing)  
 
     //user form control
-    if (stNoEditing)  this._dev.control.funFrmBlockAll()
-    if (this._mode == this.MODE_LIST.IDLE )  this._dev.control.funFrmErase()
+    if (stNoEditing && isFun(this._dev.control.funcBlockInputs)){  
+      this._dev.control.funcBlockInputs() //.funFrmBlockAll()
+    }
+    if (this._mode == this.MODE_LIST.IDLE && isFun(this._dev.control.funcClearInputs()))  {
+      this._dev.control.funcClearInputs()  //  funFrmErase()
+    }
+    if (this._mode == this.MODE_LIST.CREATE  && isFun(this._dev.control.funcEnableInputs_Create)){
+      this._dev.control.funcEnableInputs_Create()
+    }
+    if (this._mode == this.MODE_LIST.MODIFY && isFun(this._dev.control.funcEnableInputs_Update)){
+      this._dev.control.funcEnableInputs_Update()
+    }
+
   }
   
   
@@ -674,7 +730,7 @@ window.customElements.define('litul-crudpad', class extends HTMLElement {
       this.btTired,       ()=>{this._btTired()},    
     ) 
   
-    ;(isFun(fun))? fun(): 'nofun' // Not my but.
+    ;(isFun(fun))? fun(): 'nofun' // nofun? Not my but.
   }
 
   _makeElement(context, elemtype, id, initialClass = '',   ) {    

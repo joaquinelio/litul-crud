@@ -1,43 +1,26 @@
 
-
-this.  missing                                     ***************   30+
-spelling                                          spell  **********  47
-[]  init array                                      REAL BUG  -----------------------
-this.divCrud.appendChild(this.div1)   divMain       real BUG  ----------------------
-this.mode = newMode                   _mode         real BUG -----------------------
-divCrud - divMain                                       REAL BUG  --------------------------
-fieldset no css flex                                    REAL BUG -------------------------
-confirm noshow                                      REAL BUG-------------------------
-confirm disable confirm butt after hit                 REAL BUG ----------------------                                      
-From to-do list...                                    REAL BUGS -----------------  1            !!!??? only one?
-Firefox era                                       Spell *********************** 7
-Firefox era                                         REAL BUGS              2    plus the refactor needed, I dont consider it bugs
-...
-ugh. I stopped counting.  More real bugs, fewer spelling ones.  Still, too much spelling issues.
-
-
+Pre versioning.
 To do, to test & to fix 
-=======================
+
+======================
+
+** test / check
+- test app without .setControl() implemented
+
 
 ** js: **  Bugs
 - ERROR handlers.  Reckless work of mine.  throw new Error("something") everywhere.  Not a bug, close to. It has to be done.
 - confirm() still needs the 2 handlers implemented yes and no, altought it can be empty ()=>{}. Empty works ok.
-- OK button issue
-    1) After hitting OK, wait for db operation result, then block inputs if ok or continue editing if fails
-       problem: user can change the data in the form before the result arrives, so data shown differs from data saved.
-    2) After hitting OK, block inputs inmediatly  (via form-block-inputs cb set by setFormControl) so evil user cannot overwrite inputs. 
-       problem: if db op fails, need to unlock inputs.  
-       Wrong fix: send formCreateEdit cb, it will erase inputs, not nice.  
-       TO-DO: optional function form-unlock-inputs-create  inside setFormControl.
-       If implemented, crudpad use both.  If not, user CAN alter inputs. 
 
 ** js: ** Improvement               Nice, but no extra learning with these...
 - permissions. To let certain buttons stay disabled. Can do: 
      * Nothing, Read only not write, create only not read, create but not delete, etc... 
        any combination!!! so it has to be a method that set individual permissions for C R U D, no so hard.
      * setPermissions(create, read, update, delete) true/false params.
-  Can fire in any moment.  Changemode has to consider same mode diferent permissions. 
+  Can fire in any moment.  Changemode has to consider same mode diferent permissions.   
   It Could have added button-classes  enabled/disabled/prohibited
+- permissions II:  user profile? It should match global (sql) permissions,
+    maybe it's a login issue.  So, I could read user profile and set proper bahaviour with no more dev's caretaking.
 - addCustomInput() 
   like custom button.  useful for, example, range searchs. I can even replace customButton with
   addCustomElement() 
@@ -65,14 +48,10 @@ To do, to test & to fix
   Nothing but the class.
   fire & listen events: to receive clicks, to inform dev elems to enable/disable
   Advantages:  FREEDOM. real freedom, not shitty like js.
-- HEA! I forgot: How do I force a Read being dev?  The pad doesnt give the option. 
-  For example, If I want a custom button "Import" from a file or a from locally saved record.
-  This is IMPORTANT. 
-  Has to be a method.  
-      forceReadDone() -names, names- 
-      err if pad is in edit mode, 
-      enters in show mode 
 - cloud img in separated svg file? Easy to do.   Not sure, just 3 ellipsses.  
+- proper naming.  
+  mode = MODIFY??   change names  MODIFY ==> UPDATE ,  SHOW ==> READ  ??
+  cbResult() ==>  handlerResult() ?     
 
 
 ** js ** Structure  Improvement
@@ -82,6 +61,8 @@ To do, to test & to fix
   Would be big. Works well without, 
   if i understand it can be better code:
   fewer functions (can be good or not), lesser blind guess behaviour.
+-function to test mode instead of asking for mask   .isInMode( .MODE_LIST. some  )   
+
 
 ** css: **
 - everything, flex arrangement the first!
@@ -93,15 +74,18 @@ To do, to test & to fix
 - check: separate crudpad bahaviour and l&f 
 - everything  uglyness 
 
+
 ** challenge: ** 
 - touch & drag the toolbar to a new position: left, up, right.  Not my current scope, but...
   or via "..." menu like FF dock console
   or htm attributes
 
+
 ** tst app: ** 
 - Port tst app to a server 
 - Make the DB cloud to test smartphone properly.  For proper EVERYTHIG test.  
-- Test simultaneous crudpads...  Same page? inside Tab element...
+- Test simultaneous crudpads...  Same page? inside Tab element ...
+
 
 ** party.
 
@@ -145,8 +129,8 @@ Done?  Philosophical issues
     No. unneeded complexity,  yes no is all what it needs.  Put .then where?
 - tst app?  create/ ok with empty:  warning msg and form blocked.
     crudpad fault.  "fixed".
-    But now there is an "OK button issue".  Need a real fix, another callback inside setFormControl
-
+    But now there is an "OK button issue".  Need a real fix, another callback inside setFormControl - DONE TOO.
+ 
 
 
 ===== 
@@ -191,3 +175,18 @@ Done.
     You wont do (nor cb for later) an op after abort it.  
 - test app: checks if is in edit mode before drawing the search result (only happens if user searchs->aborts->edit)
 - delousing monkey in separated svg file.
+- OK button issue
+    1) When dev dsnt implement it:  
+       After hitting OK, wait for db operation result, then block inputs if ok or continue editing if fails
+       problem: user can change the data in the form before the result arrives, so data shown differs from data saved.
+    2) After hitting OK, block inputs inmediatly  (via form-block-inputs cb set by setFormControl) so evil user cannot overwrite inputs. 
+       problem: if db op fails, need to unlock inputs.  
+       Wrong fix: send formCreateEdit cb, it will erase inputs, not nice.  
+       TO-DO: optional function form-unlock-inputs-create  inside setFormControl.
+       If implemented, crudpad use both.  If not, user CAN alter inputs. 
+    Done, .setControl() is now optional with 4 parameters
+- new methods  STILL looking better names.
+  pushRead()    forces show mode , dev HAS to fill controls first.
+  pushCreate()  forces create mode. dev can prefill fields.  example: If I want a custom button "Import" from a file or a from locally saved record.
+      err if pad is in edit mode, 
+-

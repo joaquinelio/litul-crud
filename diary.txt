@@ -4,6 +4,17 @@
 *** ----------- ***
 
 
+|190925|
+Some breathing. Two fresh fixes.
+Addressed the ok button issue, 
+more control handlers, plus they are all the four optional.  
+--
+then added the force. I mean force mode.  force a mode, being this create or read.
+useful to, say retrieve local data saved when offline, fill the inputs then .pushModeCreate()  
+yeah, still looking for a name.
+
+
+
 |190922|
 Too sick to play with azure functions.  Local looks easier... if I remember anything of this.
 Delousing the cat?
