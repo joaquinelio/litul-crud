@@ -57,7 +57,9 @@ Real abstraction.  I dont see good ones, this hope is.
 To avoid the unresponsiveness 
 when dev forgets the user while doing fancy server ops.
 
-To leave dev to just write the handlers for the real job.
+To leave Dev to just write the handlers for the real job. 
+
+Zero buttons behaviour bugs.
  
 
 ***How to***
@@ -71,7 +73,7 @@ Example for CREATE:
 
   crudpad.setCreate(formEdit_Handler, DBInsert_Handler);   
 
- Param 1: Draws a form with the input controls.      ONLY the form. Leaves it enabled for edit.  
+ Param 1: Draws a form with the input controls.      ONLY the form. Leaves it enabled for user to edit.  
  Param 2: Extract and Checks data from the form, then does the DB add (SQL insert)
 
 NO onclick listening, no taking care of buttons status, 
@@ -82,6 +84,7 @@ Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
     db.onsuccess = (){ crudpad.cbResult(true) }
     db.onerror =   (){ crudpad.cbResult(false, "I'm so, so sorry")}
 
+  fictional db obj, for real example look at test-app, html + js + the browser built-in async nosql
 
 ###
 
@@ -91,6 +94,8 @@ Dev has to manage the DOM/DB callbacks then inform to crudpad its result.
 Learning...  personal thoughts
 
 I learned to hate JS. 2 Months.
+
+Debug:
 So far 
 ...10 real bugs, real errors, real learning.
 ...80+ from spelling. My mistakes. But a TOTAL FAILURE FROM JS LANG.
@@ -104,13 +109,12 @@ Freedom sucks.
     **JS, the freedom to step on the flowers.**
 
 
-Async.
-
+Async:
 Love it.
 You are the boss.
-You dont tell your minions what to do then sit and wait until they finish.
+You don't tell your minions what to do then sit and wait until they finish.
 You send them to work with a to-do list, 
-and go and do another boss thing.
+then go and do another boss thing.
 With sometimes the philosophical issue:
 
     **Now it is doing nothing, but nothing is wrong.**

@@ -4,7 +4,7 @@
   <title>CRUDPAD test</title>
   <meta charset="UTF-8" >
   <style>
-    * {background-color: lightgray} 
+    * {background-color:blueviolet} 
   </style>
   
   <script defer src="./zfakecrud.js"   >  </script>
@@ -20,17 +20,18 @@
     <p>Test app for my crudpad </p>
     <p>Async local indexedDb, faking the long wait</p>  
     <br>
-    <!--  ************************************************************************************** -->
-    <!--  ***************************sorry couldn't resist**************************************** -->
-    <!--     msg div     -->
     <hr>
-    <div style='display:inline-block'>  
-        <p>    </p>
+    <div style='display:inline-block; ' >  
+        <p>Debug    </p>
         <img src="./delousing.svg">
+  <!--
+        <p>indexedDb dbname</p><input id = 'dbname' value = 'dbname' >
+        <p>indexedDb store </p><input id = 'dbstore' value = 'dbstore' >
+        <p>indexedDb key</p><input id = 'dbkey' value = 'dbkey' >
+        <input go>
+  -->
+        <p>Fake Cloud Delay secs</p><input id = 'fakeclouddelay' value = '0' >
     </div>
-    <!--  ***************************sorry couldn't resist**************************************** -->
-    <!--  ************************************************************************************** -->
-
 
 
    <div id="idPanel"  style='display:inline-block; vertical-align:top; '>             
@@ -40,6 +41,11 @@
             <p>what:</p><input id = 'i3' value = '' disabled>
         </form>
     </div>
+
+    <div  style='display:inline-block; vertical-align:top; '>             
+          <p id = 'status'    >status</p>
+    </div>
+
     <hr>
 
     <div >

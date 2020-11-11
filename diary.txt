@@ -3,6 +3,95 @@
 *** Dear Diary: ***   
 *** ----------- ***
 
+
+
+
+
+
+|200423|
+Svelte seems my thing.
+Still looking server lang, TS, TS... mmm... MS...    again?  Seems good but...  FY wpf, FY J++, FY slvlght, FY... MS.   
+SVELTE MSAZURESQL NODE 
+Why bother, I'll be dead soon in my room by asphixia
+Nobody reads data ok, the virus is spreading no matter what, It'll get 80% soon.
+if slow enough I'll have a bed in the hospital so after I die my lungs continue breathing a little longer.  
+Lets wait for the vacine.
+I feel like doing nothing today.
+Mpff.. I'll be plenty of time to do nothing soon, 
+better do something.
+Let's see...
+---
+I wanna branch.
++ standalone litul-button element
++ abstract 
+stuck in a fucking hotel the only one in capital city without wifi 
+How much phone spot?  Forget it.  
+I'll wait 'til I can work at the bar.  
+Too bad they have pizza delivery bu they dont have wifi delivery. 
+Branch. Really?   Good enough as it is.
+but
+without wifi, cant learn node nor azure
+mmm
+need to fix this
+Should I slip dressed like Eternauta to catch signal?
+Phone maybe, laptop... mmm. 
+need to fix this
+Fixed.  'Till next... anywhen
+
+
+
+|200422|
+Spent time debugging firefox indexedDB
+wtf
+chrome opened its old db with no trouble
+ff refused:  "unknown error not relatd to db"
+but it was fixed by creating a new one 
+I guess it became obsolete, some cleaning broke it, upgradeneeded not working
+I dunno
+I miss my old sql's job
+it doesnt matter, indexeddb is just async test data, it will not be my db in production even for temp offline data.
+so, some unworthy testapp changes
+
+
+
+|200420|
+Acuartelado y deprimido.
+61 years old, asmatic, had neumonia spitting blood 5 years ago, 
+so: 
+on risk status.  
+besides
+No bussiness is working.
+Incomes drop to zero.
+Fucking virus.
+Crypters and erasers were funnier.  
+---
+Mmm.
+Why dev.control.  obj ?  shouldnt be those props inside the actual objets? 
+  I remember writing the why somewhere.
+  an structural why or a why from lazyness?
+  Cant find it...
+---
+I'd like to add buttons quicklocalsave quicklocalload for offline backup...
+  just json single rec, dont recommend indexeddb, too hard maintain and to sync.
+  anyway, json, indexedDb, localstarage, even cookie -dont-, doesn't care, crudpad is abstraction, it just ask for the handler.
+---
+Shouldnt have activemode prop inside button obj? My own button obj, not DOM's.    
+  Mpfff.
+  wait, I already started it. There is an unused this.crudButtons = {} just like custom buttons obj  
+---
+Terrible naming.  resultCaller ?? 
+---
+Panel management. Im not happy. But it works.
+---
+GIT, versioning.  PR instead of overwrite everything.
+---
+More control? Keep db.id track from db, any db, send/receive it as crudpad property.
+More abstraction? No htm controls, so Dev can draw -then bind- to crudpad abstract controls. 
+  so Dev can even avoid buttons and replace them with canvas regions, drop menu items, svg subelements... anything.  
+  not my goal now. Focus!
+
+
+
 |190930|
 Collaborating with myself, not a way to learn git
 I finally got what is stage for... real collaborative you dont want to commit everything
