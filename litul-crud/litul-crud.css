@@ -29,7 +29,7 @@
   overflow: hidden;  
 
   /* L&F */
-  background-color: aqua;
+  background-color: gray;
   list-style-type: none;
   margin: 10px 0 0 0;
   padding: 0;
@@ -106,16 +106,16 @@
   margin: auto;
   flex: auto;
   
-  transition: 1s;
+  transition: 0.1s;
   transition-property: color;
-  color: black;
-  background-color: white;  
+  color: rgb(11,11,11);
+  background-color: darkgray;  
 }
 
 .msg_flash {
-  transition: 1s;
+  transition: 0.1s;
   transition-property: color;
-  color: white;
+  color: darkgray;
   background-color: black;  
 }
 
@@ -139,20 +139,21 @@
   background-color: darkblue;
   /*border: gray 2px   ;*/
   text-align: center;      
-  box-shadow: 3px 3px grey;
+  box-shadow: 3px 3px rgb(48, 51, 54);
   /*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
+ /* background: linear-gradient(75deg, rgb(11,11,11), darkblue)*/
 
 }
 
 /* Sigo experimentando...      */
 /*.div_crud button:hover {background-color:rgb(0, 102, 255) ; }    hover doesnt look good on touch devices */
 .button_crud:disabled {
-  color:lightslategray;
+  color:white;
   background-color: grey; 
-  background: linear-gradient(75deg, lightblue, darkgrey)
+  background: linear-gradient(75deg, gray, blue)
 }
 .button_crud:active {
-  background-color: lightblue;
+ background-color: lightblue;
   box-shadow: 1px 1px #666;
   transform: translate(5%,5% );
 }
@@ -179,7 +180,7 @@
 }
 .div_search input {
   border: solid 1px black;
-  background-color: lightgreen;
+  background-color: lightgray;
   margin: 2px;
 }
 

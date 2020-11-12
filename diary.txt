@@ -5,8 +5,9 @@
 
 
 
-
-
+|201111|
+wtf last commit didnt change case on hub. Total rename will do.
+ok, now fix css a little.  Arreglos rapido para que se vean los deshabilitados.
 
 |200423|
 Svelte seems my thing.
