@@ -1,57 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <title>CRUDPAD test</title>
   <meta charset="UTF-8" >
-  <style>
-    * {background-color:rgb(116, 186, 196)} 
-  </style>
+  <link rel="stylesheet" type="text/css" media="screen" href="test.css" />  
   
-  <script defer src="./zcrud.js"   >  </script>
+  <script defer src="./zcrud.js"   >  </script> 
 
   <script defer src="../litul-crud/litul-crud.js"  ></script>
   <link rel="stylesheet" type="text/css" media="screen" href="../litul-crud/litul-crud.css" />  
   <!-- to do:  how to remove crudpad css from here, dev shoundt bother-->
 
 </head>
-<body>
+
+<body  class='realshit'>
     <h4> ♫ JoaquinElio Buenos Aires ♫ </h4>
     <br>
     <p>Test app for my crudpad </p>
     <p>Async local indexedDb, faking the long wait</p>  
-    <br>
-    <hr>
-    <div style='display:inline-block; ' >  
+
+  <!-- debug shit -->
+  <aside  class='debugshit' style='display:inline-block;'>
+    <div style='display:inline-block;' >  
         <p>Debug    </p>
-        <img src="./delousing.svg">
-  <!--
+        <img src="./delousing.svg" style="zoom: 80%;"> <!--" background-color: gray;"-->
+        <!--
         <p>indexedDb dbname</p><input id = 'dbname' value = 'dbname' >
         <p>indexedDb store </p><input id = 'dbstore' value = 'dbstore' >
         <p>indexedDb key</p><input id = 'dbkey' value = 'dbkey' >
         <input go>
-  -->
-        <p>Fake Cloud Delay secs</p><input id = 'fakeclouddelay' value = '0' >
+        -->
     </div>
-
-
-   <div id="idPanel"  style='display:inline-block; vertical-align:top; '>             
-        <form>
-            <p>Code:</p><input id = 'i1' value = '' disabled>
-            <p>Desc:</p><input id = 'i2' value = '' disabled>
-            <p>what:</p><input id = 'i3' value = '' disabled>
-        </form>
-    </div>
-
-    <div  style='display:inline-block; vertical-align:top; '>             
+    <div  style='display:inline-block; vertical-align:top;'>             
           <p id = 'status'    >status</p>
+          <p>Fake Cloud Delay secs</p><input id = 'fakeclouddelay' value = '0' style="text-align: right; width: 60px;">
     </div>
-
     <hr>
+  </aside>
+    <!-- debug shit -->
+   
 
-    <div >
 
-        <litul-crudpad id= 'idmenu'></litul-crudpad>
-    
-    </div>
+
+  <div id="idpanel"  style='display:inline-block; vertical-align:top; border-style: solid; padding:5px; margin: 5px;'>             
+    <form>
+        <p>Code:</p><input id = 'i1' value = '' disabled>
+        <p>Desc:</p><input id = 'i2' value = '' disabled>
+        <p>what:</p><input id = 'i3' value = '' disabled>
+    </form>
+  </div>
+  <div>
+      <litul-crudpad id='idmenu'></litul-crudpad>
+  </div>
+
 </body>
 </html>

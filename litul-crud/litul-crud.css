@@ -8,7 +8,7 @@
 
 * {
   /* not too pretty, not my goal yet*/
-  transition-property: height , width , transform ,  ;
+  transition-property: height , width , transform;
   transition-duration: 100ms;  
 }
 
@@ -17,7 +17,8 @@
 
   /* Position=  down, full width */
   position: fixed;
-  bottom: 0;
+  
+  /* bottom: 0; */
   width: 100%;
 
   /* Behaviour as a container*/
@@ -29,7 +30,7 @@
   overflow: hidden;  
 
   /* L&F */
-  background-color: gray;
+  background-color: dimgrey;
   list-style-type: none;
   margin: 10px 0 0 0;
   padding: 0;
@@ -40,7 +41,8 @@
   /* Behaviour as a container*/
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
+  flex-wrap: wrap;
   justify-content: space-between; 
   align-items: center;
 
@@ -53,12 +55,13 @@
 
 .div_search,  .div_crud, .div_custom, .div_okcancel, .div_waiting {
   border: solid 1px;
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap:nowrap;
-  justify-content: space-between; 
+  /* justify-content: space-between;  */
+  justify-content: space-between;
   align-items: center;
 }
 .div_nav  {
@@ -67,11 +70,29 @@
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between; 
-  align-items: center;
+  align-items: flex-start;
 }
+.div_msg {
+  /* width: 100%; */
+  margin: auto;
+  flex: max-content;
+  
+  transition: 0.1s;
+  transition-property: color;
+  color: rgb(11,11,11);
+  background-color: darkgray;  
+}
+.div_exit{     /* down right I suppose  */
+  display: flex;
+  flex-flow: row;
+  justify-content: right;
+  align-content: flex-end;
+}
+
+
 .div_confirm {
   border: solid 1px;
-  width: 100%;
+  /* width: 100%; */ 
   flex-direction: column;
   justify-content: left;
 }
@@ -101,16 +122,6 @@
   75% {transform: scaleY(0.7);}
 }
 
-.div_msg {
-  width: 100%;
-  margin: auto;
-  flex: auto;
-  
-  transition: 0.1s;
-  transition-property: color;
-  color: rgb(11,11,11);
-  background-color: darkgray;  
-}
 
 .msg_flash {
   transition: 0.1s;
@@ -121,25 +132,25 @@
 
 .div_main button {          /* ALL buttons, non L&F attr ONLY */
 /*  display:flex;          no aplicable, I think*/
-  flex-direction: row !important;   /* just test. !important "bad practice" seems good in crudpad behaviourlike disable*/
-  flex-wrap: nowrap !important;
+  flex-direction: row !important; /*   just test. !important "bad practice" seems good in crudpad behaviourlike disable */
+  /* flex-wrap: nowrap !important; */
 }
 
 .button_crud {            /*  L&F only class  */
-  border-radius: 5px;
+
+  background-color: rgb(3, 3, 175);
+
   color: white;
-  /* background-color: #0F5897; */
-  /* padding: 5px 10px 8px 10px;  */
+  text-align: center;      
   justify-content: center;
 
-  padding: 5px;
+  padding: 4px;
   margin: 1px;
   outline: none;
-  color: white;
-  background-color: darkblue;
-  /*border: gray 2px   ;*/
-  text-align: center;      
-  box-shadow: 3px 3px rgb(48, 51, 54);
+
+  border: 0px   ;
+
+  /* box-shadow: 3px 3px rgb(48, 51, 54); */
   /*  background: linear-gradient(75deg, rgb(6, 6, 58), rgb(97, 116, 202))    */
  /* background: linear-gradient(75deg, rgb(11,11,11), darkblue)*/
 
@@ -147,11 +158,13 @@
 
 /* Sigo experimentando...      */
 /*.div_crud button:hover {background-color:rgb(0, 102, 255) ; }    hover doesnt look good on touch devices */
+
 .button_crud:disabled {
-  color:white;
+  color: white;
   background-color: grey; 
-  background: linear-gradient(75deg, gray, blue)
+  /* background: linear-gradient(75deg, rgb(187, 185, 185), rgb(73, 73, 207)) */
 }
+
 .button_crud:active {
  background-color: lightblue;
   box-shadow: 1px 1px #666;
@@ -173,11 +186,6 @@
   justify-content: center;
 }
 
-.div_exit{     /* down right I suppose  */
-  display: flex;
-  justify-content: right;
-  align-content: flex-end;
-}
 .div_search input {
   border: solid 1px black;
   background-color: lightgray;
