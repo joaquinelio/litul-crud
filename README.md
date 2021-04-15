@@ -64,6 +64,9 @@ Zero buttons behaviour bugs.
 
 ***How to***
 
+You only need litul-crud subdirectory, the js & css
+
+
 CRUD and NAV operations have to be implemented by their methods
   setCreate(handlers...)
   setRead(...)
