@@ -11,7 +11,7 @@ My very first js LEARNING project
     indexedDb app for testing
     client side only (for now) 
 
-Thanks javascript.info   That site is great, it helped a lot.
+Thanks www.javascript.info   That site is great, it helped a lot.
 
 
 Started on
